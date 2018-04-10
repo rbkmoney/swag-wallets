@@ -1,0 +1,24 @@
+description: |
+  Условия предоставления услуг в части возможных к использованию валют
+type: object
+required:
+  - computedAt
+  - currencies
+properties:
+  computedAt:
+    description: |
+      Дата и время расчёта условий
+    type: string
+    format: date-time
+  currencies:
+    description: |
+      Список валют, в которых можно заводить кошельки и проводить по ним
+      операции
+    type: array
+    items:
+      x-rebillyMerge:
+        - $ref: '#/definitions/Currency'
+    example:
+      - RUB
+      - USD
+      - EUR

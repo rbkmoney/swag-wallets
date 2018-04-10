@@ -1,0 +1,17 @@
+description: Состояние счёта кошелька
+type: object
+required:
+  - ownAmount
+  - availableAmount
+properties:
+  ownAmount:
+    description: |
+      Сумма собственных средств на счёте (в минорных денежных единицах)
+    type: int64
+    example: 1430000
+  availableAmount:
+    description: |
+      Сумма доступных к использованию средств на счёте (в минорных денежных единицах), обычно равна сумме
+      собственных средств за вычетом сумм всех незавершённых операций
+    type: int64
+    example: 1285000

@@ -1,0 +1,20 @@
+post:
+  operationId: createWallet
+  summary: Завести новый кошелёк
+  tags:
+    - Wallets
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - name: wallet
+      description: Данные создаваемого кошелька
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/Wallet'
+  responses:
+    '201':
+      description: Кошелёк создан
+      schema:
+        $ref: '#/definitions/Wallet'
+    '400':
+      $ref: '#/responses/BadRequest'

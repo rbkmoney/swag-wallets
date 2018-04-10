@@ -1,0 +1,20 @@
+post:
+  operationId: createIdentity
+  summary: Создать личность владельца
+  tags:
+    - Identities
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - name: identity
+      description: Данные создаваемой личности
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/Identity'
+  responses:
+    '201':
+      description: Личность владельца создана
+      schema:
+        $ref: '#/definitions/Identity'
+    '400':
+      $ref: '#/responses/BadRequest'

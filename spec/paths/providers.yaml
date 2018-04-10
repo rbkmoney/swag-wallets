@@ -1,0 +1,17 @@
+get:
+  operationId: listProviders
+  summary: Получить список провайдеров
+  tags:
+    - Providers
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/servicedResidence'
+  responses:
+    '200':
+      description: Провайдеры найдены
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/Provider'
+    '400':
+      $ref: '#/responses/BadRequest'
