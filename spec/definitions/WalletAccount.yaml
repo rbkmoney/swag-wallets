@@ -7,11 +7,15 @@ properties:
   ownAmount:
     description: |
       Сумма собственных средств на счёте (в минорных денежных единицах)
-    type: int64
+    type: integer
+    format: int64
+    minimum: 0
     example: 1430000
   availableAmount:
     description: |
       Сумма доступных к использованию средств на счёте (в минорных денежных единицах), обычно равна сумме
       собственных средств за вычетом сумм всех незавершённых операций
-    type: int64
+    type: integer
+    format: int64
+    minimum: 0
     example: 1285000

@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.0
+  version: '0.0'
   title: RBKmoney Wallet API
   description: >
 
@@ -155,7 +155,6 @@ parameters:
       [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
     type: string
     pattern: '^[A-Z]{3}$'
-    example: RUS
     required: false
 
 tags:
