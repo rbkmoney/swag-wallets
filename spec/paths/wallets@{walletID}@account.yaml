@@ -1,6 +1,6 @@
 get:
   operationId: getWalletAccount
-  summary: Получить состояние счёта кошелька
+  summary: Получить состояние счёта
   tags:
     - Wallets
   parameters:

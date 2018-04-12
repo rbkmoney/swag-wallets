@@ -1,6 +1,6 @@
 get:
   operationId: computeWalletAccount
-  summary: Получить условия обслуживания кошелька
+  summary: Получить условия обслуживания
   tags:
     - Wallets
   parameters:
