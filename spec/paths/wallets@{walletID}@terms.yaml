@@ -1,0 +1,17 @@
+get:
+  operationId: computeWalletAccount
+  summary: Получить условия обслуживания кошелька
+  tags:
+    - Wallets
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/walletID'
+  responses:
+    '200':
+      description: Условия обслуживания расчитаны
+      schema:
+        $ref: '#/definitions/WalletTerms'
+    '404':
+      $ref: '#/responses/NotFound'
+    '400':
+      $ref: '#/responses/BadRequest'

@@ -1,0 +1,8 @@
+type: object
+discriminator: type
+required:
+  - type
+properties:
+  type:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityProofType'

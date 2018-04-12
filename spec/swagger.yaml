@@ -80,9 +80,6 @@ security:
 
 responses:
 
-  NotFound:
-    description: Искомая сущность не найдена
-
   BadRequest:
     description: Недопустимые для операции входные данные
     schema:
@@ -108,6 +105,12 @@ responses:
         description:
           description: Пояснение, почему данные считаются недопустимыми
           type: string
+
+  NotFound:
+    description: Искомая сущность не найдена
+
+  Conflict:
+    description: Операция вызывает конфликт
 
 parameters:
 
@@ -147,8 +150,17 @@ parameters:
     maxLength: 40
     minLength: 1
 
-  servicedResidence:
-    name: servicedResidence
+  challengeID:
+    name: challengeID
+    in: path
+    description: Идентификатор процедуры идентификации личности
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
+  residence:
+    name: residence
     in: query
     description: |
       Резиденция, в рамках которой производится оказание услуг, трёхсимвольный код по стандарту
@@ -169,4 +181,8 @@ tags:
 
   - name: Wallets
     x-displayName: Кошельки
+    description: ""
+
+  - name: Currencies
+    x-displayName: Валюты
     description: ""

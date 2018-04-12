@@ -1,0 +1,60 @@
+description: Процедура идентификации личности
+type: object
+required:
+  - level
+  - type
+  - proofs
+properties:
+  id:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityChallengeID'
+      - readOnly: true
+  createdAt:
+    description: Дата и время запуска процедуры
+    type: string
+    format: date-time
+    readOnly: true
+  level:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityLevelID'
+      - description: Необходимый уровень идентификации личности
+  type:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityChallengeTypeID'
+  status:
+    description: Статус процедуры
+    type: string
+    enum:
+      - pending
+      - completed
+      - failed
+      - cancelled
+    readOnly: true
+    example: pending
+  validUntil:
+    description: |
+      Дата и время, до наступления которого результат процедуры действителен
+    type: string
+    format: date-time
+    readOnly: true
+  failureReason:
+    description: |
+      Описание причины неудачного завершения процедуры
+    type: string
+    example: Proof incomplete
+  proofs:
+    description: |
+      Набор представленных доказательств
+    type: array
+    uniqueItems: true
+    items:
+      $ref: '#/definitions/IdentityProof'
+    # example:
+    #   - type: RUSDomesticPassport
+    #     token: 7kodCm5gr68ji4O11KpVn0
+    #     seriesMasked: "4***"
+    #     numberMasked: "*****6"
+    #     fullnameMasked: "И***** И.И."
+    #   - type: RUSRetireeInsuranceCertificate
+    #     token: Gfu6tLdqS2qtxsdB6WjOQ5h
+    #     numberMasked: "12-**** ***0"

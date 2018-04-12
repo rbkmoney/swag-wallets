@@ -1,0 +1,21 @@
+description: Данные СНИЛС гражданина РФ
+allOf:
+  - $ref: '#/definitions/IdentityProof'
+  - type: object
+    required:
+      - token
+    properties:
+      type:
+        description: СНИЛС
+        type: string
+        enum: [RUSRetireeInsuranceCertificate]
+        readOnly: true
+      token:
+        description: Токен исходных данных
+        type: string
+        example: Gfu6tLdqS2qtxsdB6WjOQ5h
+      numberMasked:
+        description: Маскированный номер СНИЛС
+        type: string
+        example: "12-**** ***0"
+        readOnly: true

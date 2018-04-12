@@ -29,7 +29,7 @@ properties:
       - $ref: '#/definitions/IdentityID'
   currency:
     x-rebillyMerge:
-      - $ref: '#/definitions/Currency'
+      - $ref: '#/definitions/CurrencyID'
   metadata:
     description: |
       Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с

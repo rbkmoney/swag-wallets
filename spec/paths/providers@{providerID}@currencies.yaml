@@ -1,0 +1,24 @@
+get:
+  operationId: getProviderTerms
+  summary: Получить валюты провайдера
+  tags:
+    - Providers
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/providerID'
+  responses:
+    '200':
+      description: Обслуживаемые валюты найдены
+      schema:
+        type: array
+        items:
+          x-rebillyMerge:
+            - $ref: '#/definitions/CurrencyID'
+        example:
+          - RUB
+          - USD
+          - EUR
+    '404':
+      $ref: '#/responses/NotFound'
+    '400':
+      $ref: '#/responses/BadRequest'

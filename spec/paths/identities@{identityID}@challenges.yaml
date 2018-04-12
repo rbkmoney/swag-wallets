@@ -1,0 +1,27 @@
+post:
+  operationId: startIdentityChallenge
+  summary: Запустить процедуру идентификации
+  tags:
+    - Identities
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/identityID'
+    - name: challenge
+      description: Данные для запуска процедуры идентификации
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/IdentityChallenge'
+  responses:
+    '202':
+      description: Процедура идентификации запущена
+      schema:
+        $ref: '#/definitions/IdentityChallenge'
+    '422':
+      description: Неверные данные для проведения процедуры
+      schema:
+        $ref: '#/definitions/InvalidOperationParameters'
+    '404':
+      $ref: '#/responses/NotFound'
+    '400':
+      $ref: '#/responses/BadRequest'

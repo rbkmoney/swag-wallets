@@ -5,7 +5,7 @@ get:
     - Providers
   parameters:
     - $ref: '#/parameters/requestID'
-    - $ref: '#/parameters/servicedResidence'
+    - $ref: '#/parameters/residence'
   responses:
     '200':
       description: Провайдеры найдены

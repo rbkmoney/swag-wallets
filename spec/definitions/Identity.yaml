@@ -25,14 +25,20 @@ properties:
   residence:
     x-rebillyMerge:
       - $ref: '#/definitions/Residence'
-  status:
-    type: string
-    example: active
-    readOnly: true
   level:
-    type: string
-    example: anonymous
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityLevelID'
+      - readOnly: true
+  effectiveChallenge:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityChallengeID'
+      - description: Процедура идентификации, результат которой действителен на текущий момент
+        readOnly: true
+  isBlocked:
+    description: Заблокирована ли личность владельца?
+    type: boolean
     readOnly: true
+    example: false
   metadata:
     description: |
       Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
