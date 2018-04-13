@@ -1,6 +1,6 @@
 get:
-  operationId: getProviderTerms
-  summary: Получить валюты провайдера
+  operationId: listProviderCurrencies
+  summary: Перечислить валюты провайдера
   tags:
     - Providers
   parameters:

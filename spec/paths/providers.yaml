@@ -1,6 +1,6 @@
 get:
   operationId: listProviders
-  summary: Получить список провайдеров
+  summary: Перечислить доступных провайдеров
   tags:
     - Providers
   parameters:

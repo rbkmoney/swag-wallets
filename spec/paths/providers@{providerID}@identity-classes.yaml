@@ -1,6 +1,6 @@
 get:
-  operationId: getProviderIdentityClasses
-  summary: Получить возможные классы личностей
+  operationId: listProviderIdentityClasses
+  summary: Перечислить классы личностей
   tags:
     - Providers
   parameters:

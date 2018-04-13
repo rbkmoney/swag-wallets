@@ -1,6 +1,6 @@
 get:
-  operationId: getProviderIdentityLevels
-  summary: Получить уровни идентификации личности
+  operationId: listProviderIdentityLevels
+  summary: Перечислить уровни идентификации личности
   tags:
     - Providers
   parameters:

@@ -1,6 +1,6 @@
 get:
   operationId: getProviderIdentityLevel
-  summary: Получить описание уровня идентификации личности
+  summary: Получить описание уровня идентификации
   tags:
     - Providers
   parameters:
@@ -12,7 +12,7 @@ get:
       required: true
       type: string
     - name: identityLevelID
-      description: Уровень идентификации личности
+      description: Уровень идентификации
       in: path
       required: true
       type: string
