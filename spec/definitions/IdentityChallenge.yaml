@@ -4,15 +4,6 @@ required:
   - level
   - type
   - proofs
-dependencies:
-  validUntil:
-    properties:
-      status:
-        enum: [completed]
-  failureReason:
-    properties:
-      status:
-        enum: [failed]
 properties:
   id:
     x-rebillyMerge:
