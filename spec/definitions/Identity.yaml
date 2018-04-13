@@ -2,7 +2,6 @@ description: Данные личности владельца кошельков
 type: object
 required:
   - name
-  - residence
   - provider
 properties:
   id:
@@ -22,9 +21,6 @@ properties:
   provider:
     x-rebillyMerge:
       - $ref: '#/definitions/ProviderID'
-  residence:
-    x-rebillyMerge:
-      - $ref: '#/definitions/Residence'
   level:
     x-rebillyMerge:
       - $ref: '#/definitions/IdentityLevelID'
