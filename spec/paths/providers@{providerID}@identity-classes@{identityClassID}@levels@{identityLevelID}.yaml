@@ -1,6 +1,6 @@
 get:
   operationId: getProviderIdentityLevel
-  summary: Получить данные уровня идентификации личности
+  summary: Получить описание уровня идентификации личности
   tags:
     - Providers
   parameters:

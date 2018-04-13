@@ -1,5 +1,19 @@
-description: |
-  Резиденция, трёхсимвольный код по стандарту [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
-type: string
-pattern: '^[A-Z]{3}$'
-example: RUS
+description: Описание региона резиденции
+type: object
+required:
+  - id
+  - name
+properties:
+  id:
+    x-rebillyMerge:
+      - $ref: '#/definitions/ResidenceID'
+  name:
+    description: |
+      Человекочитаемое название региона резиденции
+    type: string
+    example: Российская федерация
+  flag:
+    description: |
+      Флаг региона резиденции
+    type: string
+    example: '🇷🇺'

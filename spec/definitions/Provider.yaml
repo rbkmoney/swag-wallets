@@ -15,6 +15,6 @@ properties:
     example: НКО «ЭПС»
   residence:
     x-rebillyMerge:
-      - $ref: '#/definitions/Residence'
+      - $ref: '#/definitions/ResidenceID'
       - description: |
           Резиденция, в которой провайдер предоставляет услуги

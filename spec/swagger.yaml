@@ -166,10 +166,10 @@ parameters:
     name: residence
     in: query
     description: |
-      Резиденция, в рамках которой производится оказание услуг, трёхсимвольный код по стандарту
-      [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
+      Резиденция, в рамках которой производится оказание услуг,
+      код страны или региона по стандарту [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
     type: string
-    pattern: '^[A-Z]{3}$'
+    pattern: '^[A-Z]{2}$'
     required: false
 
 tags:

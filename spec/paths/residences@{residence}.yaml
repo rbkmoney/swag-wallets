@@ -1,0 +1,19 @@
+get:
+  operationId: getResidence
+  summary: Получить описание региона резиденции
+  tags:
+    - Residences
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - x-rebillyMerge:
+      - $ref: '#/parameters/residence'
+      - required: true
+  responses:
+    '200':
+      description: Регион резиденции найден
+      schema:
+        $ref: '#/definitions/Residence'
+    '404':
+      $ref: '#/responses/NotFound'
+    '400':
+      $ref: '#/responses/BadRequest'
