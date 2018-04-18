@@ -1,19 +1,12 @@
-description: Данные национального паспорта гражданина РФ
+description: Открытые данные национального паспорта гражданина РФ
 allOf:
   - $ref: '#/definitions/IdentityProof'
   - type: object
-    required:
-      - token
     properties:
       type:
         description: Национальный паспорт гражданина РФ
         type: string
-        enum: [RUSDomesticPassport]
         readOnly: true
-      token:
-        description: Токен исходных данных
-        type: string
-        example: 7kodCm5gr68ji4O11KpVn0
       seriesMasked:
         description: Маскированная серия паспорта
         type: string

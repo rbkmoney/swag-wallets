@@ -1,21 +1,18 @@
-description: Данные СНИЛС гражданина РФ
+description: |
+  Открытые данные страхового свидетельства обязательного пенсионного страхования
+  гражданина РФ
 allOf:
   - $ref: '#/definitions/IdentityProof'
   - type: object
-    required:
-      - token
     properties:
       type:
-        description: СНИЛС
+        description: |
+          Страховое свидетельство обязательного пенсионного страхования
         type: string
-        enum: [RUSRetireeInsuranceCertificate]
         readOnly: true
-      token:
-        description: Токен исходных данных
-        type: string
-        example: Gfu6tLdqS2qtxsdB6WjOQ5h
       numberMasked:
-        description: Маскированный номер СНИЛС
+        description: |
+          Маскированный [СНИЛС](https://ru.wikipedia.org/wiki/Страховой_номер_индивидуального_лицевого_счёта)
         type: string
-        example: "12-**** ***0"
+        example: "12*-***-*** *4"
         readOnly: true

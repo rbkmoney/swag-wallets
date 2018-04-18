@@ -1,0 +1,20 @@
+post:
+  operationId: submitIdentityProof
+  summary: Предоставить подтверждающий личность документ
+  tags:
+    - Identities
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - name: proof
+      description: Данные документа
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/IdentityProofDocument'
+  responses:
+    '201':
+      description: Документ токенизирован
+      schema:
+        $ref: '#/definitions/IdentityProof'
+    '400':
+      $ref: '#/responses/BadRequest'
