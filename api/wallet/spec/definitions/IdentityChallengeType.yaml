@@ -15,7 +15,7 @@ properties:
     type: array
     items:
       x-rebillyMerge:
-        - $ref: '#/definitions/IdentityProofType'
+        - $ref: '#/definitions/SecuredPrivateDocumentType'
     example:
       - RUSDomesticPassport
       - RUSRetireeInsuranceCertificate

@@ -2,19 +2,28 @@
 'use strict';
 var Path = require('path');
 
+require('shelljs/global');
+set('-e');
+
 var TARGET_DIR = 'dist'
 if (process.argv[2]) {
     TARGET_DIR = process.argv[2]
 }
 
-require('shelljs/global');
-set('-e');
+var APIS = ls('api')
+if (process.argv[3]) {
+    APIS = [process.argv[3]]
+}
 
-mkdir('-p', TARGET_DIR);
 cp('-R', 'web/*', TARGET_DIR + '/');
 
-exec('npm run swagger bundle --        -o ' + TARGET_DIR + '/swagger.json');
-exec('npm run swagger bundle -- --yaml -o ' + TARGET_DIR + '/swagger.yaml');
+APIS.forEach(function (api) {
+    var basedir = 'api/' + api + '/spec/';
+    var targetdir = TARGET_DIR + '/api/' + api;
+    mkdir('-p', targetdir);
+    exec('npm run swagger bundle -- --basedir ' + basedir + '        -o ' + targetdir + '/swagger.json');
+    exec('npm run swagger bundle -- --basedir ' + basedir + ' --yaml -o ' + targetdir + '/swagger.yaml');
+});
 
 var SWAGGER_UI_DIST = Path.dirname(require.resolve('swagger-ui'));
 rm('-rf', TARGET_DIR + '/swagger-ui/')

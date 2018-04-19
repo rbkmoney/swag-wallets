@@ -2,7 +2,7 @@ description: |
   Открытые данные страхового свидетельства обязательного пенсионного страхования
   гражданина РФ
 allOf:
-  - $ref: '#/definitions/IdentityProof'
+  - $ref: '#/definitions/SecuredPrivateDocument'
   - type: object
     properties:
       type:

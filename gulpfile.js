@@ -46,5 +46,5 @@ gulp.task('reload', ['build'], function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch(['spec/**/*', 'web/**/*'], ['reload']);
+  gulp.watch(['api/**/*', 'spec/**/*', 'web/**/*'], ['reload']);
 });

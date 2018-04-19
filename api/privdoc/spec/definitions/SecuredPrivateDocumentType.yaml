@@ -1,4 +1,4 @@
-description: Тип доказательного документа
+description: Тип документа
 type: string
 enum:
   - RUSDomesticPassport

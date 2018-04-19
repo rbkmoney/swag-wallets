@@ -44,11 +44,13 @@ properties:
     example: Proof incomplete
   proofs:
     description: |
-      Набор представленных доказательств
+      Набор представленных доказательств.
+
+      См. [RBKmoney Private Documents API](/?api/privdoc/swagger.json).
     type: array
     uniqueItems: true
     items:
-      $ref: '#/definitions/IdentityProof'
+      $ref: '#/definitions/SecuredPrivateDocument'
     # example:
     #   - type: RUSDomesticPassport
     #     token: 7kodCm5gr68ji4O11KpVn0

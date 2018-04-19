@@ -1,6 +1,6 @@
 description: Исходные данные национального паспорта гражданина РФ
 allOf:
-  - $ref: '#/definitions/IdentityProofDocument'
+  - $ref: '#/definitions/PrivateDocument'
   - type: object
     required:
       - series

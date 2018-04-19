@@ -2,7 +2,7 @@ description: |
   Исходные данные страхового свидетельства обязательного пенсионного страхования
   гражданина РФ
 allOf:
-  - $ref: '#/definitions/IdentityProofDocument'
+  - $ref: '#/definitions/PrivateDocument'
   - type: object
     required:
       - number
