@@ -162,6 +162,10 @@ tags:
     x-displayName: Кошельки
     description: ""
 
+  - name: Residences
+    x-displayName: Резиденции
+    description: ""
+
   - name: Currencies
     x-displayName: Валюты
     description: ""
