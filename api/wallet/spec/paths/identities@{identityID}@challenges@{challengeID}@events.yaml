@@ -7,23 +7,8 @@ get:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/identityID'
     - $ref: '#/parameters/challengeID'
-    - name: limit
-      in: query
-      description: Лимит выборки
-      required: true
-      type: integer
-      format: int32
-      minimum: 1
-    - name: eventID
-      in: query
-      description: |
-        Идентификатор события.
-
-        Все события, произошедшие _после_ указанного, попадут в выборку.
-        Если этот параметр не указан, в выборку попадут все события по идентификации с самого её начала.
-      required: false
-      type: integer
-      format: int32
+    - $ref: '#/parameters/eventLimit'
+    - $ref: '#/parameters/eventCursor'
   responses:
     '200':
       description: События найдены

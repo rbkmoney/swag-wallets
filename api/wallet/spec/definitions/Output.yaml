@@ -1,0 +1,46 @@
+description: Данные инструмента вывода денежных средств
+allOf:
+  - type: object
+    required:
+      - name
+      - identity
+      - resource
+    properties:
+      id:
+        x-rebillyMerge:
+          - $ref: '#/definitions/OutputID'
+          - readOnly: true
+      name:
+        description: |
+          Человекочитаемое название инструмента, по которому его легко узнать
+        type: string
+        example: Squarey plastic thingy
+      createdAt:
+        description: Дата и время создания инструмента вывода
+        type: string
+        format: date-time
+        readOnly: true
+      isBlocked:
+        description: Заблокирован ли инструмент вывода?
+        type: boolean
+        readOnly: true
+        example: false
+      identity:
+        x-rebillyMerge:
+          - $ref: '#/definitions/IdentityID'
+      currency:
+        x-rebillyMerge:
+          - $ref: '#/definitions/CurrencyID'
+      resource:
+        allOf:
+          - description: |
+              Платёжный ресурс, посредством которого будут осуществляться выводы
+          - $ref: '#/definitions/PaymentResource'
+      metadata:
+        description: |
+          Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
+          данным инструментом
+        type: object
+        example:
+          display_name: Картофан СБЕР
+  - $ref: '#/definitions/OutputStatus'

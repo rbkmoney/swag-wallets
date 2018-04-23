@@ -1,0 +1,61 @@
+get:
+  operationId: listOutputs
+  summary: Перечислить инструменты вывода
+  tags:
+    - Withdrawals
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - name: identity
+      description: Фильтр по личности владельца
+      in: query
+      required: false
+      type: string
+      maxLength: 40
+      minLength: 1
+    - name: currency
+      description: |
+        Фильтр по валюте инструмента вывода,
+        символьный код согласно [ISO 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+      in: query
+      required: false
+      type: string
+      pattern: '^[A-Z]{3}$'
+  responses:
+    '200':
+      description: Инструменты вывода найдены
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/Output'
+    '400':
+      $ref: '#/responses/BadRequest'
+
+post:
+  operationId: createOutput
+  summary: Завести инструмент вывода
+  tags:
+    - Withdrawals
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - name: output
+      description: Данные инструмента вывода
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/Output'
+  responses:
+    '201':
+      description: Инструмент вывода создан
+      headers:
+        Location:
+          description: URI созданного инструмента вывода
+          type: string
+          format: uri
+      schema:
+        $ref: '#/definitions/Output'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '422':
+      description: Неверные данные инструмента вывода
+      schema:
+        $ref: '#/definitions/InvalidOperationParameters'

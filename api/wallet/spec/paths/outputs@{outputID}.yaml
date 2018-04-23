@@ -1,0 +1,33 @@
+get:
+  operationId: getOutput
+  summary: Получить инструмент вывода
+  tags:
+    - Withdrawals
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/outputID'
+  responses:
+    '200':
+      description: Инструмент вывода найден
+      schema:
+        $ref: '#/definitions/Output'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '404':
+      $ref: '#/responses/NotFound'
+
+delete:
+  operationId: removeOutput
+  summary: Удалить инструмент вывода
+  tags:
+    - Withdrawals
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/outputID'
+  responses:
+    '204':
+      description: Инструмент вывода удалён
+    '400':
+      $ref: '#/responses/BadRequest'
+    '404':
+      $ref: '#/responses/NotFound'

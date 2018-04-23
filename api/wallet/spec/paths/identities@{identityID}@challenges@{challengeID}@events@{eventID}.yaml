@@ -7,13 +7,7 @@ get:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/identityID'
     - $ref: '#/parameters/challengeID'
-    - name: eventID
-      in: path
-      description: |
-        Идентификатор события процедуры идентификации.
-      required: true
-      type: integer
-      format: int32
+    - $ref: '#/parameters/eventID'
   responses:
     '200':
       description: Событие найдено

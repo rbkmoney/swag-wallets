@@ -102,15 +102,6 @@ parameters:
     maxLength: 32
     minLength: 1
 
-  walletID:
-    name: walletID
-    in: path
-    description: Идентификатор кошелька
-    required: true
-    type: string
-    maxLength: 40
-    minLength: 1
-
   providerID:
     name: providerID
     in: path
@@ -138,6 +129,33 @@ parameters:
     maxLength: 40
     minLength: 1
 
+  walletID:
+    name: walletID
+    in: path
+    description: Идентификатор кошелька
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
+  outputID:
+    name: outputID
+    in: path
+    description: Идентификатор средства вывода
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
+  withdrawalID:
+    name: withdrawalID
+    in: path
+    description: Идентификатор вывода денежных средств
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
   residence:
     name: residence
     in: query
@@ -147,6 +165,36 @@ parameters:
     type: string
     pattern: '^[A-Z]{2}$'
     required: false
+
+  eventLimit:
+    name: limit
+    in: query
+    description: Лимит выборки
+    required: true
+    type: integer
+    format: int32
+    minimum: 1
+
+  eventCursor:
+    name: eventCursor
+    in: query
+    description: |
+      Идентификатор последнего известного события.
+
+      Все события, произошедшие _после_ указанного, попадут в выборку.
+      Если этот параметр не указан, в выборку попадут события, начиная с самого первого.
+    required: false
+    type: integer
+    format: int32
+
+  eventID:
+    name: eventID
+    in: path
+    description: |
+      Идентификатор события процедуры идентификации.
+    required: true
+    type: integer
+    format: int32
 
 tags:
 
@@ -160,6 +208,10 @@ tags:
 
   - name: Wallets
     x-displayName: Кошельки
+    description: ""
+
+  - name: Withdrawals
+    x-displayName: Выводы
     description: ""
 
   - name: Residences
