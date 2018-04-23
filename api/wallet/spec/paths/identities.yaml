@@ -52,6 +52,11 @@ post:
   responses:
     '201':
       description: Личность владельца создана
+      headers:
+        Location:
+          description: URI созданной личности
+          type: string
+          format: uri
       schema:
         $ref: '#/definitions/Identity'
     '400':
