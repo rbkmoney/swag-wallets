@@ -1,3 +1,0 @@
-description: Процедура отменена
-allOf:
-  - $ref: '#/definitions/IdentityChallenge'

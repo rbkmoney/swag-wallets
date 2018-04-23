@@ -1,15 +1,39 @@
-description: Статус процедуры идентификации личности
 type: object
-discriminator: status
-required:
-  - status
 properties:
   status:
-    description: Статус процедуры идентификации личности
+    description: |
+      Статус процедуры идентификации личности.
+
+      | Значение  | Пояснение                       |
+      | --------- | ------------------------------- |
+      | Pending   | Процедура в процессе выполнения |
+      | Completed | Процедура пройдена успешно      |
+      | Failed    | Процедура не пройдена           |
+      | Cancelled | Процедура отменена              |
+
     type: string
     enum:
-      - IdentityChallengePending
-      - IdentityChallengeCompleted
-      - IdentityChallengeFailed
-      - IdentityChallengeCancelled
+      - Pending
+      - Completed
+      - Failed
+      - Cancelled
+    readOnly: true
+  validUntil:
+    # TODO
+    # Интересно, помогла бы механика из OpenAPI 3.x, которая позволила бы задачть discriminator по `status`,
+    # а потом allOf'нуть его в основной объект `IdentityChallenge`?
+    description: |
+      > Если `status` == `Completed`
+
+      Дата и время, до наступления которого результат процедуры действителен
+    type: string
+    format: date-time
+    readOnly: true
+  failureReason:
+    description: |
+      > Если `status` == `Failed`
+
+      Описание причины неудачного завершения процедуры
+    type: string
+    example: Proof incomplete
     readOnly: true

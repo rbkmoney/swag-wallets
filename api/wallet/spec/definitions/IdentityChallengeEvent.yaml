@@ -10,12 +10,10 @@ properties:
     description: Идентификатор события процедуры идентификации
     type: integer
     format: int32
-    readOnly: true
   occuredAt:
     description: Дата и время запуска процедуры
     type: string
     format: date-time
-    readOnly: true
   changes:
     type: array
     items:

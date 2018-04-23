@@ -1,3 +1,0 @@
-description: Процедура в процессе выполнения
-allOf:
-  - $ref: '#/definitions/IdentityChallenge'
