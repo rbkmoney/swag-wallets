@@ -1,0 +1,11 @@
+description: Процедура пройдена успешно
+allOf:
+  - $ref: '#/definitions/IdentityChallenge'
+  - type: object
+    properties:
+      validUntil:
+        description: |
+          Дата и время, до наступления которого результат процедуры действителен
+        type: string
+        format: date-time
+        readOnly: true

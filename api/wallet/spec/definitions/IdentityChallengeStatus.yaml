@@ -1,0 +1,15 @@
+description: Статус процедуры идентификации личности
+type: object
+discriminator: status
+required:
+  - status
+properties:
+  status:
+    description: Статус процедуры идентификации личности
+    type: string
+    enum:
+      - IdentityChallengePending
+      - IdentityChallengeCompleted
+      - IdentityChallengeFailed
+      - IdentityChallengeCancelled
+    readOnly: true
