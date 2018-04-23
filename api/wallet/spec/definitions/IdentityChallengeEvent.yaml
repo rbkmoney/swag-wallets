@@ -10,8 +10,9 @@ properties:
     description: Идентификатор события процедуры идентификации
     type: integer
     format: int32
+    example: 42
   occuredAt:
-    description: Дата и время запуска процедуры
+    description: Дата и время возникновения события
     type: string
     format: date-time
   changes:

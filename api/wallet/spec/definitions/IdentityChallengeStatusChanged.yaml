@@ -1,11 +1,4 @@
 description: Изменение статуса процедуры идентификации
 allOf:
   - $ref: '#/definitions/IdentityChallengeEventChange'
-  - type: object
-    required:
-      - status
-    properties:
-      status:
-        allOf:
-          - description: Новый статус
-          - $ref: '#/definitions/IdentityChallengeStatus'
+  - $ref: '#/definitions/IdentityChallengeStatus'
