@@ -52,3 +52,7 @@ post:
         $ref: '#/definitions/Wallet'
     '400':
       $ref: '#/responses/BadRequest'
+    '422':
+      description: Неверные данные кошелька
+      schema:
+        $ref: '#/definitions/InvalidOperationParameters'
