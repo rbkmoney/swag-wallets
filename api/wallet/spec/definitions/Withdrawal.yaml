@@ -2,7 +2,7 @@ description: Данные вывода денежных средств
 allOf:
   - type: object
     required:
-      - source
+      - resource
       - output
       - body
     properties:
@@ -15,9 +15,8 @@ allOf:
         type: string
         format: date-time
         readOnly: true
-      source:
-        description: |
-          Источник средств для вывода
+      resource:
+        $ref: '#/definitions/PaymentResource'
       output:
         x-rebillyMerge:
           - $ref: '#/definitions/OutputID'

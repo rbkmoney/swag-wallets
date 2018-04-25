@@ -1,0 +1,4 @@
+description: Токенизированный платёжный ресурс
+allOf:
+  - $ref: '#/definitions/PaymentResource'
+  - $ref: '#/definitions/SecuredPaymentResource'
