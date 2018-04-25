@@ -4,6 +4,7 @@ allOf:
     required:
       - name
       - identity
+      - currency
       - resource
     properties:
       id:

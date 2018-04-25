@@ -12,7 +12,7 @@ post:
       schema:
         $ref: '#/definitions/Withdrawal'
   responses:
-    '201':
+    '202':
       description: Вывод запущен
       headers:
         Location:
