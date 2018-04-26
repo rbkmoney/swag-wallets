@@ -1,4 +1,4 @@
-description: Ресурс для осуществления платежей
+description: Ресурс для осуществления выводов
 type: object
 discriminator: type
 required:
@@ -6,7 +6,7 @@ required:
 properties:
   type:
     description: |
-      Тип платёжного ресурса.
+      Тип ресурса для выводов.
 
       См. [RBKmoney Payment Resource API](/?api/payres/swagger.yaml).
     type: string

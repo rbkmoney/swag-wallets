@@ -19,7 +19,7 @@
   "scripts": {
     "build": "node ./scripts/build.js",
     "swagger": "swagger-repo",
-    "test": "swagger-repo validate --basedir api/wallet/spec/ && swagger-repo validate --basedir api/privdoc/spec/",
+    "test": "swagger-repo validate --basedir api/wallet/spec/ && swagger-repo validate --basedir api/privdoc/spec/ && swagger-repo validate --basedir api/payres/spec/",
     "start": "gulp serve"
   }
 }

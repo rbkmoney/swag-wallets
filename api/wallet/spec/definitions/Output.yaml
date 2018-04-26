@@ -36,7 +36,7 @@ allOf:
         allOf:
           - description: |
               Платёжный ресурс, посредством которого будут осуществляться выводы
-          - $ref: '#/definitions/PaymentResource'
+          - $ref: '#/definitions/OutputResource'
       metadata:
         description: |
           Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с

@@ -13,7 +13,6 @@ properties:
     enum:
       - Unauthorized
       - Authorized
-      - Unadmissible
     readOnly: true
     example: Authorized
   validUntil:
