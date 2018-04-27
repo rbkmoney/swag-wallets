@@ -1,9 +1,0 @@
-type: object
-discriminator: type
-required:
-  - type
-properties:
-  type:
-    type: string
-    enum:
-      - BankCard

@@ -38,6 +38,9 @@ security:
 
 responses:
 
+  NotFound:
+    description: Искомая сущность не найдена
+
   BadRequest:
     description: Недопустимые для операции входные данные
     schema:

@@ -11,4 +11,4 @@ properties:
       См. [RBKmoney Payment Resource API](/?api/payres/swagger.yaml).
     type: string
     enum:
-      - SecurePaymentResource
+      - BankCardResource

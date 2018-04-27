@@ -1,5 +1,5 @@
 post:
-  operationId: submitPrivateDocument
+  operationId: storePrivateDocument
   summary: Сохранить персональный документ
   tags:
     - Private Documents
