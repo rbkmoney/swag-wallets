@@ -8,4 +8,5 @@ properties:
       - $ref: '#/definitions/WalletID'
   walletGrant:
     x-rebillyMerge:
-      - $ref: '#/definitions/WalletGrantToken'
+      # - $ref: '#/definitions/WalletGrantToken'
+      - $ref: '#/definitions/GrantToken'

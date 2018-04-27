@@ -1,0 +1,27 @@
+post:
+  operationId: issueOutputGrant
+  summary: Выдать право управления инструментом вывода
+  tags:
+    - Withdrawals
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/outputID'
+    - name: request
+      description: Запрос на право управления инструментом вывода
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/OutputGrantRequest'
+  responses:
+    '201':
+      description: Право выдано
+      schema:
+        $ref: '#/definitions/OutputGrantRequest'
+    '404':
+      $ref: '#/responses/NotFound'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '422':
+      description: Неверные данные для выдачи
+      schema:
+        $ref: '#/definitions/InvalidOperationParameters'

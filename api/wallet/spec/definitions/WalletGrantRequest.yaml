@@ -6,7 +6,8 @@ required:
 properties:
   token:
     x-rebillyMerge:
-      - $ref: '#/definitions/WalletGrantToken'
+      - description: Токен, дающий право единоразового управления средствами на кошельке
+      - $ref: '#/definitions/GrantToken'
       - readOnly: true
   asset:
     allOf:

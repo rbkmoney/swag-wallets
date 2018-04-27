@@ -2,7 +2,7 @@ description: Данные вывода денежных средств
 allOf:
   - type: object
     required:
-      - source
+      - wallet
       - output
       - body
     properties:
@@ -15,11 +15,30 @@ allOf:
         type: string
         format: date-time
         readOnly: true
-      source:
-        $ref: '#/definitions/WalletSource'
+      wallet:
+        x-rebillyMerge:
+          - $ref: '#/definitions/WalletID'
+      walletGrant:
+        x-rebillyMerge:
+          - description: |
+              Токен, дающий право на списание с кошелька для оплаты вывода.
+
+              Необходимо предоставить в том случае, если оплата производится засчёт средств _чужого_
+              кошелька. Владелец указанного кошелька может
+              [выдать на это право](#operation/issueWalletGrant).
+          - $ref: '#/definitions/GrantToken'
       output:
         x-rebillyMerge:
           - $ref: '#/definitions/OutputID'
+      outputGrant:
+        x-rebillyMerge:
+          - description: |
+              Токен, дающий право вывода на инструмент.
+
+              Необходимо предоставить в том случае, если вывод производится посредством _чужого_
+              инструмента вывода. Владелец указанного инструмента вывода может
+              [выдать на это право](#operation/issueOutputGrant).
+          - $ref: '#/definitions/GrantToken'
       body:
         allOf:
           - description: Объём средств, которые необходимо вывести
