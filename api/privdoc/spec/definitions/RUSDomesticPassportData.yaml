@@ -58,3 +58,4 @@ allOf:
         description: Место рождения гражданина
         type: string
         pattern: "^[ .0-9А-Яа-я'-]{1,100}$"
+        example: "дер. Упоровка"
