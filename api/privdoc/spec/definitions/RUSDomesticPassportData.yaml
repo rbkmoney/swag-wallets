@@ -6,8 +6,11 @@ allOf:
       - series
       - number
       - issuer
+      - issuedAt
       - familyName
       - firstName
+      - birthDate
+      - birthPlace
     properties:
       type:
         description: Национальный паспорт гражданина РФ
@@ -28,6 +31,10 @@ allOf:
         example: |
           Отделение УФМС России по Кемеровской области в Упоровском районе
         maxLength: 1000
+      issuedAt:
+        description: Дата выдачи паспорта
+        type: string
+        format: date
       familyName:
         description: Фамилия гражданина
         type: string
@@ -43,3 +50,11 @@ allOf:
         type: string
         example: "Иванович"
         pattern: "^[А-Яа-я'-]{1,100}$"
+      birthDate:
+        description: Дата рождения гражданина
+        type: string
+        format: date
+      birthPlace:
+        description: Место рождения гражданина
+        type: string
+        pattern: "^[ .0-9А-Яа-я'-]{1,100}$"
