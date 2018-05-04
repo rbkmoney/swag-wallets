@@ -18,3 +18,7 @@ post:
         $ref: '#/definitions/SecuredBankCard'
     '400':
       $ref: '#/responses/BadRequest'
+    '422':
+      description: Непригодные данные банковской карты
+      schema:
+        $ref: '#/definitions/InvalidBankCard'
