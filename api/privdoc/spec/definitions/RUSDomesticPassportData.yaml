@@ -8,7 +8,6 @@ allOf:
       - issuer
       - familyName
       - firstName
-      - patronymic
     properties:
       type:
         description: Национальный паспорт гражданина РФ
