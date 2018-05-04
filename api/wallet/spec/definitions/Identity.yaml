@@ -32,7 +32,9 @@ properties:
   effectiveChallenge:
     x-rebillyMerge:
       - $ref: '#/definitions/IdentityChallengeID'
-      - description: Процедура идентификации, результат которой действителен на текущий момент
+      - description: |
+          Идентификатор успешно пройденной процедура идентификации, результат которой действителен на
+          текущий момент
         readOnly: true
   isBlocked:
     description: Заблокирована ли личность владельца?
