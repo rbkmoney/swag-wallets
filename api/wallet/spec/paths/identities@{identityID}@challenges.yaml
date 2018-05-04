@@ -1,3 +1,29 @@
+get:
+  operationId: listIdentityChallenges
+  summary: Перечислить процедуры идентификации
+  tags:
+    - Identities
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/identityID'
+    - x-rebillyMerge:
+        - name: status
+          description: Фильтр по статусу процедуры
+          in: query
+          required: false
+        - $ref: '#/definitions/IdentityChallengeStatusValue'
+  responses:
+    '200':
+      description: Процедуры идентификации найдены
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/IdentityChallenge'
+    '404':
+      $ref: '#/responses/NotFound'
+    '400':
+      $ref: '#/responses/BadRequest'
+
 post:
   operationId: startIdentityChallenge
   summary: Запустить процедуру идентификации
@@ -26,6 +52,8 @@ post:
       description: Неверные данные для проведения процедуры
       schema:
         $ref: '#/definitions/InvalidOperationParameters'
+    '409':
+      description: Ранее запущенная процедура ещё не завершена
     '404':
       $ref: '#/responses/NotFound'
     '400':

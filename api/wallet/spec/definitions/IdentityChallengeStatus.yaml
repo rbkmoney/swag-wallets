@@ -1,23 +1,9 @@
 type: object
 properties:
   status:
-    description: |
-      Статус процедуры идентификации личности.
-
-      | Значение    | Пояснение                       |
-      | ----------- | ------------------------------- |
-      | `Pending`   | Процедура в процессе выполнения |
-      | `Completed` | Процедура пройдена успешно      |
-      | `Failed`    | Процедура не пройдена           |
-      | `Cancelled` | Процедура отменена              |
-
-    type: string
-    enum:
-      - Pending
-      - Completed
-      - Failed
-      - Cancelled
-    readOnly: true
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityChallengeStatusValue'
+      - readOnly: true
   validUntil:
     # TODO
     # Интересно, помогла бы механика из OpenAPI 3.x, которая позволила бы задачть discriminator по `status`,
