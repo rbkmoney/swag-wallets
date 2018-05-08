@@ -5,7 +5,7 @@ post:
     - Withdrawals
   parameters:
     - $ref: '#/parameters/requestID'
-    - name: payout
+    - name: withdrawal
       description: Данные вывода
       in: body
       required: true
