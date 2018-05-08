@@ -138,10 +138,10 @@ parameters:
     maxLength: 40
     minLength: 1
 
-  outputID:
-    name: outputID
+  destinationID:
+    name: destinationID
     in: path
-    description: Идентификатор средства вывода
+    description: Идентификатор приёмника средств
     required: true
     type: string
     maxLength: 40

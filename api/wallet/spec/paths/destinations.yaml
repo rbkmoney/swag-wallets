@@ -1,6 +1,6 @@
 get:
-  operationId: listOutputs
-  summary: Перечислить инструменты вывода
+  operationId: listDestinations
+  summary: Перечислить приёмники средств
   tags:
     - Withdrawals
   parameters:
@@ -14,7 +14,7 @@ get:
       minLength: 1
     - name: currency
       description: |
-        Фильтр по валюте инструмента вывода,
+        Фильтр по валюте приёмника средств,
         символьный код согласно [ISO 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
       in: query
       required: false
@@ -22,40 +22,40 @@ get:
       pattern: '^[A-Z]{3}$'
   responses:
     '200':
-      description: Инструменты вывода найдены
+      description: Приёмники средств найдены
       schema:
         type: array
         items:
-          $ref: '#/definitions/Output'
+          $ref: '#/definitions/Destination'
     '400':
       $ref: '#/responses/BadRequest'
 
 post:
-  operationId: createOutput
-  summary: Завести инструмент вывода
+  operationId: createDestination
+  summary: Завести приёмник средств
   tags:
     - Withdrawals
   parameters:
     - $ref: '#/parameters/requestID'
-    - name: output
-      description: Данные инструмента вывода
+    - name: destination
+      description: Данные приёмника средств
       in: body
       required: true
       schema:
-        $ref: '#/definitions/Output'
+        $ref: '#/definitions/Destination'
   responses:
     '201':
-      description: Инструмент вывода создан
+      description: Приёмник средств создан
       headers:
         Location:
-          description: URI созданного инструмента вывода
+          description: URI созданного приёмника средств
           type: string
           format: uri
       schema:
-        $ref: '#/definitions/Output'
+        $ref: '#/definitions/Destination'
     '400':
       $ref: '#/responses/BadRequest'
     '422':
-      description: Неверные данные инструмента вывода
+      description: Неверные данные приёмника средств
       schema:
         $ref: '#/definitions/InvalidOperationParameters'

@@ -1,4 +1,4 @@
-description: Запрос на право управления выводами на инструмент
+description: Запрос на право управления выводами на приёмник средств
 type: object
 required:
   - validUntil

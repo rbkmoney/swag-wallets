@@ -1,4 +1,4 @@
 description: Банковская карта
 allOf:
-  - $ref: '#/definitions/OutputResource'
+  - $ref: '#/definitions/DestinationResource'
   - $ref: '#/definitions/SecuredBankCard'

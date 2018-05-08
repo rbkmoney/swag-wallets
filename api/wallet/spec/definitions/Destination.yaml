@@ -1,4 +1,4 @@
-description: Данные инструмента вывода денежных средств
+description: Данные приёмника денежных средств
 allOf:
   - type: object
     required:
@@ -9,20 +9,20 @@ allOf:
     properties:
       id:
         x-rebillyMerge:
-          - $ref: '#/definitions/OutputID'
+          - $ref: '#/definitions/DestinationID'
           - readOnly: true
       name:
         description: |
-          Человекочитаемое название инструмента, по которому его легко узнать
+          Человекочитаемое название приёмника средств, по которому его легко узнать
         type: string
         example: Squarey plastic thingy
       createdAt:
-        description: Дата и время создания инструмента вывода
+        description: Дата и время создания приёмника средств
         type: string
         format: date-time
         readOnly: true
       isBlocked:
-        description: Заблокирован ли инструмент вывода?
+        description: Заблокирован ли приёмник средств?
         type: boolean
         readOnly: true
         example: false
@@ -33,15 +33,12 @@ allOf:
         x-rebillyMerge:
           - $ref: '#/definitions/CurrencyID'
       resource:
-        allOf:
-          - description: |
-              Платёжный ресурс, посредством которого будут осуществляться выводы
-          - $ref: '#/definitions/OutputResource'
+        $ref: '#/definitions/DestinationResource'
       metadata:
         description: |
           Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
-          данным инструментом
+          данным приёмником
         type: object
         example:
           display_name: Картофан СБЕР
-  - $ref: '#/definitions/OutputStatus'
+  - $ref: '#/definitions/DestinationStatus'
