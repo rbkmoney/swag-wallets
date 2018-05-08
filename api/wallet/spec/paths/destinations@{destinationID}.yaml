@@ -15,19 +15,3 @@ get:
       $ref: '#/responses/BadRequest'
     '404':
       $ref: '#/responses/NotFound'
-
-delete:
-  operationId: removeDestination
-  summary: Удалить приёмник средств
-  tags:
-    - Withdrawals
-  parameters:
-    - $ref: '#/parameters/requestID'
-    - $ref: '#/parameters/destinationID'
-  responses:
-    '204':
-      description: Приёмник средств удалён
-    '400':
-      $ref: '#/responses/BadRequest'
-    '404':
-      $ref: '#/responses/NotFound'
