@@ -13,8 +13,10 @@ properties:
       Человекочитаемое наименование провайдера услуг
     type: string
     example: НКО «ЭПС»
-  residence:
-    x-rebillyMerge:
-      - $ref: '#/definitions/ResidenceID'
-      - description: |
-          Резиденция, в которой провайдер предоставляет услуги
+  residences:
+    type: array
+    description: |
+      Резиденции, в которых провайдер предоставляет услуги
+    items:
+      x-rebillyMerge:
+        - $ref: '#/definitions/ResidenceID'
