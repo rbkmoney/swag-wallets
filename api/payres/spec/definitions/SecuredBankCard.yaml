@@ -25,7 +25,7 @@ properties:
 
       [1]: https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_(IIN)
     type: string
-    pattern: '^\d{2,4}$'
+    pattern: '^\d{6,8}$'
     example: "4242"
     readOnly: true
   lastDigits:
