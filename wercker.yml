@@ -36,8 +36,8 @@ release:
 
 deploy:
   steps:
-    - git-push:
-         token: ${GITHUB_API_TOKEN}
+    - lordlothar99/git-push:
+         gh_oauth: ${GITHUB_API_TOKEN}
          repo: rbkmoney/wallets-api
          gh_pages: true
          destdir: ${WERCKER_GIT_BRANCH}
