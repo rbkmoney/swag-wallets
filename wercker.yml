@@ -36,11 +36,11 @@ release:
 
 deploy:
   steps:
-    - leipert/git-push@0.7.6
+    - leipert/git-push@0.7.6:
     - git-push:
          gh_oauth: ${GITHUB_API_TOKEN}
          gh_pages: true
-         basedir: out
+         basedir: ${WERCKER_OUTPUT_DIR}/out
          repo: wallets-api
          destdir: ${WERCKER_GIT_BRANCH}
   after-steps:
