@@ -36,7 +36,7 @@ release:
 
 deploy:
   steps:
-    - leipert/git-push@0.7.6:
+    - leipert/git-push@0.7.6
     - git-push:
          gh_oauth: ${GITHUB_API_TOKEN}
          gh_pages: true
