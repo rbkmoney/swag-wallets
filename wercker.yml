@@ -36,11 +36,10 @@ release:
 
 deploy:
   steps:
-    - leipert/git-push@0.7.6:
-         gh_oauth: ${GITHUB_API_TOKEN}
-         gh_pages: true
+    - uetchy/gh-pages:
+         token: ${GITHUB_API_TOKEN}
          repo: wallets-api
-         destdir: ${WERCKER_GIT_BRANCH}
+         path: ${WERCKER_GIT_BRANCH}
   after-steps:
     - slack-notifier:
       url: ${SLACK_WEBHOOK_URL}
