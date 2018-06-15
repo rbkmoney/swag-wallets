@@ -36,10 +36,11 @@ release:
 
 deploy:
   steps:
-    - uetchy/gh-pages:
+    - git-push:
          token: ${GITHUB_API_TOKEN}
          repo: rbkmoney/wallets-api
-         path: ${WERCKER_GIT_BRANCH}
+         gh_pages: true
+         destdir: ${WERCKER_GIT_BRANCH}
   after-steps:
     - slack-notifier:
       url: ${SLACK_WEBHOOK_URL}
