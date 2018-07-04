@@ -38,7 +38,6 @@ allOf:
         example: |
           666-777
         pattern: '^[0-9]{3}-[0-9]{3}$'
-        maxLength: 100
       issuedAt:
         description: Дата выдачи паспорта
         type: string
