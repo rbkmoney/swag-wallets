@@ -1,0 +1,14 @@
+description: Данные кошелька
+type: object
+properties:
+  id:
+    x-rebillyMerge:
+      - $ref: '#/definitions/WalletID'
+  name:
+    x-rebillyMerge:
+      - $ref: '#/definitions/WalletName'
+  identityID:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityID'
+  balance:
+    $ref: '#/definitions/Asset'

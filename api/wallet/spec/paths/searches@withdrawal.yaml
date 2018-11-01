@@ -1,0 +1,44 @@
+get:
+  operationId: searchWithdrawals
+  summary: Поиск выводов
+  tags:
+    - Searches
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - name: walletID
+      in: query
+      description: Идентификатор кошелька
+      type: string
+      maxLength: 40
+      minLength: 1
+    - name: identityID
+      in: query
+      description: Идентификатор личности владельца
+      type: string
+      maxLength: 40
+      minLength: 1
+    - name: destinationID
+      in: query
+      description: Идентификатор приёмника средств
+      type: string
+      maxLength: 40
+      minLength: 1
+    - name: status
+      in: query
+      type: string
+      enum:
+        - Pending
+        - Succeeded
+        - Failed
+    - $ref: '#/parameters/amountFrom'
+    - $ref: '#/parameters/amountTo'
+    - $ref: '#/parameters/currencyID'
+  responses:
+    '200':
+      description: Найденные выводы
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/SearchResultWithdrawal'
+    '400':
+      $ref: '#/responses/BadRequest'

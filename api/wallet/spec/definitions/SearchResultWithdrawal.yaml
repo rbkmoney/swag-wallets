@@ -1,0 +1,28 @@
+description: Данные вывода денежных средств
+allOf:
+  - type: object
+    properties:
+      id:
+        x-rebillyMerge:
+          - $ref: '#/definitions/WithdrawalID'
+      createdAt:
+        description: Дата и время запуска вывода
+        type: string
+        format: date-time
+      identityID:
+        x-rebillyMerge:
+          - $ref: '#/definitions/IdentityID'
+      walletID:
+        x-rebillyMerge:
+          - $ref: '#/definitions/WalletID'
+      destinationID:
+        x-rebillyMerge:
+          - $ref: '#/definitions/DestinationID'
+      payres:
+        $ref: '#/definitions/SecuredBankCard'
+      fee:
+        description: Сумма коммисии в минорных единицах
+        type: integer
+        format: int64
+  - $ref: '#/definitions/Asset'
+  - $ref: '#/definitions/WithdrawalStatus'

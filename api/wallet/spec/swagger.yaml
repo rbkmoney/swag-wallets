@@ -163,6 +163,30 @@ parameters:
     pattern: '^[A-Za-z]{3}$'
     required: false
 
+  amountFrom:
+    name: amountFrom
+    in: query
+    description: Сумма денежных средств в минорных единицах
+    type: integer
+    format: int64
+
+  amountTo:
+    name: amountTo
+    in: query
+    description: Сумма денежных средств в минорных единицах
+    type: integer
+    format: int64
+
+  currencyID:
+    name: currencyID
+    in: query
+    description: |
+      Валюта, символьный код согласно [ISO
+      4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+    type: string
+    pattern: '^[A-Z]{3}$'
+    example: RUB
+
   eventLimit:
     name: limit
     in: query
@@ -217,4 +241,8 @@ tags:
 
   - name: Currencies
     x-displayName: Валюты
+    description: ""
+
+  - name: Searches
+    x-displayName: Поиск
     description: ""

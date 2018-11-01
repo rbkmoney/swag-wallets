@@ -1,0 +1,31 @@
+get:
+  operationId: searchWallets
+  summary: Поиск кошельков
+  tags:
+    - Searches
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - name: walletID
+      in: query
+      description: Идентификатор кошелька
+      type: string
+      maxLength: 40
+      minLength: 1
+    - name: identityID
+      in: query
+      description: Идентификатор личности владельца
+      type: string
+      maxLength: 40
+      minLength: 1
+    - $ref: '#/parameters/amountFrom'
+    - $ref: '#/parameters/amountTo'
+    - $ref: '#/parameters/currencyID'
+  responses:
+    '200':
+      description: Найденные кошельки
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/SearchResultWallet'
+    '400':
+      $ref: '#/responses/BadRequest'
