@@ -187,7 +187,7 @@ parameters:
     pattern: '^[A-Z]{3}$'
     example: RUB
 
-  eventLimit:
+  limit:
     name: limit
     in: query
     description: Лимит выборки
@@ -195,6 +195,7 @@ parameters:
     type: integer
     format: int32
     minimum: 1
+    maximum: 1000
 
   eventCursor:
     name: eventCursor

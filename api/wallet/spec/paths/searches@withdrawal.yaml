@@ -30,15 +30,37 @@ get:
         - Pending
         - Succeeded
         - Failed
+    - name: createdAtFrom
+      in: query
+      description: Дата создания с
+      type: string
+      format: date-time
+    - name: createdAtTo
+      in: query
+      description: Дата создания до
+      type: string
+      format: date-time
     - $ref: '#/parameters/amountFrom'
     - $ref: '#/parameters/amountTo'
     - $ref: '#/parameters/currencyID'
+    - $ref: '#/parameters/limit'
+    - x-rebillyMerge:
+      - name: continuationToken
+        in: query
+        required: false
+      - $ref: '#/definitions/ContinuationToken'
   responses:
     '200':
       description: Найденные выводы
       schema:
-        type: array
-        items:
-          $ref: '#/definitions/SearchResultWithdrawal'
+        type: object
+        properties:
+          continuationToken:
+            x-rebillyMerge:
+              - $ref: '#/definitions/ContinuationToken'
+          result:
+            type: array
+            items:
+              $ref: '#/definitions/SearchResultWithdrawal'
     '400':
       $ref: '#/responses/BadRequest'

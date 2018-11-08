@@ -18,8 +18,8 @@ allOf:
       destinationID:
         x-rebillyMerge:
           - $ref: '#/definitions/DestinationID'
-      payres:
-        $ref: '#/definitions/SecuredBankCard'
+      destinationResource:
+        $ref: '#/definitions/DestinationResource'
       fee:
         description: Сумма коммисии в минорных единицах
         type: integer
