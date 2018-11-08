@@ -21,8 +21,11 @@ allOf:
       destinationResource:
         $ref: '#/definitions/DestinationResource'
       fee:
-        description: Сумма коммисии в минорных единицах
-        type: integer
-        format: int64
-  - $ref: '#/definitions/Asset'
+        x-rebillyMerge:
+          - $ref: '#/definitions/Asset'
+          - description: Сумма коммисии
+      amount:
+        x-rebillyMerge:
+          - $ref: '#/definitions/Asset'
+          - description: Сумма вывода
   - $ref: '#/definitions/WithdrawalStatus'
