@@ -243,7 +243,3 @@ tags:
   - name: Currencies
     x-displayName: Валюты
     description: ""
-
-  - name: Searches
-    x-displayName: Поиск
-    description: ""
