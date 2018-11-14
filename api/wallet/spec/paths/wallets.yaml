@@ -12,8 +12,6 @@ get:
       type: string
       maxLength: 40
       minLength: 1
-    - $ref: '#/parameters/amountFrom'
-    - $ref: '#/parameters/amountTo'
     - $ref: '#/parameters/currencyID'
     - $ref: '#/parameters/limit'
     - x-rebillyMerge:
