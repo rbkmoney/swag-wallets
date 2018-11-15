@@ -169,6 +169,7 @@ parameters:
     description: Сумма денежных средств в минорных единицах
     type: integer
     format: int64
+    required: false
 
   amountTo:
     name: amountTo
@@ -176,6 +177,7 @@ parameters:
     description: Сумма денежных средств в минорных единицах
     type: integer
     format: int64
+    required: false
 
   currencyID:
     name: currencyID
@@ -185,7 +187,6 @@ parameters:
       4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
     type: string
     pattern: '^[A-Z]{3}$'
-    example: RUB
 
   limit:
     name: limit

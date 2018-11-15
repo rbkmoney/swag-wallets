@@ -11,18 +11,21 @@ get:
       type: string
       maxLength: 40
       minLength: 1
+      required: false
     - name: identityID
       in: query
       description: Идентификатор личности владельца
       type: string
       maxLength: 40
       minLength: 1
+      required: false
     - name: destinationID
       in: query
       description: Идентификатор приёмника средств
       type: string
       maxLength: 40
       minLength: 1
+      required: false
     - name: status
       in: query
       type: string
@@ -30,16 +33,19 @@ get:
         - Pending
         - Succeeded
         - Failed
+      required: false
     - name: createdAtFrom
       in: query
       description: Дата создания с
       type: string
       format: date-time
+      required: false
     - name: createdAtTo
       in: query
       description: Дата создания до
       type: string
       format: date-time
+      required: false
     - $ref: '#/parameters/amountFrom'
     - $ref: '#/parameters/amountTo'
     - $ref: '#/parameters/currencyID'
