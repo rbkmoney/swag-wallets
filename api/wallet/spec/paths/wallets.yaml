@@ -32,7 +32,7 @@ get:
             description: Найденные кошельки
             type: array
             items:
-              $ref: '#/definitions/SearchResultWallet'
+              $ref: '#/definitions/Wallet'
     '400':
       $ref: '#/responses/BadRequest'
 

@@ -62,7 +62,7 @@ get:
             description: Найденные выводы
             type: array
             items:
-              $ref: '#/definitions/SearchResultWithdrawal'
+              $ref: '#/definitions/Withdrawal'
     '400':
       $ref: '#/responses/BadRequest'
 
