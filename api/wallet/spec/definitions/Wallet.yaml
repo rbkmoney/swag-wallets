@@ -35,3 +35,6 @@ properties:
     type: object
     example:
       client_locale: RU_ru
+  idempotencyTag:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdempotencyTag'

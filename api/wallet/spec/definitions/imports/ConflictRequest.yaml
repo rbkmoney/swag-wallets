@@ -1,7 +1,6 @@
 type: object
 properties:
   id:
-    description: Идентификатор конфликтующей сущности
+    description: Идентификатор конфликтующего элемента
     type: string
-    example: |
-      12345151362762.
+    example: '12345151362762'

@@ -86,7 +86,7 @@ responses:
       $ref: '#/definitions/BadRequest'
 
   ConflictRequest:
-    description: Конфликтующие входные данные для операции
+    description: Конфликт входных данных операции
     schema:
       $ref: '#/definitions/ConflictRequest'
 
