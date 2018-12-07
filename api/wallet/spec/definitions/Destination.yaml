@@ -41,7 +41,7 @@ allOf:
         type: object
         example:
           color_hint: olive-green
-      idempotencyTag:
+      externalID:
         x-rebillyMerge:
-          - $ref: '#/definitions/IdempotencyTag'
+          - $ref: '#/definitions/ExternalID'
   - $ref: '#/definitions/DestinationStatus'

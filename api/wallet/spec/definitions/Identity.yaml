@@ -48,6 +48,6 @@ properties:
     type: object
     example:
       lkDisplayName: Сергей Иванович
-  idempotencyTag:
+  externalID:
     x-rebillyMerge:
-      - $ref: '#/definitions/IdempotencyTag'
+      - $ref: '#/definitions/ExternalID'
