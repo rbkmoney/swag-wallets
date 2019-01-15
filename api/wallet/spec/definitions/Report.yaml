@@ -30,6 +30,7 @@ properties:
     enum:
       - pending
       - created
+      - canceled
   type:
     description: Тип отчета
     type: string

@@ -49,6 +49,13 @@ get:
     - $ref: '#/parameters/contractID'
     - $ref: '#/parameters/fromTime'
     - $ref: '#/parameters/toTime'
+    - name: type
+      in: query
+      description: Тип получаемых отчетов
+      required: false
+      type: string
+      enum:
+        - withdrawalRegistry
   responses:
     '200':
       description: Найденные отчеты
