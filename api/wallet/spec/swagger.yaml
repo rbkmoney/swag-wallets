@@ -93,6 +93,9 @@ responses:
   NotFound:
     description: Искомая сущность не найдена
 
+  Unauthorized:
+    description: Ошибка авторизации
+
 parameters:
 
   requestID:
@@ -224,6 +227,39 @@ parameters:
     type: integer
     format: int32
 
+  contractID:
+    name: contractID
+    in: path
+    description: Идентификатор договора
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
+  reportID:
+    name: reportID
+    in: path
+    description: Идентификатор отчета
+    required: true
+    type: integer
+    format: int64
+
+  fromTime:
+    name: fromTime
+    in: query
+    description: Начало временного отрезка
+    required: true
+    type: string
+    format: date-time
+
+  toTime:
+    name: toTime
+    in: query
+    description: Конец временного отрезка
+    required: true
+    type: string
+    format: date-time
+
 tags:
 
   - name: Providers
@@ -248,4 +284,8 @@ tags:
 
   - name: Currencies
     x-displayName: Валюты
+    description: ""
+
+  - name: Reports
+    x-displayName: Отчеты
     description: ""

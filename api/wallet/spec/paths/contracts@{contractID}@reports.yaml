@@ -1,0 +1,79 @@
+post:
+  description: Сгенерировать отчет с указанным типом по контракту за указанный промежуток времени
+  tags:
+    - Reports
+  operationId: createReport
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/contractID'
+    - name: createReport
+      in: body
+      description: Параметры генерации отчета
+      required: true
+      schema:
+        $ref: '#/definitions/ReportParams'
+  responses:
+    '201':
+      description: Отчет создан
+      schema:
+        $ref: '#/definitions/Report'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '400':
+      description: Ошибочные данные для генерации
+      schema:
+        type: object
+        required:
+          - code
+          - message
+        properties:
+          code:
+            description: |
+              [Код ошибки](#tag/Error-Codes)
+            type: string
+            enum:
+              - invalidContractID
+              - invalidRequest
+          message:
+            description: Человекочитаемое описание ошибки
+            type: string
+            example: "Invalid contract id"
+
+get:
+  description: Получить список отчетов по данному контракту за период
+  tags:
+    - Reports
+  operationId: getReports
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/contractID'
+    - $ref: '#/parameters/fromTime'
+    - $ref: '#/parameters/toTime'
+  responses:
+    '200':
+      description: Найденные отчеты
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/Report'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '400':
+      description: Ошибочные данные для получения
+      schema:
+        type: object
+        required:
+          - code
+          - message
+        properties:
+          code:
+            description: |
+              [Код ошибки](#tag/Error-Codes)
+            type: string
+            enum:
+              - limitExceeded
+              - invalidRequest
+          message:
+            description: Человекочитаемое описание ошибки
+            type: string
+            example: "Max limit: 1000"
