@@ -1,0 +1,23 @@
+get:
+  description: Скачать файл
+  tags:
+    - Reports
+  operationId: downloadFile
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/fileID'
+    - name: expiresAt
+      in: query
+      description: Время до которого ссылка будет считаться действительной
+      required: true
+      type: string
+      format: date-time
+  responses:
+    '200':
+      description: Download link
+      schema:
+        $ref: '#/definitions/FileStorageLink'
+    '404':
+      $ref: '#/responses/NotFound'
+    '401':
+      $ref: '#/responses/Unauthorized'

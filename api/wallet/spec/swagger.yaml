@@ -244,6 +244,15 @@ parameters:
     type: integer
     format: int64
 
+  fileID:
+    name: fileID
+    in: path
+    description: Идентификатор файла
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
   fromTime:
     name: fromTime
     in: query
