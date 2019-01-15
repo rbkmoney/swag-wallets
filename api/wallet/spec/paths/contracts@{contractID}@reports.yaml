@@ -5,6 +5,7 @@ post:
   operationId: createReport
   parameters:
     - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/contractID'
     - name: createReport
       in: body
@@ -17,27 +18,10 @@ post:
       description: Отчет создан
       schema:
         $ref: '#/definitions/Report'
+    '400':
+      $ref: '#/responses/BadRequest'
     '401':
       $ref: '#/responses/Unauthorized'
-    '400':
-      description: Ошибочные данные для генерации
-      schema:
-        type: object
-        required:
-          - code
-          - message
-        properties:
-          code:
-            description: |
-              [Код ошибки](#tag/Error-Codes)
-            type: string
-            enum:
-              - invalidContractID
-              - invalidRequest
-          message:
-            description: Человекочитаемое описание ошибки
-            type: string
-            example: "Invalid contract id"
 
 get:
   description: Получить список отчетов по данному контракту за период
@@ -46,6 +30,7 @@ get:
   operationId: getReports
   parameters:
     - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/contractID'
     - $ref: '#/parameters/fromTime'
     - $ref: '#/parameters/toTime'
@@ -63,24 +48,7 @@ get:
         type: array
         items:
           $ref: '#/definitions/Report'
+    '400':
+      $ref: '#/responses/BadRequest'
     '401':
       $ref: '#/responses/Unauthorized'
-    '400':
-      description: Ошибочные данные для получения
-      schema:
-        type: object
-        required:
-          - code
-          - message
-        properties:
-          code:
-            description: |
-              [Код ошибки](#tag/Error-Codes)
-            type: string
-            enum:
-              - limitExceeded
-              - invalidRequest
-          message:
-            description: Человекочитаемое описание ошибки
-            type: string
-            example: "Max limit: 1000"
