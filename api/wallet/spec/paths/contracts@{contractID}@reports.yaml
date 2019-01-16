@@ -7,7 +7,7 @@ post:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/contractID'
-    - name: createReport
+    - name: ReportParams
       in: body
       description: Параметры генерации отчета
       required: true
@@ -32,15 +32,12 @@ get:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/contractID'
-    - $ref: '#/parameters/fromTime'
-    - $ref: '#/parameters/toTime'
-    - name: type
-      in: query
-      description: Тип получаемых отчетов
-      required: false
-      type: string
-      enum:
-        - withdrawalRegistry
+    - name: ReportParams
+      in: body
+      description: Параметры получения отчетов
+      required: true
+      schema:
+        $ref: '#/definitions/ReportParams'
   responses:
     '200':
       description: Найденные отчеты
