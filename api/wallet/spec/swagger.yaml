@@ -271,6 +271,22 @@ parameters:
     maxLength: 40
     minLength: 1
 
+  fromTime:
+    name: fromTime
+    in: query
+    description: Начало временного отрезка
+    required: true
+    type: string
+    format: date-time
+
+  toTime:
+    name: toTime
+    in: query
+    description: Конец временного отрезка
+    required: true
+    type: string
+    format: date-time
+
   deadline:
     name: X-Request-Deadline
     in: header
