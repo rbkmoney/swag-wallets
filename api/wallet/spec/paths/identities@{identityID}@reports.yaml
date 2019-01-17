@@ -1,13 +1,13 @@
 post:
-  description: Сгенерировать отчет с указанным типом по контракту за указанный промежуток времени
+  description: Сгенерировать отчет с указанным типом по личности владельца за указанный промежуток времени
   tags:
     - Reports
   operationId: createReport
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
-    - $ref: '#/parameters/contractID'
-    - name: createReport
+    - $ref: '#/parameters/identityID'
+    - name: ReportParams
       in: body
       description: Параметры генерации отчета
       required: true
@@ -24,14 +24,14 @@ post:
       $ref: '#/responses/Unauthorized'
 
 get:
-  description: Получить список отчетов по данному контракту за период
+  description: Получить список отчетов по личности владельца за период
   tags:
     - Reports
   operationId: getReports
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
-    - $ref: '#/parameters/contractID'
+    - $ref: '#/parameters/identityID'
     - $ref: '#/parameters/fromTime'
     - $ref: '#/parameters/toTime'
     - name: type

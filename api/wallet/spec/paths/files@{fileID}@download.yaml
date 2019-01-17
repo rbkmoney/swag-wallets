@@ -1,7 +1,7 @@
-get:
+post:
   description: Скачать файл
   tags:
-    - Reports
+    - Downloads
   operationId: downloadFile
   parameters:
     - $ref: '#/parameters/requestID'
@@ -15,9 +15,9 @@ get:
       format: date-time
   responses:
     '200':
-      description: Download link
+      description: Данные для получения файла
       schema:
-        $ref: '#/definitions/FileStorageLink'
+        $ref: '#/definitions/FileDownload'
     '404':
       $ref: '#/responses/NotFound'
     '400':
