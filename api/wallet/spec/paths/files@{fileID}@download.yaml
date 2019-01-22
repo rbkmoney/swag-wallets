@@ -14,7 +14,7 @@ post:
       type: string
       format: date-time
   responses:
-     '201':
+    '201':
       description: Данные для получения файла
       schema:
         $ref: '#/definitions/FileDownload'
