@@ -301,6 +301,10 @@ tags:
     x-displayName: Кошельки
     description: ""
 
+  - name: Deposits
+    x-displayName: Вводы
+    description: ""
+
   - name: Withdrawals
     x-displayName: Выводы
     description: ""
