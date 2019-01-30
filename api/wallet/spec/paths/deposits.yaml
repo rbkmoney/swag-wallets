@@ -73,7 +73,7 @@ get:
             x-rebillyMerge:
               - $ref: '#/definitions/ContinuationToken'
           result:
-            description: Найденные вводы
+            description: Найденные пополнения
             type: array
             items:
               $ref: '#/definitions/Deposit'

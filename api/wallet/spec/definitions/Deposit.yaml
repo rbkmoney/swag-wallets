@@ -24,7 +24,7 @@ allOf:
       body:
         x-rebillyMerge:
           - $ref: '#/definitions/Asset'
-          - description: Объём средств, которые были введены
+          - description: Объём поступивших средств
       fee:
         x-rebillyMerge:
           - $ref: '#/definitions/Asset'
