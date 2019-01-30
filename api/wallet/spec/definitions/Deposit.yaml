@@ -29,13 +29,6 @@ allOf:
         x-rebillyMerge:
           - $ref: '#/definitions/Asset'
           - description: Сумма коммисии
-      metadata:
-        description: |
-          Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
-          данным пополнением
-        type: object
-        example:
-          notify_email: iliketrains@example.com
       externalID:
         x-rebillyMerge:
           - $ref: '#/definitions/ExternalID'

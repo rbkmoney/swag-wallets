@@ -302,7 +302,7 @@ tags:
     description: ""
 
   - name: Deposits
-    x-displayName: Вводы
+    x-displayName: Пополнения
     description: ""
 
   - name: Withdrawals
