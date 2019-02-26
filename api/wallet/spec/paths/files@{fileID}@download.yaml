@@ -1,5 +1,5 @@
 post:
-  description: Скачать файл
+  description: Получить ссылку для скачивания файла
   tags:
     - Downloads
   operationId: downloadFile
