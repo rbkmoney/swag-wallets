@@ -1,0 +1,15 @@
+description: Данные кошелька криптовалюты
+type: object
+required:
+  - id
+properties:
+  id:
+    description: Номер кошелька криптовалюты
+    type: string
+    minLength: 33
+    maxLength: 34
+    example: zu3TcwGI71Bpaaw2XkLWZXlhMdn4zpVzMQ
+  paymentSystem:
+    x-rebillyMerge:
+      - $ref: '#/definitions/CryptoWalletPaymentSystem'
+      - readOnly: true
