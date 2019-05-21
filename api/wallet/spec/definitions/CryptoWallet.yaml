@@ -12,4 +12,3 @@ properties:
   paymentSystem:
     x-rebillyMerge:
       - $ref: '#/definitions/CryptoCurrency'
-      - readOnly: true
