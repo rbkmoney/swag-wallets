@@ -1,4 +1,4 @@
-description: Данные кошелька криптовалюты
+description: Данные криптовалютного кошелька
 type: object
 required:
   - id
