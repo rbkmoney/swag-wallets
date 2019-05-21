@@ -11,5 +11,5 @@ properties:
     example: zu3TcwGI71Bpaaw2XkLWZXlhMdn4zpVzMQ
   paymentSystem:
     x-rebillyMerge:
-      - $ref: '#/definitions/CryptoWalletPaymentSystem'
+      - $ref: '#/definitions/CryptoCurrency'
       - readOnly: true
