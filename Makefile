@@ -4,11 +4,11 @@ all: build
 install: node_modules
 
 .PHONY: build
-build: install
+build: install dist
 	npm run build
 
 .PHONY: start
-start: install
+start: install dist
 	npm start
 
 .PHONY: dev
@@ -18,3 +18,6 @@ dev:
 node_modules: package.json
 	npm install
 	touch $@
+
+dist:
+	mkdir $@
