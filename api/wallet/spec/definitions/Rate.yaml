@@ -1,0 +1,33 @@
+description: Данные курса
+type: object
+required:
+  - currencyFrom
+  - currencyTo
+  - rateRange
+  - rate
+  - roundingMethod
+properties:
+  currencyFrom:
+    x-rebillyMerge:
+      - $ref: '#/definitions/CurrencyID'
+      - description: Код исходной валюты
+      - readOnly: true
+  currencyTo:
+    x-rebillyMerge:
+      - $ref: '#/definitions/CurrencyID'
+      - description: Код конечной валюты
+      - readOnly: true
+  rateRange:
+    x-rebillyMerge:
+      - $ref: '#/definitions/Range'
+      - description: Данные диапазона в исходной валюте, в котором действует курс
+      - readOnly: true
+  rate:
+    x-rebillyMerge:
+      - $ref: '#/definitions/Rational'
+      - description: Курс валют в виде рационального числа
+      - readOnly: true
+  roundingMethod:
+    x-rebillyMerge:
+      - $ref: '#/definitions/RoundingMethod'
+      - readOnly: true

@@ -2,6 +2,9 @@ description: Параметры создаваемого вывода
 allOf:
   - $ref: '#/definitions/Withdrawal'
   - type: object
+    required:
+      - walletGrant
+      - destinationGrant
     properties:
       walletGrant:
         x-rebillyMerge:
@@ -21,3 +24,11 @@ allOf:
               Необходимо предоставить в том случае, если вывод производится посредством _чужого_ приёмника
               средств. Владелец указанного приёмника может
               [выдать на это право](#operation/issueDestinationGrant).
+      exchangeGrant:
+        x-rebillyMerge:
+          - $ref: '#/definitions/GrantToken'
+          - description: |
+              Токен, дающий право вывода с конвертацией в другую валюту.
+
+              Необходимо предоставить в том случае, если вывод производится по предоставленному ранее
+              курсу валют. [Получить это право.](#operation/listRates)

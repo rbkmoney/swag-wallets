@@ -1,0 +1,102 @@
+get:
+  operationId: listRates
+  summary: Получение курсов валют
+  tags:
+    - Rates
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - name: walletID
+      in: query
+      description: Идентификатор кошелька
+      type: string
+      maxLength: 40
+      minLength: 1
+      required: true
+    - name: destinationID
+      in: query
+      description: Идентификатор приёмника средств
+      type: string
+      maxLength: 40
+      minLength: 1
+      required: true
+    - x-rebillyMerge:
+      - name: currencyFrom
+        in: query
+        required: true
+      - $ref: '#/definitions/CurrencyID'
+      - description: Код исходной валюты
+    - x-rebillyMerge:
+      - name: currencyTo
+        in: query
+        required: true
+      - $ref: '#/definitions/CurrencyID'
+      - description: Код конечной валюты
+    - name: amountType
+      in: query
+      description: Код, определяющий в какой из валют передана сумма конвертации
+      type: string
+      enum:
+        - From
+        - To
+      required: false
+    - name: amount
+      in: query
+      description: |
+        Сумма денежных средств в минорных единицах, например, в копейках
+      type: integer
+      format: int64
+      example: 1430000
+      required: false
+    - x-rebillyMerge:
+      - name: walletGrant
+        in: query
+        required: true
+      - description: >
+          Токен, дающий право на списание с кошелька для оплаты вывода.
+
+          Необходимо предоставить в том случае, если оплата производится
+          засчёт средств _чужого_ кошелька. Владелец указанного кошелька
+          может [выдать на это право](#operation/issueWalletGrant)
+      - $ref: '#/definitions/GrantToken'
+    - x-rebillyMerge:
+      - name: destinationGrant
+        in: query
+        required: true
+      - description: >
+          Токен, дающий право вывода.
+
+          Необходимо предоставить в том случае, если вывод производится
+          посредством _чужого_ приёмника средств. Владелец указанного
+          приёмника может [выдать на это право](#operation/issueDestinationGrant)
+      - $ref: '#/definitions/GrantToken'
+  responses:
+    '200':
+      description: Результат запроса
+      schema:
+        type: object
+        properties:
+          createdAt:
+            description: Дата и время получения курсов
+            type: string
+            format: date-time
+          expiresOn:
+            description: Дата и время окончания действия полученных курсов
+            type: string
+            format: date-time
+          exchangeGrant:
+            x-rebillyMerge:
+              - $ref: '#/definitions/GrantToken'
+              - description: >
+                  Токен, дающий право вывода с конвертацией в другую валюту.
+
+                  Необходимо предоставить при создании вывода по полученному курсу
+          result:
+            description: Полученные курсы валют
+            type: array
+            items:
+              $ref: '#/definitions/Rate'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '401':
+      $ref: '#/responses/Unauthorized'

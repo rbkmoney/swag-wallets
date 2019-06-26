@@ -1,0 +1,12 @@
+description: Диапазон значений
+type: object
+required:
+  - upperBound
+  - lowerBound
+properties:
+  upperBound:
+    x-rebillyMerge:
+      - $ref: '#/definitions/RangeBound'
+  lowerBound:
+    x-rebillyMerge:
+      - $ref: '#/definitions/RangeBound'

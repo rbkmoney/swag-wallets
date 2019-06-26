@@ -1,0 +1,5 @@
+description: Метод округления
+type: string
+enum:
+  - RoundHalfTowardsZero
+  - RoundHalfAwayFromZero

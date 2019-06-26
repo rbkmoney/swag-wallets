@@ -1,0 +1,16 @@
+description: Рациональное число.
+type: object
+required:
+  - p
+  - q
+properties:
+  p:
+    type: integer
+    format: int64
+    example: 1430000
+    readOnly: true
+  q:
+    type: integer
+    format: int64
+    example: 1430000
+    readOnly: true
