@@ -1,5 +1,5 @@
 post:
-  operationId: prepareRate
+  operationId: prepareWithdrawalRate
   summary: Подготовка курса валют
   description: Фиксация курса валют для проведения выплаты с конвертацией
   tags:
@@ -12,12 +12,12 @@ post:
       in: body
       required: true
       schema:
-        $ref: '#/definitions/RateParams'
+        $ref: '#/definitions/WithdrawalRateParams'
   responses:
     '202':
       description: Полученный курс валют
       schema:
-        $ref: '#/definitions/Rate'
+        $ref: '#/definitions/WithdrawalRate'
     '400':
       $ref: '#/responses/BadRequest'
     '401':

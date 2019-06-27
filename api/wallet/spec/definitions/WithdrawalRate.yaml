@@ -1,4 +1,4 @@
-description: Данные курса
+description: Данные курса для вывода
 type: object
 required:
   - bodyFrom
@@ -11,18 +11,22 @@ properties:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Объём средств в исходной валюте
+      - readOnly: true
   bodyTo:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Объём средств в конечной валюте
+      - readOnly: true
   createdAt:
     description: Дата и время получения курса
     type: string
     format: date-time
+    readOnly: true
   expiresOn:
     description: Дата и время окончания действия полученных курса
     type: string
     format: date-time
+    readOnly: true
   exchangeToken:
     x-rebillyMerge:
       - $ref: '#/definitions/GrantToken'

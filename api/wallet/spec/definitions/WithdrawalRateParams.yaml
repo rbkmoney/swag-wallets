@@ -1,4 +1,4 @@
-description: Данные курса
+description: Параметры подготовки курса для вывода
 type: object
 required:
   - walletID
