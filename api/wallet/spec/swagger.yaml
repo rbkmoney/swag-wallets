@@ -324,7 +324,3 @@ tags:
   - name: Downloads
     x-displayName: Загрузка файлов
     description: ""
-
-  - name: Rates
-    x-displayName: Курсы валют
-    description: ""

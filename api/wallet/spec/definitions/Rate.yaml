@@ -1,33 +1,32 @@
 description: Данные курса
 type: object
 required:
-  - currencyFrom
-  - currencyTo
-  - rateRange
-  - rate
-  - roundingMethod
+  - bodyFrom
+  - bodyTo
+  - createdAt
+  - expiresOn
+  - exchangeToken
 properties:
-  currencyFrom:
+  bodyFrom:
     x-rebillyMerge:
-      - $ref: '#/definitions/CurrencyID'
-      - description: Код исходной валюты
-      - readOnly: true
-  currencyTo:
+      - $ref: '#/definitions/Asset'
+      - description: Объём средств в исходной валюте
+  bodyTo:
     x-rebillyMerge:
-      - $ref: '#/definitions/CurrencyID'
-      - description: Код конечной валюты
-      - readOnly: true
-  rateRange:
+      - $ref: '#/definitions/Asset'
+      - description: Объём средств в конечной валюте
+  createdAt:
+    description: Дата и время получения курса
+    type: string
+    format: date-time
+  expiresOn:
+    description: Дата и время окончания действия полученных курса
+    type: string
+    format: date-time
+  exchangeToken:
     x-rebillyMerge:
-      - $ref: '#/definitions/Range'
-      - description: Данные диапазона в исходной валюте, в котором действует курс
-      - readOnly: true
-  rate:
-    x-rebillyMerge:
-      - $ref: '#/definitions/Rational'
-      - description: Курс валют в виде рационального числа
-      - readOnly: true
-  roundingMethod:
-    x-rebillyMerge:
-      - $ref: '#/definitions/RoundingMethod'
-      - readOnly: true
+      - $ref: '#/definitions/GrantToken'
+      - description: >
+          Курс валют, по которому следует проводить вывод средств.
+
+          Необходимо предоставить при создании вывода по полученному курсу
