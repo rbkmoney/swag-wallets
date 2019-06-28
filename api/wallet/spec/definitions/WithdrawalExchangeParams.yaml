@@ -1,4 +1,4 @@
-description: Параметры подготовки курса для вывода
+description: Параметры подготовки курса обмена валют для вывода
 type: object
 required:
   - walletID
