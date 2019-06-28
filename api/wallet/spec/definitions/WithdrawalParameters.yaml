@@ -2,9 +2,6 @@ description: Параметры создаваемого вывода
 allOf:
   - $ref: '#/definitions/Withdrawal'
   - type: object
-    required:
-      - walletGrant
-      - destinationGrant
     properties:
       walletGrant:
         x-rebillyMerge:
@@ -30,5 +27,5 @@ allOf:
           - description: |
               Курс валют, по которому следует проводить вывод средств.
 
-              Необходимо предоставить в том случае, если вывод производится по предоставленному ранее
-              курсу валют. [Получить этот курс.](#operation/prepareWithdrawalRate)
+              Должен быть [получен](#operation/createExchangePromise)
+              заранее для каждой отдельной операции вывода с конвертацией.

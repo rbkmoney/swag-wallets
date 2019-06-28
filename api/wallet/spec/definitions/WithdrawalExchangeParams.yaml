@@ -4,8 +4,7 @@ required:
   - walletID
   - currencyFrom
   - currencyTo
-  - body
-  - walletGrant
+  - cash
 properties:
   externalID:
     x-rebillyMerge:
@@ -24,7 +23,7 @@ properties:
     x-rebillyMerge:
       - $ref: '#/definitions/CurrencyID'
       - description: Код конечной валюты
-  body:
+  cash:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Объём средств для получения курса в одной из валют обмена

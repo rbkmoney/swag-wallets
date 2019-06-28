@@ -1,18 +1,18 @@
 description: Данные курса для вывода
 type: object
 required:
-  - bodyFrom
-  - bodyTo
+  - cashFrom
+  - cashTo
   - createdAt
   - expiresOn
   - exchangeToken
 properties:
-  bodyFrom:
+  cashFrom:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Объём средств в исходной валюте
       - readOnly: true
-  bodyTo:
+  cashTo:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Объём средств в конечной валюте
@@ -23,7 +23,7 @@ properties:
     format: date-time
     readOnly: true
   expiresOn:
-    description: Дата и время окончания действия полученных курса
+    description: Дата и время окончания действия полученного курса
     type: string
     format: date-time
     readOnly: true
