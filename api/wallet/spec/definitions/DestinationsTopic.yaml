@@ -13,6 +13,6 @@ allOf:
         items:
           type: string
           enum:
-            - WithdrawalCreated
-            - WithdrawalUnauthorized
-            - WithdrawalAuthorized
+            - DestinationCreated
+            - DestinationUnauthorized
+            - DestinationAuthorized
