@@ -351,4 +351,4 @@ tags:
       RBKmoney, а следовательно и данной спецификации. Для реализации
       обработчика присылаемых уведомлений вам необходимо будет ознакомиться со
       Swagger-спецификацей [RBKmoney Wallet Webhooks Events
-      API](https://rbkmoney.github.io/swag-wallets-webhook-events).
+      API](https://rbkmoney.github.io/wallet-webhook-events-api/).
