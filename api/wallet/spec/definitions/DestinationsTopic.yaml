@@ -5,16 +5,8 @@ allOf:
   - $ref: '#/definitions/WebhookScope'
   - type: object
     required:
-      - identityID
-      - walletID
       - eventTypes
     properties:
-      identityID:
-        x-rebillyMerge:
-        - $ref: '#/definitions/IdentityID'
-      walletID:
-        x-rebillyMerge:
-        - $ref: '#/definitions/WalletID'
       eventTypes:
         description: Набор типов событий приёмника денежных средств, о которых следует оповещать
         type: array

@@ -296,6 +296,15 @@ parameters:
     maxLength: 40
     minLength: 1
 
+  queryIdentityID:
+    name: identityID
+    in: query
+    description: Идентификатор личности владельца
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
 tags:
 
   - name: Providers

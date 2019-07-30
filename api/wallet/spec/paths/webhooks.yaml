@@ -30,6 +30,7 @@ get:
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
+    - $ref: '#/parameters/queryIdentityID'
   responses:
     '200':
       description: Набор webhook'ов

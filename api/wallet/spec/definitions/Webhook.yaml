@@ -1,8 +1,16 @@
 type: object
 required:
+  - identityID
+  - walletID
   - scope
   - url
 properties:
+  identityID:
+    x-rebillyMerge:
+    - $ref: '#/definitions/IdentityID'
+  walletID:
+    x-rebillyMerge:
+    - $ref: '#/definitions/WalletID'
   id:
     description: |
       Идентификатор webhook'а
