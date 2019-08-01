@@ -4,8 +4,12 @@ allOf:
   - $ref: '#/definitions/WebhookScope'
   - type: object
     required:
+      - walletID
       - eventTypes
     properties:
+      walletID:
+        x-rebillyMerge:
+        - $ref: '#/definitions/WalletID'
       eventTypes:
         description: Набор типов событий выплаты, о которых следует оповещать
         type: array
