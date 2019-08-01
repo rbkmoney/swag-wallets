@@ -4,7 +4,6 @@ allOf:
   - $ref: '#/definitions/WebhookScope'
   - type: object
     required:
-      - walletID
       - eventTypes
     properties:
       walletID:
