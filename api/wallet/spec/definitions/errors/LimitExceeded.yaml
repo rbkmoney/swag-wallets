@@ -1,0 +1,8 @@
+description: Переданные значение не соответствуют заданным ограничениям
+type: object
+properties:
+  type:
+    type: string
+    enum:
+      - ValueAboveMaxLimit
+      - ValueBelowMinLimit

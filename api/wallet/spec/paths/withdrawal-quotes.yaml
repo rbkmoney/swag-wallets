@@ -27,4 +27,6 @@ post:
     '422':
       description: Неверные данные для получения котировки
       schema:
-        $ref: '#/definitions/InvalidOperationParameters'
+        oneOf:
+          - $ref: '#/definitions/InvalidOperationParameters'
+          - $ref: '#/definitions/LimitExceeded'
