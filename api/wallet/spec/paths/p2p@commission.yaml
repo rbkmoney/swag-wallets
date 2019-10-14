@@ -13,7 +13,7 @@ post:
       schema:
         $ref: '#/definitions/CommissionParameters'
   responses:
-    '202':
+    '201':
       description: Комиссия и токен
       schema:
         $ref: '#/definitions/p2pCommission'
