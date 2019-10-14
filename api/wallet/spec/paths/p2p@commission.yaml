@@ -1,0 +1,23 @@
+post:
+  operationId: fixCommission
+  summary: Получить и зафиксировать комиссию
+  tags:
+    - P2P
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - name: params
+      description: Ресурс принемающего
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/CommissionParameters'
+  responses:
+    '202':
+      description: Комиссия и токен
+      schema:
+        $ref: '#/definitions/p2pCommission'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '401':
+      $ref: '#/responses/Unauthorized'

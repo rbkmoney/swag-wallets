@@ -343,6 +343,10 @@ tags:
     x-displayName: Загрузка файлов
     description: ""
 
+  - name: P2P
+    x-displayName: Переводы
+    description: ""
+
   - name: Webhooks
     x-displayName: Webhooks
     description: >

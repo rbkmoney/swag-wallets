@@ -1,0 +1,15 @@
+description: Комиссия и токен по которому её можно получить
+type: object
+required:
+  - fee
+  - token
+properties:
+  fee:
+    x-rebillyMerge:
+      - $ref: '#/definitions/Asset'
+      - description: Сумма комисси
+  token:
+    type: string
+    minLength: 1
+    maxLength: 1000
+    description: Токен используемый для проведения перевода
