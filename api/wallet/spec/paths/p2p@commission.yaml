@@ -7,7 +7,7 @@ post:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
     - name: params
-      description: Ресурс принемающего
+      description: Ресурсы участников перевода и сумма
       in: body
       required: true
       schema:

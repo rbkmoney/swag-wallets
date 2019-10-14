@@ -12,4 +12,4 @@ properties:
   asset:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
-      - destination: Сумма перевода
+      - description: Сумма перевода
