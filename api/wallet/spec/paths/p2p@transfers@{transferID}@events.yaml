@@ -1,0 +1,38 @@
+get:
+  description: Получить историю указанного перевода в виде набора событий.
+  tags:
+    - P2P
+  operationId: getTransferEvents
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - $ref: '#/parameters/transferID'
+    - name: limit
+      in: query
+      description: Лимит выборки
+      required: true
+      type: integer
+      format: int32
+      minimum: 1
+    - name: eventID
+      in: query
+      description: |
+        Идентификатор события.
+
+        Все события, возникшие в системе _после_ указанного, попадут в выборку.
+      required: false
+      type: integer
+      format: int32
+  responses:
+    '200':
+      description: Набор событий
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/TransferEvent'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '404':
+      $ref: '#/responses/NotFound'

@@ -305,6 +305,15 @@ parameters:
     maxLength: 40
     minLength: 1
 
+  transferID:
+    name: transferID
+    in: path
+    description: Идентификатор перевода
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
 tags:
 
   - name: Providers

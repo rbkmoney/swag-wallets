@@ -1,0 +1,14 @@
+type: object
+required:
+  - status
+properties:
+  status:
+    description: Статус перевода
+    type: string
+    enum:
+      - pending
+      - processed
+      - cancelled
+      - failed
+  error:
+    $ref: '#/definitions/TransferError'

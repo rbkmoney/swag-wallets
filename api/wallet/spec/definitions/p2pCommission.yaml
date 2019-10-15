@@ -11,5 +11,5 @@ properties:
   token:
     type: string
     minLength: 1
-    maxLength: 1000
+    maxLength: 4000
     description: Токен используемый для проведения перевода

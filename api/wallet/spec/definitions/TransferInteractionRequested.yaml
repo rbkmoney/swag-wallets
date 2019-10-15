@@ -1,0 +1,16 @@
+type: object
+allOf:
+  - $ref: '#/definitions/TransferChange'
+  - type: object
+    description: |
+      Требование провести взаимодействие с плательщиком для продолжения процесса
+      перевода
+    required:
+      - paymentID
+      - userInteraction
+    properties:
+      paymentID:
+        description: Идентификатор платежа
+        type: string
+      userInteraction:
+        $ref: '#/definitions/UserInteraction'
