@@ -1,0 +1,26 @@
+post:
+  description: Создать перевод на основе полученного токена
+  tags:
+    - P2P
+  operationId: createTransfer
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - name: token
+      in: query
+      description: Токен полученный `fixCommission`
+      required: true
+      type: string
+      minLength: 1
+      maxLength: 4000
+  responses:
+    '201':
+      description: Передача создана
+      schema:
+        $ref: '#/definitions/Transfer'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '409':
+      $ref: '#/responses/ConflictRequest'

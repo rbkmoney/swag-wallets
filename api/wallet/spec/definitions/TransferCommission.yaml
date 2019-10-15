@@ -9,7 +9,4 @@ properties:
       - $ref: '#/definitions/Asset'
       - description: Сумма комисси
   token:
-    type: string
-    minLength: 1
-    maxLength: 4000
-    description: Токен используемый для проведения перевода
+    $ref: '#/definitions/TransferCommissionToken'

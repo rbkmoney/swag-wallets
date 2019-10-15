@@ -1,0 +1,20 @@
+description: Данные перевода
+type: object
+required:
+  - id
+properties:
+  id:
+    x-rebillyMerge:
+      - $ref: '#/definitions/TransferID'
+      - readOnly: true
+  createdAt:
+    description: Дата и время создания
+    type: string
+    format: date-time
+  total:
+    x-rebillyMerge:
+      - $ref: '#/definitions/Asset'
+      - description: Общая сумма перевода (с комиссией)
+  externalID:
+    x-rebillyMerge:
+      - $ref: '#/definitions/ExternalID'
