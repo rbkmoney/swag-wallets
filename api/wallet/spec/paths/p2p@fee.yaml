@@ -23,3 +23,7 @@ post:
       $ref: '#/responses/Unauthorized'
     '409':
       $ref: '#/responses/ConflictRequest'
+    '422':
+      description: Неверные данные приема/передачи средств
+      schema:
+        $ref: '#/definitions/InvalidOperationParameters'
