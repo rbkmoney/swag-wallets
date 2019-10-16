@@ -6,7 +6,7 @@ post:
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
-    - name: params
+    - name: feeParams
       description: Ресурсы участников перевода и сумма
       in: body
       required: true
