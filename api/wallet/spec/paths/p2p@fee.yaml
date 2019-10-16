@@ -1,6 +1,6 @@
 post:
   description: Получить и зафиксировать комиссию
-  operationId: fixCommission
+  operationId: fixateFee
   tags:
     - P2P
   parameters:
@@ -11,12 +11,12 @@ post:
       in: body
       required: true
       schema:
-        $ref: '#/definitions/CommissionParameters'
+        $ref: '#/definitions/FeeParameters'
   responses:
     '201':
       description: Комиссия и токен
       schema:
-        $ref: '#/definitions/TransferCommission'
+        $ref: '#/definitions/TransferFee'
     '400':
       $ref: '#/responses/BadRequest'
     '401':

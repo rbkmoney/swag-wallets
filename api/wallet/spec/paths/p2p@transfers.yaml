@@ -8,7 +8,7 @@ post:
     - $ref: '#/parameters/deadline'
     - name: token
       in: query
-      description: Токен полученный `fixCommission`
+      description: Токен полученный `fixateFee`
       required: true
       type: string
       minLength: 1
