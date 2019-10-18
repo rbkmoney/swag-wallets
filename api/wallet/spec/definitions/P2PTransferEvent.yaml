@@ -4,8 +4,6 @@ required:
   - createdAt
   - changes
 properties:
-  id:
-    type: integer
   createdAt:
     type: string
     format: date-time
