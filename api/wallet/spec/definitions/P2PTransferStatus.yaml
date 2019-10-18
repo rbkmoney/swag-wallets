@@ -8,7 +8,6 @@ properties:
     enum:
       - pending
       - processed
-      - cancelled
       - failed
   error:
-    $ref: '#/definitions/TransferError'
+    $ref: '#/definitions/P2PTransferError'

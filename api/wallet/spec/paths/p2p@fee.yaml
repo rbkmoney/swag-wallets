@@ -16,7 +16,7 @@ post:
     '201':
       description: Комиссия и токен
       schema:
-        $ref: '#/definitions/TransferFee'
+        $ref: '#/definitions/P2PTransferFee'
     '400':
       $ref: '#/responses/BadRequest'
     '401':

@@ -12,4 +12,4 @@ properties:
   changes:
     type: array
     items:
-      $ref: '#/definitions/TransferChange'
+      $ref: '#/definitions/P2PTransferChange'

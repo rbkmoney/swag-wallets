@@ -1,7 +1,7 @@
 type: object
 allOf:
-  - $ref: '#/definitions/TransferChange'
-  - $ref: '#/definitions/TransferStatus'
+  - $ref: '#/definitions/P2PTransferChange'
+  - $ref: '#/definitions/P2PTransferStatus'
   - type: object
     required:
       - paymentID

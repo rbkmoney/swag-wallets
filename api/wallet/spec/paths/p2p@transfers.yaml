@@ -17,7 +17,7 @@ post:
     '201':
       description: Передача создана
       schema:
-        $ref: '#/definitions/Transfer'
+        $ref: '#/definitions/P2PTransfer'
     '400':
       $ref: '#/responses/BadRequest'
     '401':

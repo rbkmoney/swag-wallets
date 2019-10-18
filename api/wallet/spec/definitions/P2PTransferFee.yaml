@@ -9,4 +9,4 @@ properties:
       - $ref: '#/definitions/Asset'
       - description: Сумма комисси
   token:
-    $ref: '#/definitions/TransferFeeToken'
+    $ref: '#/definitions/P2PTransferFeeToken'

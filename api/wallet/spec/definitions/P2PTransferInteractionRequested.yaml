@@ -1,6 +1,6 @@
 type: object
 allOf:
-  - $ref: '#/definitions/TransferChange'
+  - $ref: '#/definitions/P2PTransferChange'
   - type: object
     description: |
       Требование провести взаимодействие с плательщиком для продолжения процесса

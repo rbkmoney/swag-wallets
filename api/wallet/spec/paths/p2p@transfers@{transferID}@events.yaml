@@ -29,7 +29,7 @@ get:
       schema:
         type: array
         items:
-          $ref: '#/definitions/TransferEvent'
+          $ref: '#/definitions/P2PTransferEvent'
     '400':
       $ref: '#/responses/BadRequest'
     '401':

@@ -5,7 +5,7 @@ required:
 properties:
   id:
     x-rebillyMerge:
-      - $ref: '#/definitions/TransferID'
+      - $ref: '#/definitions/P2PTransferID'
       - readOnly: true
   createdAt:
     description: Дата и время создания
