@@ -8,12 +8,13 @@ get:
     - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/transferID'
     - x-rebillyMerge:
-        - name: continuationToken
-          in: query
-          required: false
-        - $ref: '#/definitions/ContinuationToken'
+      - name: continuationToken
+        in: query
+        required: false
+      - $ref: '#/definitions/ContinuationToken'
   responses:
     '200':
+      description: Результат запроса событий
       schema:
         type: object
         properties:
@@ -22,10 +23,9 @@ get:
               - $ref: '#/definitions/ContinuationToken'
           result:
             description: Набор событий
-            schema:
-              type: array
-              items:
-                $ref: '#/definitions/P2PTransferEvent'
+            type: array
+            items:
+              $ref: '#/definitions/P2PTransferEvent'
     '400':
       $ref: '#/responses/BadRequest'
     '401':
