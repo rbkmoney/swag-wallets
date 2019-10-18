@@ -1,4 +1,4 @@
 description: Банковская карта
-x-merge-properties:
+allOf:
   - $ref: '#/definitions/ReceiverResource'
   - $ref: '#/definitions/SecuredBankCard'
