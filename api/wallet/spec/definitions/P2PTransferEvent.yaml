@@ -6,7 +6,5 @@ properties:
   createdAt:
     type: string
     format: date-time
-  changes:
-    type: array
-    items:
-      $ref: '#/definitions/P2PTransferChange'
+  change:
+    $ref: '#/definitions/P2PTransferChange'
