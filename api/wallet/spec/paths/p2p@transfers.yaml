@@ -13,6 +13,10 @@ post:
       type: string
       minLength: 1
       maxLength: 4000
+    - name: metadata
+      in: body
+      description: 'Метаданные, которые необходимо связать с переводом'
+      type: object
   responses:
     '201':
       description: Передача создана
