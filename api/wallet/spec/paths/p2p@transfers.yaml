@@ -1,5 +1,5 @@
 post:
-  description: Создать перевод на основе полученного токена
+  description: Создать перевод
   tags:
     - P2P
   operationId: createTransfer
