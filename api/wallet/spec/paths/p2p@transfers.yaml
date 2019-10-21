@@ -22,3 +22,7 @@ post:
       $ref: '#/responses/Unauthorized'
     '409':
       $ref: '#/responses/ConflictRequest'
+    '422':
+      description: Неверные входные данные для перевода
+      schema:
+        $ref: '#/definitions/InvalidTransferParameters'

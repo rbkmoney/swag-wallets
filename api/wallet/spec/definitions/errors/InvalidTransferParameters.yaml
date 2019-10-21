@@ -1,0 +1,19 @@
+description: Неверные входные данные для перевода
+type: object
+required:
+  - errorType
+properties:
+  errorType:
+    description: Тип ошибки в данных
+    type: string
+    enum:
+      - TokenExpired
+    example: TokenExpired
+  name:
+    description: Имя или идентификатор элемента сообщения, содержащего недопустимые данные
+    type: string
+    example: token
+  description:
+    description: Пояснение, почему данные считаются недопустимыми
+    type: string
+    example: Fee token expired
