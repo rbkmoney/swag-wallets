@@ -1,4 +1,4 @@
-description: Комиссия и токен по которому её можно получить
+description: Комиссия и токен предназначеный для создания перевода
 type: object
 required:
   - fee
@@ -7,6 +7,6 @@ properties:
   fee:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
-      - description: Сумма комисси
+      - description: Комиссия "сверху" - взимается с клиента в дополнение к сумме операции
   token:
     $ref: '#/definitions/P2PTransferFeeToken'
