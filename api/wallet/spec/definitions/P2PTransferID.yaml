@@ -1,5 +1,5 @@
 description: Идентификатор перевода
 type: string
-example: "10068321"
+example: "10a0b68D3E21"
 maxLength: 40
 minLength: 1
