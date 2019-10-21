@@ -13,7 +13,7 @@ post:
         $ref: '#/definitions/P2PTransferParameters'
   responses:
     '201':
-      description: Передача создана
+      description: Перевод создана
       schema:
         $ref: '#/definitions/P2PTransfer'
     '400':
