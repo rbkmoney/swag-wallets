@@ -14,7 +14,13 @@ properties:
   total:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
-      - description: Общая сумма перевода (с комиссией)
+      - description: Общая сумма перевода
+  sender:
+    $ref: '#/definitions/SenderResource'
+  receiver:
+    $ref: '#/definitions/ReceiverResource'
+  status:
+    $ref: '#/definitions/P2PTransferStatus'
   externalID:
     x-rebillyMerge:
       - $ref: '#/definitions/ExternalID'
