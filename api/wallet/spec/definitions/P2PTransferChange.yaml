@@ -6,5 +6,5 @@ properties:
   changeType:
     type: string
     enum:
-      - TransferStatusChanged
-      - TransferInteractionRequested
+      - P2PTransferStatusChanged
+      - P2PTransferInteractionRequested

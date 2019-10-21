@@ -7,10 +7,14 @@ allOf:
       перевода
     required:
       - transferID
-      - userInteraction
+      - userInteractionID
+      - userInteractionIntent
     properties:
       transferID:
         description: Идентификатор перевода
         type: string
-      userInteraction:
-        $ref: '#/definitions/UserInteraction'
+      userInteractionID:
+        description: Идентификатор взаимодействия с пользователем
+        type: string
+      userInteractionIntent:
+        $ref: '#/definitions/UserInteractionIntent'

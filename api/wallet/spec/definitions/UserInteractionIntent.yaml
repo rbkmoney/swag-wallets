@@ -1,0 +1,13 @@
+type: object
+discriminator: interactionType
+required:
+  - intentType
+properties:
+  intentType:
+    description: Начало или прекращение взаимодействия с пользователем
+    type: string
+    enum:
+      - create
+      - finish
+  userInteraction:
+    $ref: '#/definitions/UserInteraction'
