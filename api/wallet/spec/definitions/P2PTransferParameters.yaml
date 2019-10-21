@@ -1,10 +1,23 @@
 description: Параметры создания перевода
 type: object
 required:
-  - token
+  - sender
+  - receiver
+  - senderIdentityID
+  - asset
 properties:
+  sender:
+    $ref: '#/definitions/SenderResource'
+  receiver:
+    $ref: '#/definitions/ReceiverResource'
+  senderIdentityID:
+    $ref: '#/definitions/IdentityID'
+  asset:
+    x-rebillyMerge:
+      - $ref: '#/definitions/Asset'
+      - description: Сумма перевода
   token:
-    description: Токен полученный `#/fixateFee`
+    description: Токен полученный из [fixateFee](#operation/fixateFee)
     type: string
     minLength: 1
     maxLength: 4000
