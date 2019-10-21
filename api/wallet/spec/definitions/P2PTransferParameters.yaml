@@ -1,0 +1,13 @@
+description: Параметры создания перевода
+type: object
+required:
+  - token
+properties:
+  token:
+    description: Токен полученный `#/fixateFee`
+    type: string
+    minLength: 1
+    maxLength: 4000
+  metadata:
+    description: 'Метаданные, которые необходимо связать с переводом'
+    type: object

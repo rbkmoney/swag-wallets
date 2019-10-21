@@ -6,17 +6,11 @@ post:
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
-    - name: token
-      in: query
-      description: Токен полученный `fixateFee`
-      required: true
-      type: string
-      minLength: 1
-      maxLength: 4000
-    - name: metadata
+    - name: transferParams
       in: body
-      description: 'Метаданные, которые необходимо связать с переводом'
-      type: object
+      description: 'Параметры создания перевода'
+      schema:
+        $ref: '#/definitions/P2PTransferParameters'
   responses:
     '201':
       description: Передача создана
