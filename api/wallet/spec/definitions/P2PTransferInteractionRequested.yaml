@@ -6,7 +6,7 @@ allOf:
       Требование провести взаимодействие с плательщиком для продолжения процесса
       перевода
     required:
-      - paymentID
+      - transferID
       - userInteraction
     properties:
       transferID:

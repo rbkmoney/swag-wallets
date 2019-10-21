@@ -4,7 +4,7 @@ allOf:
   - $ref: '#/definitions/P2PTransferStatus'
   - type: object
     required:
-      - paymentID
+      - transferID
     properties:
-      paymentID:
+      transferID:
         type: string
