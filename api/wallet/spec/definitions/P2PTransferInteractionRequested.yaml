@@ -9,8 +9,8 @@ allOf:
       - paymentID
       - userInteraction
     properties:
-      paymentID:
-        description: Идентификатор платежа
+      transferID:
+        description: Идентификатор перевода
         type: string
       userInteraction:
         $ref: '#/definitions/UserInteraction'

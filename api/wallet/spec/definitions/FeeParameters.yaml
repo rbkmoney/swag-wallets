@@ -3,12 +3,15 @@ type: object
 required:
   - sender
   - receiver
+  - senderIdentityID
   - asset
 properties:
   sender:
     $ref: '#/definitions/SenderResource'
   receiver:
     $ref: '#/definitions/ReceiverResource'
+  senderIdentityID:
+    $ref: '#/definitions/IdentityID'
   asset:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
