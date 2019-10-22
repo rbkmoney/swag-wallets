@@ -8,4 +8,4 @@ properties:
     description: Основной код ошибки
     type: string
   subError:
-    $ref: '#/definitions/SubError'
+    $ref: '#/definitions/SubFailure'

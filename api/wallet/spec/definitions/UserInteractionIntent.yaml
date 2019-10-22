@@ -3,7 +3,7 @@ required:
   - intentType
 properties:
   intentType:
-    description: Начало или прекращение взаимодействия с пользователем
+    description: Требуется ли взаимодействия с пользователем или более не требуется.
     type: string
     enum:
       - create

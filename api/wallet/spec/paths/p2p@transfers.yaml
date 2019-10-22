@@ -25,4 +25,4 @@ post:
     '422':
       description: Неверные входные данные для перевода
       schema:
-        $ref: '#/definitions/InvalidTransferParameters'
+        $ref: '#/definitions/InvalidP2PTransferParameters'

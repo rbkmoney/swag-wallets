@@ -3,11 +3,24 @@ required:
   - status
 properties:
   status:
-    description: Статус перевода
+    description: |
+      Статус вывода денежных средств.
+
+      | Значение    | Пояснение                                  |
+      | ----------- | ------------------------------------------ |
+      | `Pending`   | Перевод в процессе выполнения                |
+      | `Succeeded` | Перевод средств произведён успешно           |
+      | `Failed`    | Перевод средств завершился неудачей          |
+
     type: string
     enum:
-      - pending
-      - processed
-      - failed
-  error:
-    $ref: '#/definitions/P2PTransferError'
+      - Pending
+      - Succeeded
+      - Failed
+  failure:
+    x-rebillyMerge:
+      - description: |
+          > Если `status` == `Failed`
+
+          Пояснение причины неудачи
+      - $ref: '#/definitions/P2PTransferFailure'

@@ -4,7 +4,7 @@ required:
   - sender
   - receiver
   - senderIdentityID
-  - asset
+  - body
 properties:
   sender:
     $ref: '#/definitions/SenderResource'
@@ -12,7 +12,7 @@ properties:
     $ref: '#/definitions/ReceiverResource'
   senderIdentityID:
     $ref: '#/definitions/IdentityID'
-  asset:
+  body:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
-      - description: Сумма перевода
+      - description: Сумма операции
