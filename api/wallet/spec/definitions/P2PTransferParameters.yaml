@@ -17,7 +17,7 @@ properties:
       - $ref: '#/definitions/Asset'
       - description: Сумма перевода
   feeToken:
-    description: Токен полученный из [fixateFee](#operation/fixateFee)
+    description: Токен полученный из [calculateFee](#operation/calculateFee)
     type: string
     minLength: 1
     maxLength: 4000

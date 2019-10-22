@@ -1,6 +1,6 @@
 post:
   description: Получить и зафиксировать комиссию
-  operationId: fixateFee
+  operationId: calculateFee
   tags:
     - P2P
   parameters:
