@@ -1,0 +1,9 @@
+type: object
+allOf:
+  - $ref: '#/definitions/UserInteractionIntent'
+  - type: object
+    required:
+      - userInteraction
+    properties:
+      userInteraction:
+        $ref: '#/definitions/UserInteraction'

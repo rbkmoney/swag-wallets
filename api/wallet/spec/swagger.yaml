@@ -354,7 +354,7 @@ tags:
 
   - name: P2P
     x-displayName: Переводы
-    description: "Переводы средств между банковскими картами"
+    description: "Переводы средств между людьми"
 
   - name: Webhooks
     x-displayName: Webhooks

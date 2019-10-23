@@ -1,4 +1,5 @@
 type: object
+discriminator: intentType
 required:
   - intentType
 properties:
@@ -6,7 +7,5 @@ properties:
     description: Требуется ли взаимодействия с пользователем или более не требуется.
     type: string
     enum:
-      - create
-      - finish
-  userInteraction:
-    $ref: '#/definitions/UserInteraction'
+      - UserInteractionIntentCreate
+      - UserInteractionIntentFinish
