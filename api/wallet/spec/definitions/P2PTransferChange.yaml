@@ -7,4 +7,4 @@ properties:
     type: string
     enum:
       - P2PTransferStatusChanged
-      - P2PTransferInteractionRequested
+      - P2PTransferInteractionChanged
