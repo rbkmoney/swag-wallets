@@ -1,8 +1,8 @@
 get:
-  description: Получить историю указанного перевода в виде набора событий.
+  description: Получить историю перевода в виде набора событий.
   tags:
     - P2P
-  operationId: getTransferEvents
+  operationId: getP2PTransferEvents
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'

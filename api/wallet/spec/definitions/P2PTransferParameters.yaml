@@ -3,14 +3,14 @@ type: object
 required:
   - sender
   - receiver
-  - partyIdentityID
+  - identityID
   - body
 properties:
   sender:
     $ref: '#/definitions/SenderResource'
   receiver:
     $ref: '#/definitions/ReceiverResource'
-  partyIdentityID:
+  identityID:
     $ref: '#/definitions/IdentityID'
   body:
     x-rebillyMerge:

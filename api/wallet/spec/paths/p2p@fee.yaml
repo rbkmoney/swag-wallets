@@ -7,7 +7,7 @@ post:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
     - name: feeParams
-      description: Ресурсы участников перевода и сумма
+      description: Параметры для вычисления комиссии
       in: body
       required: true
       schema:

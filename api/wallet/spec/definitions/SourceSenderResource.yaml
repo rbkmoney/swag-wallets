@@ -1,0 +1,9 @@
+description: Банковская карта
+allOf:
+  - $ref: '#/definitions/SenderResource'
+  - type: object
+    required:
+      - sourceID
+    properties:
+      sourceID:
+        $ref: '#/definitions/SourceID'

@@ -2,7 +2,7 @@ post:
   description: Создать перевод
   tags:
     - P2P
-  operationId: createTransfer
+  operationId: createP2PTransfer
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
@@ -13,7 +13,7 @@ post:
         $ref: '#/definitions/P2PTransferParameters'
   responses:
     '201':
-      description: Перевод создана
+      description: Перевод создан
       schema:
         $ref: '#/definitions/P2PTransfer'
     '400':
