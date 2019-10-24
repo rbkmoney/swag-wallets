@@ -6,11 +6,11 @@ allOf:
       Требование провести взаимодействие с плательщиком для продолжения процесса
       перевода
     required:
-      - transferID
+      - p2pTransferID
       - userInteractionID
       - userInteractionIntent
     properties:
-      transferID:
+      p2pTransferID:
         description: Идентификатор перевода
         type: string
       userInteractionID:
