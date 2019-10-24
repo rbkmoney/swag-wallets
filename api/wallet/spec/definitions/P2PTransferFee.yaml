@@ -10,3 +10,7 @@ properties:
       - description: Комиссия "сверху" - взимается с клиента в дополнение к сумме операции
   token:
     $ref: '#/definitions/P2PTransferFeeToken'
+  validUntil:
+    description: Дата и время прекращения действия токена
+    type: string
+    format: date-time
