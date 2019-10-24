@@ -12,8 +12,13 @@ post:
       schema:
         $ref: '#/definitions/P2PTransferParameters'
   responses:
-    '201':
-      description: Перевод создан
+    '202':
+      description: Перевод запущен
+      headers:
+        Location:
+          description: URI запущенного перевода
+          type: string
+          format: uri
       schema:
         $ref: '#/definitions/P2PTransfer'
     '400':
@@ -25,4 +30,4 @@ post:
     '422':
       description: Неверные входные данные для перевода
       schema:
-        $ref: '#/definitions/InvalidP2PTransferParameters'
+        $ref: '#/definitions/InvalidOperationParameters'
