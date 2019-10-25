@@ -1,10 +1,10 @@
 description: Комиссия и токен предназначеный для создания перевода
 type: object
 required:
-  - fee
+  - customerFee
   - token
 properties:
-  fee:
+  customerFee:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Комиссия "сверху" - взимается с клиента в дополнение к сумме операции

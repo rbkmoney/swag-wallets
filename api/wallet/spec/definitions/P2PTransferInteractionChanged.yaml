@@ -6,13 +6,9 @@ allOf:
       Требование провести взаимодействие с плательщиком для продолжения процесса
       перевода
     required:
-      - p2pTransferID
       - userInteractionID
       - userInteractionIntent
     properties:
-      p2pTransferID:
-        description: Идентификатор перевода
-        type: string
       userInteractionID:
         description: Идентификатор взаимодействия с пользователем
         type: string

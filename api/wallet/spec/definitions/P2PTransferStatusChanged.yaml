@@ -2,9 +2,3 @@ type: object
 allOf:
   - $ref: '#/definitions/P2PTransferChange'
   - $ref: '#/definitions/P2PTransferStatus'
-  - type: object
-    required:
-      - p2pTransferID
-    properties:
-      p2pTransferID:
-        type: string

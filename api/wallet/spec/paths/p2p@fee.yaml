@@ -1,5 +1,5 @@
 post:
-  description: Получить и зафиксировать комиссию
+  description: Расчитать комиссию и токен для использования в начале перевода
   operationId: calculateFee
   tags:
     - P2P
@@ -14,7 +14,7 @@ post:
         $ref: '#/definitions/FeeParameters'
   responses:
     '201':
-      description: Комиссия и токен
+      description: Результат вычисления комиссии
       schema:
         $ref: '#/definitions/P2PTransferFee'
     '400':
@@ -24,6 +24,6 @@ post:
     '409':
       $ref: '#/responses/ConflictRequest'
     '422':
-      description: Неверные данные приема/передачи средств
+      description: Неверные данные для расчета комиссии
       schema:
         $ref: '#/definitions/InvalidOperationParameters'

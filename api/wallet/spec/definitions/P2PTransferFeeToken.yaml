@@ -1,4 +1,6 @@
 type: string
 minLength: 1
 maxLength: 4000
-description: Токен используемый для создания перевода
+description: >
+  Токен полученный из [calculateFee](#operation/calculateFee),
+  нужен для проведения перевода с ранее вычисленой комиссией

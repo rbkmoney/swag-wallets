@@ -17,10 +17,7 @@ properties:
       - $ref: '#/definitions/Asset'
       - description: Сумма перевода
   feeToken:
-    description: Токен полученный из [calculateFee](#operation/calculateFee)
-    type: string
-    minLength: 1
-    maxLength: 4000
+    $ref: '#/definitions/P2PTransferParameters'
   metadata:
     description: 'Метаданные, которые необходимо связать с переводом'
     type: object
