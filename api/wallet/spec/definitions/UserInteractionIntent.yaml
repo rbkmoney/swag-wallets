@@ -4,7 +4,7 @@ required:
   - intentType
 properties:
   intentType:
-    description: Требуется ли взаимодействия с пользователем или более не требуется.
+    description: Вид намеререния по взаимодействию с пользователем.
     type: string
     enum:
       - UserInteractionIntentCreate

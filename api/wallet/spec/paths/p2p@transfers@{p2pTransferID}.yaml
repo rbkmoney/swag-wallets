@@ -9,7 +9,7 @@ get:
     - $ref: '#/parameters/p2pTransferID'
   responses:
     '200':
-      description: Перевод найден
+      description: Найденный перевод
       schema:
         $ref: '#/definitions/P2PTransfer'
     '400':
