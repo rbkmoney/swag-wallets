@@ -10,7 +10,8 @@ required:
   - externalID
 properties:
   id:
-    $ref: '#/definitions/P2PTransferID'
+    x-rebillyMerge:
+      - $ref: '#/definitions/P2PTransferID'
   createdAt:
     description: Дата и время создания
     type: string

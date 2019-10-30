@@ -11,13 +11,15 @@ properties:
   receiver:
     $ref: '#/definitions/ReceiverResource'
   identityID:
-    $ref: '#/definitions/IdentityID'
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityID'
   body:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Сумма перевода
   feeToken:
-    $ref: '#/definitions/P2PTransferParameters'
+    x-rebillyMerge:
+      - $ref: '#/definitions/P2PTransferFeeToken'
   metadata:
     description: 'Метаданные, которые необходимо связать с переводом'
     type: object

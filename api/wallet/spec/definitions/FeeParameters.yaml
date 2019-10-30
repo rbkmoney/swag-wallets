@@ -11,7 +11,8 @@ properties:
   receiver:
     $ref: '#/definitions/ReceiverResource'
   identityID:
-    $ref: '#/definitions/IdentityID'
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityID'
   body:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'

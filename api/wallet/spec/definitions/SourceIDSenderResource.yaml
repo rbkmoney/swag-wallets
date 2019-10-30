@@ -1,4 +1,4 @@
-description: Банковская карта
+description: Идентификатор источника
 allOf:
   - $ref: '#/definitions/SenderResource'
   - type: object
@@ -6,4 +6,5 @@ allOf:
       - sourceID
     properties:
       sourceID:
-        $ref: '#/definitions/SourceID'
+        x-rebillyMerge:
+          - $ref: '#/definitions/SourceID'

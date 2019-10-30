@@ -7,5 +7,5 @@ properties:
     description: Вид намеререния по взаимодействию с пользователем.
     type: string
     enum:
-      - UserInteractionIntentCreate
-      - UserInteractionIntentFinish
+      - UserInteractionCreate
+      - UserInteractionFinish
