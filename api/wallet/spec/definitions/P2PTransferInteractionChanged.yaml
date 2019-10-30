@@ -3,14 +3,13 @@ allOf:
   - $ref: '#/definitions/P2PTransferChange'
   - type: object
     description: |
-      Требование провести взаимодействие с плательщиком для продолжения процесса
-      перевода
+      Изменения определённого взаимодействия с пользователем
     required:
       - userInteractionID
-      - userInteractionIntent
+      - userInteractionChange
     properties:
       userInteractionID:
         description: Идентификатор взаимодействия с пользователем
         type: string
-      userInteractionIntent:
-        $ref: '#/definitions/UserInteractionIntent'
+      userInteractionChange:
+        $ref: '#/definitions/UserInteractionChange'

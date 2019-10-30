@@ -1,6 +1,6 @@
 type: object
 allOf:
-  - $ref: '#/definitions/UserInteractionIntent'
+  - $ref: '#/definitions/UserInteractionChange'
   - type: object
     required:
       - userInteraction
