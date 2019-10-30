@@ -1,4 +1,4 @@
-description: Параметры запроса комиссии
+description: Параметры запроса комиссий
 type: object
 required:
   - sender
