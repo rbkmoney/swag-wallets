@@ -17,7 +17,7 @@ properties:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Сумма перевода
-  feeToken:
+  feeQuote:
     x-rebillyMerge:
       - $ref: '#/definitions/P2PTransferQuoteToken'
   metadata:

@@ -2,18 +2,18 @@ post:
   description: >
     Расчитать комиссию и зафиксировать её в виде токена,
     который можно использовать при создании перевода
-  operationId: calculateFee
+  operationId: calculateQuote
   tags:
     - P2P
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
-    - name: feeParams
+    - name: quoteParams
       description: Параметры для вычисления комиссии
       in: body
       required: true
       schema:
-        $ref: '#/definitions/FeeParameters'
+        $ref: '#/definitions/QuoteParameters'
   responses:
     '201':
       description: Результат вычисления комиссии
