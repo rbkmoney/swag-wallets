@@ -12,4 +12,3 @@ properties:
     type: string
     enum:
       - BankCardSenderResource
-      - SourceIDSenderResource
