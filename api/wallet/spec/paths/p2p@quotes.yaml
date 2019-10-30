@@ -2,7 +2,7 @@ post:
   description: >
     Расчитать комиссии и зафиксировать их в виде токена,
     который можно использовать при создании перевода
-  operationId: calculateQuote
+  operationId: quoteP2PTransfer
   tags:
     - P2P
   parameters:
