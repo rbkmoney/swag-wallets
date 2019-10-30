@@ -18,7 +18,7 @@ post:
     '201':
       description: Результат вычисления комиссии
       schema:
-        $ref: '#/definitions/P2PTransferFee'
+        $ref: '#/definitions/P2PTransferQuote'
     '400':
       $ref: '#/responses/BadRequest'
     '401':

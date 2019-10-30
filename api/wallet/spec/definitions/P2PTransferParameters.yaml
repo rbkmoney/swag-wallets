@@ -19,7 +19,7 @@ properties:
       - description: Сумма перевода
   feeToken:
     x-rebillyMerge:
-      - $ref: '#/definitions/P2PTransferFeeToken'
+      - $ref: '#/definitions/P2PTransferQuoteToken'
   metadata:
     description: 'Метаданные, которые необходимо связать с переводом'
     type: object

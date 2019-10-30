@@ -9,7 +9,7 @@ properties:
       - $ref: '#/definitions/Asset'
       - description: Комиссия "сверху" - взимается с клиента в дополнение к сумме операции
   token:
-    $ref: '#/definitions/P2PTransferFeeToken'
+    $ref: '#/definitions/P2PTransferQuoteToken'
   validUntil:
     description: Дата и время прекращения действия токена
     type: string
