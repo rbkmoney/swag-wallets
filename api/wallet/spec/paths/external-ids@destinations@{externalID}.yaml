@@ -1,6 +1,6 @@
 get:
   operationId: getDestinationByExternalID
-  summary: Получить приёмник средств для внешнего идентификатора
+  summary: Получить приёмник средств по внешнему идентификатору
   tags:
     - Withdrawals
   parameters:

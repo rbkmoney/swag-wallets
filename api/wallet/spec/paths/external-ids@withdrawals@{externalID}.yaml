@@ -1,6 +1,6 @@
 get:
   operationId: getWithdrawalByExternalID
-  summary: Получить состояние вывода средств для внешнего идентификатора
+  summary: Получить состояние вывода средств по внешнему идентификатору
   tags:
     - Withdrawals
   parameters:
