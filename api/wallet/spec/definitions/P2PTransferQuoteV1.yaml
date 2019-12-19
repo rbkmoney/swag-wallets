@@ -1,0 +1,28 @@
+type: object
+required:
+  - version
+properties:
+  version:
+    type: integer
+    minimum: 1
+    maximum: 1
+  amount:
+    $ref: '#/definitions/Asset'
+  partyRevision:
+    type: integer
+  domainRevision:
+    type: integer
+  createdAt:
+    type: string
+    format: date-time
+  expiresOn:
+    type: string
+    format: date-time
+  partyID:
+    string: string
+  identityID:
+    $ref: '#/definitions/IdentityID'
+  sender:
+    $ref: '#/definitions/CompactResource'
+  receiver:
+    $ref: '#/definitions/CompactResource'
