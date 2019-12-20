@@ -1,4 +1,4 @@
-description: Внутренняя схема `#/definitions/P2PTransferQuoteToken.yaml` версии 1
+description: Cхема содержимого [токена для создания перевода](#/definitions/P2PTransferQuoteToken.yaml) версии 1
 type: object
 required:
   - version
