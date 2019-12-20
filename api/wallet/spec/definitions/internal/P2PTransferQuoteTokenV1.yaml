@@ -1,6 +1,16 @@
+description: Внутренняя схема `#/definitions/P2PTransferQuoteToken.yaml` версии 1
 type: object
 required:
   - version
+  - amount
+  - partyRevision
+  - domainRevision
+  - createdAt
+  - expiresOn
+  - partyID
+  - identityID
+  - sender
+  - receiver
 properties:
   version:
     type: integer
@@ -19,7 +29,7 @@ properties:
     type: string
     format: date-time
   partyID:
-    string: string
+    type: string
   identityID:
     $ref: '#/definitions/IdentityID'
   sender:
