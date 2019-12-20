@@ -17,7 +17,7 @@ properties:
     minimum: 1
     maximum: 1
   amount:
-    $ref: '#/definitions/Asset'
+    $ref: '/spec/definitions/Asset.yaml'
   partyRevision:
     type: integer
   domainRevision:
@@ -31,8 +31,8 @@ properties:
   partyID:
     type: string
   identityID:
-    $ref: '#/definitions/IdentityID'
+    $ref: '/spec/definitions/IdentityID.yaml'
   sender:
-    $ref: '#/definitions/CompactResource'
+    $ref: 'CompactResource.yaml'
   receiver:
-    $ref: '#/definitions/CompactResource'
+    $ref: 'CompactResource.yaml'
