@@ -7,4 +7,4 @@ allOf:
         description: Уникальный идентификатор учетной записи Ripple (XRP)
         type: string
         pattern: '^[0-9]{9}$'
-        example: 191919191
+        example: '191919191'
