@@ -2,7 +2,6 @@ allOf:
   - $ref: '#/definitions/CryptoWallet'
   - type: object
     properties:
-      currency: Ripple
       tag:
         description: Уникальный идентификатор учетной записи Ripple (XRP)
         type: string
