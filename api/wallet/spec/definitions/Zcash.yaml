@@ -1,2 +1,5 @@
 allOf:
   - $ref: '#/definitions/CryptoWallet'
+  - type: object
+    properties:
+      currency: Zcash
