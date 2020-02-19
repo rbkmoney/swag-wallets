@@ -23,3 +23,12 @@ properties:
   externalID:
     x-rebillyMerge:
       - $ref: '#/definitions/ExternalID'
+  walletGrantSender:
+    x-rebillyMerge:
+      - $ref: '#/definitions/GrantToken'
+      - description: |
+          Токен, дающий право на списание с кошелька.
+
+          Необходимо предоставить в том случае, если перевод производится засчёт средств _чужого_
+          кошелька. Владелец указанного кошелька может
+          [выдать на это право](#operation/issueWalletGrant).
