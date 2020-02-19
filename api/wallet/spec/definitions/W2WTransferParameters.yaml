@@ -23,7 +23,7 @@ properties:
   externalID:
     x-rebillyMerge:
       - $ref: '#/definitions/ExternalID'
-  walletGrantSender:
+  walletGrant:
     x-rebillyMerge:
       - $ref: '#/definitions/GrantToken'
       - description: |
