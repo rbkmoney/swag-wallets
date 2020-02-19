@@ -1,0 +1,25 @@
+description: Параметры создания перевода
+type: object
+required:
+  - sender
+  - receiver
+  - identityID
+  - body
+properties:
+  sender:
+    $ref: '#/definitions/WalletID'
+  receiver:
+    $ref: '#/definitions/WalletID'
+  identityID:
+    x-rebillyMerge:
+      - $ref: '#/definitions/IdentityID'
+  body:
+    x-rebillyMerge:
+      - $ref: '#/definitions/Asset'
+      - description: Сумма перевода
+  metadata:
+    description: 'Метаданные, которые необходимо связать с переводом'
+    type: object
+  externalID:
+    x-rebillyMerge:
+      - $ref: '#/definitions/ExternalID'

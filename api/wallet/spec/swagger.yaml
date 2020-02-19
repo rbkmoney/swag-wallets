@@ -321,6 +321,15 @@ parameters:
     maxLength: 40
     minLength: 1
 
+  w2wTransferID:
+    name: w2wTransferID
+    in: path
+    description: Идентификатор перевода
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
 tags:
 
   - name: Providers
@@ -360,8 +369,12 @@ tags:
     description: ""
 
   - name: P2P
-    x-displayName: Переводы
+    x-displayName: Переводы (P2P)
     description: "Переводы средств между людьми"
+
+  - name: W2W
+    x-displayName: Переводы (W2W)
+    description: "Переводы средств между кошельками"
 
   - name: Webhooks
     x-displayName: Webhooks
