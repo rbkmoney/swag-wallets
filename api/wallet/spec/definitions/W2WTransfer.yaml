@@ -28,6 +28,3 @@ properties:
   externalID:
     x-rebillyMerge:
       - $ref: '#/definitions/ExternalID'
-  metadata:
-    description: Связанные с переводом метаданные
-    type: object

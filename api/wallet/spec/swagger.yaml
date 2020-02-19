@@ -369,12 +369,12 @@ tags:
     description: ""
 
   - name: P2P
-    x-displayName: Переводы (P2P)
-    description: "Переводы средств между людьми"
+    x-displayName: Переводы вне платформы
+    description: ""
 
   - name: W2W
-    x-displayName: Переводы (W2W)
-    description: "Переводы средств между кошельками"
+    x-displayName: Переводы внутри платформы
+    description: ""
 
   - name: Webhooks
     x-displayName: Webhooks
