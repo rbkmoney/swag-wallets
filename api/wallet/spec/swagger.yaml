@@ -370,11 +370,11 @@ tags:
 
   - name: P2P
     x-displayName: Переводы вне платформы
-    description: ""
+    description: "Переводы средств между людьми с использованием инструментов вне платформы"
 
   - name: W2W
     x-displayName: Переводы внутри платформы
-    description: ""
+    description: "Переводы средств между кошельками внутри платформы"
 
   - name: Webhooks
     x-displayName: Webhooks
