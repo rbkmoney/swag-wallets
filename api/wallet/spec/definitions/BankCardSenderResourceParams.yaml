@@ -7,6 +7,6 @@ allOf:
       - authData
     properties:
         authData: 
-          description: Данные авторизации
+          description: Данные авторизации, полученные при сохранении карты
           type: string
           maxLength: 1000
