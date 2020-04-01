@@ -320,6 +320,15 @@ parameters:
     maxLength: 40
     minLength: 1
 
+  p2pTransferTemplateID:
+    name: p2pTransferTemplateID
+    in: path
+    description: Идентификатор шаблона перевода
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
   w2wTransferID:
     name: w2wTransferID
     in: path
@@ -370,6 +379,10 @@ tags:
   - name: P2P
     x-displayName: Переводы вне платформы
     description: "Переводы средств между людьми с использованием инструментов вне платформы"
+
+  - name: P2PTemplates
+    x-displayName: Шаблоны переводов вне платформы
+    description: "Шаблоны переводов средств между людьми с использованием инструментов вне платформы"
 
   - name: W2W
     x-displayName: Переводы внутри платформы

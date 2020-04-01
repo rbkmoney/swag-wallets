@@ -1,0 +1,66 @@
+get:
+  description: Получить шаблон перевода по его идентификатору.
+  tags:
+    - P2PTemplates
+  operationId: getP2PTransferTemplateByID
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - $ref: '#/parameters/p2pTransferTemplateID'
+  responses:
+    '200':
+      description: Шаблон перевода
+      schema:
+        $ref: '#/definitions/P2PTransferTemplate'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '404':
+      $ref: '#/responses/NotFound'
+
+put:
+  description: Модифицировать шаблон перевода.
+  tags:
+    - P2PTemplates
+  operationId: updateP2PTransferTemplate
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - $ref: '#/parameters/p2pTransferTemplateID'
+    - name: p2pTransferTemplateUpdateParameters
+      description: Параметры модифицируемого перевода.
+      in: body
+      required: true
+      schema:
+        $ref: '#/definitions/P2PTransferTemplateUpdateParameters'
+  responses:
+    '200':
+      description: Шаблон перевода модифицирован.
+      schema:
+        $ref: '#/definitions/P2PTransferTemplate'
+    '400':
+      $ref: '#/responses/BadRequest'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '404':
+      $ref: '#/responses/NotFound'
+
+delete:
+  description: Удалить шаблон перевода.
+  tags:
+    - P2PTemplates
+  operationId: deleteP2PTransferTemplate
+  parameters:
+    - $ref: '#/parameters/requestID'
+    - $ref: '#/parameters/deadline'
+    - $ref: '#/parameters/p2pTransferTemplateID'
+  responses:
+    '204':
+      description: Шаблон перевода удален.
+    '400':
+      $ref: '#/responses/BadRequest'
+    '401':
+      $ref: '#/responses/Unauthorized'
+    '404':
+      $ref: '#/responses/NotFound'

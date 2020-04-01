@@ -1,0 +1,22 @@
+type: object
+required:
+  - id
+  - lifetime
+  - details
+properties:
+  id:
+    x-rebillyMerge:
+      - $ref: '#/definitions/P2PTransferTemplateID'
+  description:
+    description: Описание перевода
+    type: string
+    maxLength: 1000
+  lifetime:
+    $ref: '#/definitions/LifetimeInterval'
+  details:
+    $ref: '#/definitions/P2PTransferTemplateDetails'
+  metadata:
+    description: >
+      Метаданные, которые будут связаны с переводом, созданным по шаблону, в
+      случае, если иные метаданные не указаны в запросе на создание перевода.
+    type: object

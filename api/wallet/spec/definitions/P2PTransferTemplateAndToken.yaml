@@ -1,0 +1,9 @@
+type: object
+required:
+  - P2PTransferTemplate
+  - token
+properties:
+  P2PTransferTemplate:
+    $ref: '#/definitions/P2PTransferTemplate'
+  token:
+    $ref: '#/definitions/GrantToken'
