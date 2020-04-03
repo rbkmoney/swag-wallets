@@ -45,22 +45,3 @@ put:
       $ref: '#/responses/Unauthorized'
     '404':
       $ref: '#/responses/NotFound'
-
-delete:
-  description: Удалить шаблон перевода.
-  tags:
-    - P2PTemplates
-  operationId: deleteP2PTransferTemplate
-  parameters:
-    - $ref: '#/parameters/requestID'
-    - $ref: '#/parameters/deadline'
-    - $ref: '#/parameters/p2pTransferTemplateID'
-  responses:
-    '204':
-      description: Шаблон перевода удален.
-    '400':
-      $ref: '#/responses/BadRequest'
-    '401':
-      $ref: '#/responses/Unauthorized'
-    '404':
-      $ref: '#/responses/NotFound'

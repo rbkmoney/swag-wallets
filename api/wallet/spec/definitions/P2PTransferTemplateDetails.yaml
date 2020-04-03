@@ -1,12 +1,10 @@
 type: object
 description: Детали шаблона перевода
 properties:
-  count:
-    description: |
-      Количество переводов, которые можно создать по этому шаблону
-    type: integer
-    format: int64
-    example: 1430000
+  description:
+    description: Описание перевода
+    type: string
+    maxLength: 1000
   body:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'

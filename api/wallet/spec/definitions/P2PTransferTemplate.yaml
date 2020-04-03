@@ -7,10 +7,6 @@ properties:
   id:
     x-rebillyMerge:
       - $ref: '#/definitions/P2PTransferTemplateID'
-  description:
-    description: Описание перевода
-    type: string
-    maxLength: 1000
   lifetime:
     $ref: '#/definitions/LifetimeInterval'
   details:

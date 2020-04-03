@@ -1,6 +1,7 @@
 type: object
 required:
   - identityID
+  - type
   - lifetime
   - details
 properties:
@@ -10,10 +11,11 @@ properties:
   identityID:
     x-rebillyMerge:
       - $ref: '#/definitions/IdentityID'
-  description:
-    description: Описание перевода
+  type:
     type: string
-    maxLength: 1000
+    enum:
+      - Single
+      - Multiple
   lifetime:
     $ref: '#/definitions/LifetimeInterval'
   details:

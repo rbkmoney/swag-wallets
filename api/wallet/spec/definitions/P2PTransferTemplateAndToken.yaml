@@ -6,4 +6,11 @@ properties:
   P2PTransferTemplate:
     $ref: '#/definitions/P2PTransferTemplate'
   token:
+    description: >
+      Токен доступа к шаблону перевода создается в результате операции создания
+      шаблона. Он авторизует:
+
+      * получение шаблона перевода по его идентификатору,
+
+      * создание перевода по данному шаблону.
     $ref: '#/definitions/GrantToken'

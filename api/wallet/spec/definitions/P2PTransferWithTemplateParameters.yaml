@@ -1,12 +1,21 @@
 type: object
+required:
+  - templateGrant
 properties:
-  externalID:
-    x-rebillyMerge:
-      - $ref: '#/definitions/ExternalID'
   body:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Сумма перевода
   metadata:
-    description: 'Метаданные, которые необходимо связать с переводом'
     type: object
+    description: 'Метаданные, которые необходимо связать с переводом. **Объединяются с метаданными шаблона**'
+  templateGrant:
+    x-rebillyMerge:
+      - $ref: '#/definitions/GrantToken'
+      - description: |
+          Токен, дающий право создания перевода по шаблону.
+  idempotencyGrant:
+    x-rebillyMerge:
+      - $ref: '#/definitions/GrantToken'
+      - description: |
+          Токен, обеспечивающий идемпотентное создание перевода по шаблону.
