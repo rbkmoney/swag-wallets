@@ -5,7 +5,7 @@ properties:
     description: Описание перевода
     type: string
     maxLength: 1000
-  body:
+  templateBody:
     x-rebillyMerge:
-      - $ref: '#/definitions/Asset'
-      - description: Сумма перевода
+      - $ref: '#/definitions/P2PTransferTemplateBody'
+      - description: Описание cуммы перевода

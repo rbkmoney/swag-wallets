@@ -1,0 +1,8 @@
+type: object
+required:
+  - body
+properties:
+  body:
+    x-rebillyMerge:
+      - $ref: '#/definitions/Asset'
+      - description: Сумма перевода

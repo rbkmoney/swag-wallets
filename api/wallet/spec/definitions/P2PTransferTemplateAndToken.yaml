@@ -1,9 +1,9 @@
 type: object
 required:
-  - P2PTransferTemplate
+  - template
   - token
 properties:
-  P2PTransferTemplate:
+  template:
     $ref: '#/definitions/P2PTransferTemplate'
   token:
     description: >
