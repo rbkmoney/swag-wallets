@@ -1,5 +1,5 @@
 type: object
-description: Детали шаблона перевода
+description: Поля по умолчанию шаблона перевода
 properties:
   description:
     description: Описание перевода

@@ -3,9 +3,6 @@ required:
   - identityID
   - fields
 properties:
-  externalID:
-    x-rebillyMerge:
-      - $ref: '#/definitions/ExternalID'
   identityID:
     x-rebillyMerge:
       - $ref: '#/definitions/IdentityID'
