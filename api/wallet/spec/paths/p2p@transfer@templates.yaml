@@ -15,7 +15,7 @@ post:
     '201':
       description: Шаблон перевода создан
       schema:
-        $ref: '#/definitions/P2PTransferTemplateAndToken'
+        $ref: '#/definitions/P2PTransferTemplate'
     '400':
       $ref: '#/responses/BadRequest'
     '401':

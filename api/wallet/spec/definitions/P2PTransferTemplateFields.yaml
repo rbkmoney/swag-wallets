@@ -8,4 +8,6 @@ properties:
   templateBody:
     x-rebillyMerge:
       - $ref: '#/definitions/P2PTransferTemplateBody'
-      - description: Описание cуммы перевода
+  templateMetadata:
+    x-rebillyMerge:
+      - $ref: '#/definitions/P2PTransferTemplateMetadata'

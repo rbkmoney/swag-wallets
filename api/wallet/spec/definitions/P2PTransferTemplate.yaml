@@ -1,18 +1,10 @@
 type: object
 required:
   - id
-  - lifetime
-  - details
+  - fields
 properties:
   id:
     x-rebillyMerge:
       - $ref: '#/definitions/P2PTransferTemplateID'
-  lifetime:
-    $ref: '#/definitions/LifetimeInterval'
-  details:
-    $ref: '#/definitions/P2PTransferTemplateDetails'
-  metadata:
-    description: >
-      Метаданные, которые будут связаны с переводом, созданным по шаблону, в
-      случае, если иные метаданные не указаны в запросе на создание перевода.
-    type: object
+  fields:
+    $ref: '#/definitions/P2PTransferTemplateFields'

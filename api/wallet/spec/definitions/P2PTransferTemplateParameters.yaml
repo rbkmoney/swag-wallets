@@ -1,9 +1,7 @@
 type: object
 required:
   - identityID
-  - type
-  - lifetime
-  - details
+  - fields
 properties:
   externalID:
     x-rebillyMerge:
@@ -11,17 +9,5 @@ properties:
   identityID:
     x-rebillyMerge:
       - $ref: '#/definitions/IdentityID'
-  type:
-    type: string
-    enum:
-      - Single
-      - Multiple
-  lifetime:
-    $ref: '#/definitions/LifetimeInterval'
-  details:
-    $ref: '#/definitions/P2PTransferTemplateDetails'
-  metadata:
-    description: >
-      Метаданные, которые будут связаны с переводом, созданным по шаблону, в
-      случае, если иные метаданные не указаны в запросе на создание перевода.
-    type: object
+  fields:
+    $ref: '#/definitions/P2PTransferTemplateFields'

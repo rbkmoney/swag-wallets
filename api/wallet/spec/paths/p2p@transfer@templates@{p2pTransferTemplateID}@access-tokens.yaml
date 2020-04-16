@@ -1,6 +1,6 @@
 post:
-  operationId: issueIdempotencyGrant
-  summary: Получить токен для идемпотентного создания перевода по шаблону
+  operationId: issueP2PTransferTemplateAccessToken
+  summary: Получить токен для создания перевода по шаблону
   tags:
     - P2PTemplates
   parameters:
