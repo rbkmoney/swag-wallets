@@ -10,7 +10,3 @@ allOf:
         description: Данные авторизации, полученные при сохранении карты
         type: string
         maxLength: 1000
-      paymentSystem:
-        x-rebillyMerge:
-          - $ref: '#/definitions/BankCardPaymentSystem'
-          - readOnly: true
