@@ -7,12 +7,6 @@ post:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/p2pTransferTemplateID'
-    - name: p2pTransferParamsWithTemplate
-      description: Параметры создаваемого перевода
-      in: body
-      required: true
-      schema:
-          $ref: '#/definitions/P2PTransferWithTemplateParameters'
   responses:
     '201':
       description: Токен получен
