@@ -1,13 +1,13 @@
 type: object
-description: Поля по умолчанию шаблона перевода
+description: Параметры, использующиеся при создании перевода
 properties:
   description:
     description: Описание перевода
     type: string
     maxLength: 1000
-  templateBody:
+  body:
     x-rebillyMerge:
       - $ref: '#/definitions/P2PTransferTemplateBody'
-  templateMetadata:
+  metadata:
     x-rebillyMerge:
       - $ref: '#/definitions/P2PTransferTemplateMetadata'

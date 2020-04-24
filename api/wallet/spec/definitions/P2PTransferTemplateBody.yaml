@@ -1,8 +1,8 @@
 type: object
 required:
-  - body
+  - defaultValue
 properties:
-  body:
+  defaultValue:
     x-rebillyMerge:
       - $ref: '#/definitions/Asset'
       - description: Сумма перевода

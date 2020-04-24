@@ -1,18 +1,12 @@
 post:
-  operationId: issueP2PTransferAccessToken
-  summary: Получить токен для одной попытки создания перевода по шаблону
+  operationId: issueP2PTransferTemplateAccessToken
+  summary: Получить токен для чтения шаблона и создания переводов по шаблону
   tags:
     - P2PTemplates
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/p2pTransferTemplateID'
-    - name: p2pTransferParamsWithTemplate
-      description: Параметры создаваемого перевода
-      in: body
-      required: true
-      schema:
-          $ref: '#/definitions/P2PTransferWithTemplateParameters'
   responses:
     '201':
       description: Токен получен

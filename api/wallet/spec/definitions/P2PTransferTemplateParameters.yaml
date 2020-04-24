@@ -8,3 +8,6 @@ properties:
       - $ref: '#/definitions/IdentityID'
   fields:
     $ref: '#/definitions/P2PTransferTemplateFields'
+  externalID:
+    x-rebillyMerge:
+      - $ref: '#/definitions/ExternalID'
