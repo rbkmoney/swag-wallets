@@ -1,8 +1,8 @@
 type: object
 required:
-  - defaultValue
+  - value
 properties:
-  defaultValue:
+  value:
     description: |
       Объём денежных средств
     type: object

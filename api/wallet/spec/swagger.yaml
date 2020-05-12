@@ -404,7 +404,7 @@ tags:
       ### Токен доступа к переводу
 
       Токен доступа к переводу создается с помощью соответствующего
-      метода API [issueP2PTransferAccessToken](#operation/issueP2PTransferAccessToken).
+      метода API [issueP2PTransferTicketToken](#operation/issueP2PTransferTicketToken).
       Он авторизует:
 
       * одну попытку создания перевода по данному шаблону,

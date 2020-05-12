@@ -8,8 +8,6 @@ properties:
     type: string
     maxLength: 1000
   body:
-    x-rebillyMerge:
-      - $ref: '#/definitions/P2PTransferTemplateBody'
+    $ref: '#/definitions/P2PTransferTemplateBody'
   metadata:
-    x-rebillyMerge:
-      - $ref: '#/definitions/P2PTransferTemplateMetadata'
+    $ref: '#/definitions/P2PTransferTemplateMetadata'

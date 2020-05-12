@@ -1,6 +1,6 @@
 post:
-  operationId: issueP2PTransferTemplateAccessToken
-  summary: Получить токен для чтения шаблона и создания переводов по шаблону
+  operationId: issueP2PTransferTicketToken
+  description: Получить токен для одной попытки создания перевода по шаблону
   tags:
     - P2PTemplates
   parameters:

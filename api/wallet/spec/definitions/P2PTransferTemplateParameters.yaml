@@ -1,13 +1,13 @@
 type: object
 required:
   - identityID
-  - fields
+  - details
 properties:
   identityID:
     x-rebillyMerge:
       - $ref: '#/definitions/IdentityID'
-  fields:
-    $ref: '#/definitions/P2PTransferTemplateFields'
+  details:
+    $ref: '#/definitions/P2PTransferTemplateDetails'
   externalID:
     x-rebillyMerge:
       - $ref: '#/definitions/ExternalID'
