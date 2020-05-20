@@ -1,5 +1,5 @@
 post:
-  operationId: issueP2PTransferTicketToken
+  operationId: issueP2PTransferTicket
   description: Получить токен для одной попытки создания перевода по шаблону
   tags:
     - P2PTemplates

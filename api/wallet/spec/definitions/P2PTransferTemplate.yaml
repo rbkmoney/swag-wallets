@@ -3,7 +3,6 @@ required:
   - id
   - identityID
   - createdAt
-  - isBlocked
   - details
 properties:
   id:
