@@ -1,6 +1,6 @@
 post:
   operationId: issueP2PTransferTicket
-  description: Получить токен для одной попытки создания перевода по шаблону
+  description: Получить талон на одну попытку создания перевода по шаблону
   tags:
     - P2PTemplates
   parameters:
@@ -9,7 +9,7 @@ post:
     - $ref: '#/parameters/p2pTransferTemplateID'
   responses:
     '201':
-      description: Токен получен
+      description: Талон получен
       schema:
         $ref: '#/definitions/GrantToken'
     '404':
