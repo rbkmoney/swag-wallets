@@ -1,0 +1,8 @@
+type: object
+required:
+  - blocking
+properties:
+  blocking:
+    description: Заблокирован ли шаблон?
+    type: boolean
+    example: false
