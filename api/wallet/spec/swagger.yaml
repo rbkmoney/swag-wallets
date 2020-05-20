@@ -390,7 +390,7 @@ tags:
 
       Пример использования шаблонов: [владелец](#tag/Identities) создает шаблон для проведения
       переводов вне платформы и получает для него [access token](#operation/issueP2PTransferTemplateAccessToken).
-      Платежная форма, используя [access token](#operation/issueP2PTransferTemplateAccessToken) читает данные шаблона для отображения и
+      Платежная форма, используя [access token](#operation/issueP2PTransferTemplateAccessToken), читает данные шаблона для отображения и
       выписывает [ticket access token](#operation/issueP2PTransferTicket), который позволяет
       создать перевод и отслеживать его состояние.
 
