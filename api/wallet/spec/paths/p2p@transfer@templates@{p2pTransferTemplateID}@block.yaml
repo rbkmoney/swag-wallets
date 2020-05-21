@@ -8,7 +8,7 @@ post:
     - $ref: '#/parameters/deadline'
     - $ref: '#/parameters/p2pTransferTemplateID'
   responses:
-    '202':
+    '204':
       description: Шаблон заблокирован
     '400':
       $ref: '#/responses/BadRequest'
