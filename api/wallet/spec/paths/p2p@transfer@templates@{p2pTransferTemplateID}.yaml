@@ -18,24 +18,3 @@ get:
       $ref: '#/responses/Unauthorized'
     '404':
       $ref: '#/responses/NotFound'
-
-post:
-  description: Заблокировать использование шаблона.
-  tags:
-    - P2PTemplates
-  operationId: setP2PTransferTemplateBlocking
-  parameters:
-    - $ref: '#/parameters/requestID'
-    - $ref: '#/parameters/deadline'
-    - $ref: '#/parameters/p2pTransferTemplateID'
-  responses:
-    '202':
-      description: Блокировка запущена
-    '400':
-      $ref: '#/responses/BadRequest'
-    '401':
-      $ref: '#/responses/Unauthorized'
-    '422':
-      description: Неверные данные для блокировки шаблона
-      schema:
-        $ref: '#/definitions/InvalidOperationParameters'
