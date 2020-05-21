@@ -9,7 +9,7 @@ post:
     - $ref: '#/parameters/p2pTransferTemplateID'
   responses:
     '202':
-      description: Блокировка запущена
+      description: Шаблон заблокирован
     '400':
       $ref: '#/responses/BadRequest'
     '401':
