@@ -23,8 +23,6 @@ post:
       $ref: '#/responses/BadRequest'
     '401':
       $ref: '#/responses/Unauthorized'
-    '409':
-      $ref: '#/responses/ConflictRequest'
     '422':
       description: Неверные данные для расчета комиссий
       schema:
