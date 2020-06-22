@@ -20,7 +20,9 @@ properties:
       - $ref: '#/definitions/Asset'
       - description: Сумма перевода
   contactInfo:
-        $ref: '#/definitions/ContactInfo'
+    x-rebillyMerge:
+      - $ref: '#/definitions/ContactInfo'
+      - description: Контактные данные отправителя
   quoteToken:
     x-rebillyMerge:
       - $ref: '#/definitions/P2PTransferQuoteToken'
