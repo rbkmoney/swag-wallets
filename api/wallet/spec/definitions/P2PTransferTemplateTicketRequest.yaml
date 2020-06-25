@@ -1,0 +1,14 @@
+type: object
+required:
+  - validUntil
+properties:
+  token:
+    x-rebillyMerge:
+      - $ref: '#/definitions/GrantToken'
+      - readOnly: true
+  validUntil:
+    description: |
+      Дата и время, до наступления которого выданный токен действителен.
+      Не может быть больше, чем у [AccessToken](#operation/issueP2PTransferTemplateAccessToken)
+    type: string
+    format: date-time
