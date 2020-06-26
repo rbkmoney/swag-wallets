@@ -8,7 +8,7 @@ properties:
       - readOnly: true
   validUntil:
     description: |
-      Дата и время, до наступления которого выданный токен действителен.
-      Не может быть больше, чем у [AccessToken](#operation/issueP2PTransferTemplateAccessToken)
+      Желаемые дата и время, до наступления которых будет действителен выданный токен.
+      Итоговое значение может быть ограничено сроком действия AccessToken и его можно узнать из ответа.
     type: string
     format: date-time

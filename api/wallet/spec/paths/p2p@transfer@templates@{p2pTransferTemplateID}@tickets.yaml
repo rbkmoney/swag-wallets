@@ -17,7 +17,7 @@ post:
     '201':
       description: Талон получен
       schema:
-        $ref: '#/definitions/P2PTransferTemplateTicketRequest'
+        $ref: '#/definitions/P2PTransferTemplateTokenRequest'
     '404':
       $ref: '#/responses/NotFound'
     '400':
