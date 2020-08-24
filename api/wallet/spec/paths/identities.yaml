@@ -6,22 +6,22 @@ get:
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
-    - name: provider
-      description: Фильтр по провайдеру услуг
+    - name: providerID
+      description: Идентификатор провайдера услуг
       in: query
       required: false
       type: string
       maxLength: 40
       minLength: 1
     - name: class
-      description: Фильтр по классу личности
+      description: Класс личности
       in: query
       required: false
       type: string
       maxLength: 40
       minLength: 1
     - name: level
-      description: Фильтр по уровню идентификации
+      description: Уровень идентификации
       in: query
       required: false
       type: string

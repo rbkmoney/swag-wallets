@@ -6,25 +6,13 @@ get:
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
-    - name: identity
-      description: Фильтр по личности владельца
+    - name: identityID
+      description: Идентификатор личности владельца
       in: query
       required: false
       type: string
       maxLength: 40
       minLength: 1
-    - name: createdAtFrom
-      in: query
-      description: Дата создания с
-      type: string
-      format: date-time
-      required: false
-    - name: createdAtTo
-      in: query
-      description: Дата создания до
-      type: string
-      format: date-time
-      required: false
     - $ref: '#/parameters/currencyID'
     - $ref: '#/parameters/limit'
     - x-rebillyMerge:
