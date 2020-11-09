@@ -185,6 +185,15 @@ parameters:
     required: true
     type: string
 
+  partyID:
+    name: partyID
+    in: path
+    description: Уникальный в рамках платформы идентификатор участника
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+
   residence:
     name: residence
     in: query
