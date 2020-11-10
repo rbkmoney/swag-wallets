@@ -340,6 +340,12 @@ parameters:
 
 tags:
 
+  - name: Payment Resources
+    x-displayName: Платёжные ресурсы
+    description: >
+        Для токенизации чувствительных данных платёжных ресурсов пользователей.
+        См. [RBKmoney Payment Resource API](?api/payres/swagger.yaml).
+
   - name: Providers
     x-displayName: Провайдеры услуг
     description: ""
