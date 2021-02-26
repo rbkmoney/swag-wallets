@@ -1,0 +1,26 @@
+description: Данные корректировки поступления денежных средств
+allOf:
+  - type: object
+    properties:
+      id:
+        x-rebillyMerge:
+          - $ref: '#/definitions/AdjustmentID'
+          - readOnly: true
+      createdAt:
+        description: Дата и время запуска корректировки
+        type: string
+        format: date-time
+        readOnly: true
+      operation_timestamp:
+        description: Дата и время запуска корректировки
+        type: string
+        format: date-time
+        readOnly: true
+      domain_revision:
+        type: int64
+      party_revision:
+        type: int64
+      externalID:
+        x-rebillyMerge:
+          - $ref: '#/definitions/ExternalID'
+  - $ref: '#/definitions/AdjustmentStatus'
