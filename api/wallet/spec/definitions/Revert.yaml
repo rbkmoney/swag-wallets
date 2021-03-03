@@ -28,9 +28,11 @@ allOf:
       reason:
         type: string
       domainRevision:
-        type: int64
+        type: integer
+        format: int64
       partyRevision:
-        type: int64
+        type: integer
+        format: int64
       externalID:
         x-rebillyMerge:
           - $ref: '#/definitions/ExternalID'

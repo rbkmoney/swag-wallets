@@ -17,9 +17,11 @@ allOf:
         format: date-time
         readOnly: true
       domainRevision:
-        type: int64
+        type: integer
+        format: int64
       partyRevision:
-        type: int64
+        type: integer
+        format: int64
       externalID:
         x-rebillyMerge:
           - $ref: '#/definitions/ExternalID'
