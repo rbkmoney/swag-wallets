@@ -16,9 +16,9 @@ allOf:
         type: string
         format: date-time
         readOnly: true
-      domain_revision:
+      domainRevision:
         type: int64
-      party_revision:
+      partyRevision:
         type: int64
       externalID:
         x-rebillyMerge:

@@ -27,9 +27,9 @@ allOf:
           - description: Объём поступивших средств
       reason:
         type: string
-      domain_revision:
+      domainRevision:
         type: int64
-      party_revision:
+      partyRevision:
         type: int64
       externalID:
         x-rebillyMerge:
