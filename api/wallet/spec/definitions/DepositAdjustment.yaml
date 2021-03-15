@@ -4,7 +4,7 @@ allOf:
     properties:
       id:
         x-rebillyMerge:
-          - $ref: '#/definitions/AdjustmentID'
+          - $ref: '#/definitions/DepositAdjustmentID'
           - readOnly: true
       createdAt:
         description: Дата и время запуска корректировки
@@ -12,17 +12,11 @@ allOf:
         format: date-time
         readOnly: true
       operation_timestamp:
-        description: Дата и время запуска корректировки
+        description: Дата и время проведения операции
         type: string
         format: date-time
         readOnly: true
-      domainRevision:
-        type: integer
-        format: int64
-      partyRevision:
-        type: integer
-        format: int64
       externalID:
         x-rebillyMerge:
           - $ref: '#/definitions/ExternalID'
-  - $ref: '#/definitions/AdjustmentStatus'
+  - $ref: '#/definitions/DepositAdjustmentStatus'

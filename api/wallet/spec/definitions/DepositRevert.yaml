@@ -8,7 +8,7 @@ allOf:
     properties:
       id:
         x-rebillyMerge:
-          - $ref: '#/definitions/RevertID'
+          - $ref: '#/definitions/DepositRevertID'
           - readOnly: true
       createdAt:
         description: Дата и время запуска отмены
@@ -27,13 +27,7 @@ allOf:
           - description: Объём поступивших средств
       reason:
         type: string
-      domainRevision:
-        type: integer
-        format: int64
-      partyRevision:
-        type: integer
-        format: int64
       externalID:
         x-rebillyMerge:
           - $ref: '#/definitions/ExternalID'
-  - $ref: '#/definitions/RevertStatus'
+  - $ref: '#/definitions/DepositRevertStatus'

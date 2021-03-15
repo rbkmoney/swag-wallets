@@ -1,8 +1,8 @@
 get:
-  operationId: listAdjustments
-  summary: Поиск корректировок
+  operationId: listReverts
+  summary: Поиск отмен
   tags:
-    - Adjustments
+    - Deposits
   parameters:
     - $ref: '#/parameters/requestID'
     - $ref: '#/parameters/deadline'
@@ -73,10 +73,10 @@ get:
             x-rebillyMerge:
               - $ref: '#/definitions/ContinuationToken'
           result:
-            description: Найденные корректировки
+            description: Найденные отмены
             type: array
             items:
-              $ref: '#/definitions/Adjustment'
+              $ref: '#/definitions/DepositRevert'
     '400':
       $ref: '#/responses/BadRequest'
     '401':
