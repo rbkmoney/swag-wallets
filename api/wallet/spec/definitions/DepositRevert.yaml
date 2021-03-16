@@ -24,7 +24,7 @@ allOf:
       body:
         x-rebillyMerge:
           - $ref: '#/definitions/Asset'
-          - description: Объём поступивших средств
+          - description: Объем денежных средств
       reason:
         type: string
       externalID:

@@ -3,7 +3,7 @@ required:
   - code
 properties:
   code:
-    description: Код ошибки отмены
+    description: Код ошибки коррекции
     type: string
   subError:
     $ref: '#/definitions/SubFailure'

@@ -11,7 +11,7 @@ allOf:
         type: string
         format: date-time
         readOnly: true
-      operation_timestamp:
+      operationTimestamp:
         description: Дата и время проведения операции
         type: string
         format: date-time
