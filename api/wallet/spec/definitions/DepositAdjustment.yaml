@@ -11,11 +11,6 @@ allOf:
         type: string
         format: date-time
         readOnly: true
-      operationTimestamp:
-        description: Дата и время проведения операции
-        type: string
-        format: date-time
-        readOnly: true
       externalID:
         x-rebillyMerge:
           - $ref: '#/definitions/ExternalID'
