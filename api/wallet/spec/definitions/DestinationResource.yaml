@@ -13,4 +13,4 @@ properties:
     enum:
       - BankCardDestinationResource
       - CryptoWalletDestinationResource
-      - WebmoneyWalletDestinationResource
+      - DigitalWalletDestinationResource

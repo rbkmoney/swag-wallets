@@ -1,4 +1,4 @@
 description: Цифровой кошелек Webmoney
 allOf:
   - $ref: '#/definitions/DestinationResource'
-  - $ref: '#/definitions/WebmoneyWallet'
+  - $ref: '#/definitions/DigitalWallet'
