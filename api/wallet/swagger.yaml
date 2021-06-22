@@ -1,0 +1,5021 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: RBKmoney Wallet API
+  description: |
+
+    RBKmoney Wallet API является базовой и единственной точкой взаимодействия с платформой кошельков. Все изменения состояний платформы осуществляются с помощью вызовов соответствующих методов API. Любые сторонние приложения, включая наши веб-сайты и другие UI-интерфейсы являются внешними приложениями-клиентами.
+    RBKmoney API работает поверх HTTP-протокола. Мы используем REST архитектуру, схема описывается в соответствии со [Swagger](http://swagger.io/). Коды возврата описываются соответствующими HTTP-статусами. Платформа принимает и возвращает значения JSON в теле запросов и ответов.
+    ## Формат содержимого
+    Любой запрос к API должен выполняться в кодировке UTF-8 и с указанием содержимого в формате JSON.
+    ```
+      Content-Type: application/json; charset=utf-8
+    ```
+    ## Формат дат
+    Платформа принимает значения date-time в формате, описанном в RFC 3339, например:
+    ```
+      2017-01-01T00:00:00Z
+      2017-01-01T00:00:01+00:00
+    ```
+    ## Максимальное время обработки запроса
+    К любому вызову методов API можно добавить параметр отсечки по времени, определяющий максимальное время ожидания завершения операции по запросу. Данная отсечка передается в соответствующем заголовке HTTP-запроса:
+    ```
+     X-Request-Deadline: 10s
+    ```
+    Значение отсечки может быть задано в формате, описанном в RFC 3339 (см. [Формат дат](#section/Format-dat)), либо в относительных величинах, например:
+    `150000ms`, `540s`, `3.5m` При этом возможные единицы измерения `ms`, `s`, `m`. В обоих случаях  не рекомендуется, чтобы задаваемое значение было меньше **3 секунд** и превышало **1 минуту**.
+    ## Ошибки обработки запросов
+    В процессе обработки запросов силами нашей платформы могут происходить различные непредвиденные ситуации. Об их появлении платформа сигнализирует по протоколу HTTP соответствующими [статусами][5xx], обозначающими ошибки сервера.
+
+     |  Код    |  Описание  |
+     | ------- | ---------- |
+     | **500** | В процессе обработки платформой запроса возникла непредвиденная ситуация. При получении подобного кода ответа мы рекомендуем обратиться в техническую поддержку. |
+     | **503** | Платформа временно недоступна и не готова обслуживать данный запрос. Запрос гарантированно не выполнен, при получении подобного кода ответа попробуйте выполнить его позднее, когда доступность платформы будет восстановлена. |
+     | **504** | Платформа превысила допустимое время обработки запроса, результат запроса не определён. Попробуйте отправить запрос повторно или выяснить результат выполнения исходного запроса, если повторное исполнение запроса нежелательно. |
+
+    [5xx]: https://tools.ietf.org/html/rfc7231#section-6.6
+  termsOfService: 'http://rbk.money/'
+  contact:
+    name: RBKmoney support team
+    email: support@rbk.money
+    url: 'https://rbk.money'
+host: api.rbk.money
+basePath: /wallet/v0
+schemes:
+  - https
+consumes:
+  - application/json; charset=utf-8
+produces:
+  - application/json; charset=utf-8
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: |
+      Для аутентификации вызовов мы используем [JWT](https://jwt.io). Cоответствующий ключ передается в заголовке.
+      ```shell
+       Authorization: Bearer {TOKENIZATION|PRIVATE_JWT}
+      ```
+security:
+  - bearer: []
+responses:
+  BadRequest:
+    description: Недопустимые для операции входные данные
+    schema:
+      $ref: '#/definitions/BadRequest'
+  ConflictRequest:
+    description: Переданное значение `externalID` уже использовалось вами ранее с другими параметрами запроса
+    schema:
+      $ref: '#/definitions/ConflictRequest'
+  NotFound:
+    description: Искомая сущность не найдена
+  Unauthorized:
+    description: Ошибка авторизации
+parameters:
+  requestID:
+    name: X-Request-ID
+    in: header
+    description: Уникальный идентификатор запроса к системе
+    required: true
+    type: string
+    maxLength: 32
+    minLength: 1
+  providerID:
+    name: providerID
+    in: path
+    description: Идентификатор провайдера
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  identityID:
+    name: identityID
+    in: path
+    description: Идентификатор личности владельца
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  challengeID:
+    name: challengeID
+    in: path
+    description: Идентификатор процедуры идентификации личности
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  walletID:
+    name: walletID
+    in: path
+    description: Идентификатор кошелька
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  destinationID:
+    name: destinationID
+    in: path
+    description: Идентификатор приёмника средств
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  withdrawalID:
+    name: withdrawalID
+    in: path
+    description: Идентификатор вывода денежных средств
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  externalID:
+    name: externalID
+    in: path
+    description: Внешний идентификатор
+    required: true
+    type: string
+  residence:
+    name: residence
+    in: query
+    description: |
+      Резиденция, в рамках которой производится оказание услуг,
+      код страны или региона по стандарту [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
+    type: string
+    pattern: '^[A-Za-z]{3}$'
+    required: false
+  amountFrom:
+    name: amountFrom
+    in: query
+    description: Сумма денежных средств в минорных единицах
+    type: integer
+    format: int64
+    required: false
+  amountTo:
+    name: amountTo
+    in: query
+    description: Сумма денежных средств в минорных единицах
+    type: integer
+    format: int64
+    required: false
+  currencyID:
+    name: currencyID
+    in: query
+    description: |
+      Валюта, символьный код согласно [ISO
+      4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+    type: string
+    pattern: '^[A-Z]{3}$'
+  limit:
+    name: limit
+    in: query
+    description: Лимит выборки
+    required: true
+    type: integer
+    format: int32
+    minimum: 1
+    maximum: 1000
+  eventCursor:
+    name: eventCursor
+    in: query
+    description: |
+      Идентификатор последнего известного события.
+
+      Все события, произошедшие _после_ указанного, попадут в выборку.
+      Если этот параметр не указан, в выборку попадут события, начиная с самого первого.
+    required: false
+    type: integer
+    format: int32
+  eventID:
+    name: eventID
+    in: path
+    description: |
+      Идентификатор события процедуры идентификации.
+    required: true
+    type: integer
+    format: int32
+  reportID:
+    name: reportID
+    in: path
+    description: Идентификатор отчета
+    required: true
+    type: integer
+    format: int64
+  fileID:
+    name: fileID
+    in: path
+    description: Идентификатор файла
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  fromTime:
+    name: fromTime
+    in: query
+    description: Начало временного отрезка
+    required: true
+    type: string
+    format: date-time
+  toTime:
+    name: toTime
+    in: query
+    description: Конец временного отрезка
+    required: true
+    type: string
+    format: date-time
+  deadline:
+    name: X-Request-Deadline
+    in: header
+    description: Максимальное время обработки запроса
+    required: false
+    type: string
+    maxLength: 40
+    minLength: 1
+  webhookID:
+    name: webhookID
+    in: path
+    description: Идентификатор webhook'а
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  queryIdentityID:
+    name: identityID
+    in: query
+    description: Идентификатор личности владельца
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  p2pTransferID:
+    name: p2pTransferID
+    in: path
+    description: Идентификатор перевода
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  p2pTransferTemplateID:
+    name: p2pTransferTemplateID
+    in: path
+    description: Идентификатор шаблона перевода
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+  w2wTransferID:
+    name: w2wTransferID
+    in: path
+    description: Идентификатор перевода
+    required: true
+    type: string
+    maxLength: 40
+    minLength: 1
+tags:
+  - name: Payment Resources
+    x-displayName: Платёжные ресурсы
+    description: |
+      Платформа предоставляет возможность токенизации исходных данных пользовательских платёжных ресурсов. См. [RBKmoney Payment Resource API](?api/payres/swagger.yaml).
+  - name: Providers
+    x-displayName: Провайдеры услуг
+    description: ''
+  - name: Identities
+    x-displayName: Владельцы
+    description: ''
+  - name: Wallets
+    x-displayName: Кошельки
+    description: ''
+  - name: Deposits
+    x-displayName: Пополнения
+    description: ''
+  - name: Withdrawals
+    x-displayName: Выводы
+    description: ''
+  - name: Residences
+    x-displayName: Резиденции
+    description: ''
+  - name: Currencies
+    x-displayName: Валюты
+    description: ''
+  - name: Reports
+    x-displayName: Отчеты
+    description: ''
+  - name: Downloads
+    x-displayName: Загрузка файлов
+    description: ''
+  - name: P2P
+    x-displayName: Переводы вне платформы
+    description: Переводы средств между людьми с использованием инструментов вне платформы
+  - name: P2PTemplates
+    x-displayName: Шаблоны переводов вне платформы
+    description: |
+      Шаблоны переводов вне платформы позволяют упростить создание переводов. Шаблон перевода привязан к [личности-владельцу](#tag/Identities) и содержит спецификацию, по которой можно создавать переводы, указывая только конкретнyю сумму и/или метаданные перевода.
+
+      Шаблоны служат в первую очередь для простой и при этом безопасной реализации сценариев совершения переводов клиентами в браузере, например с использованием нашей формы.
+      ### Сценарий интеграции
+      1. Владелец [создаёт шаблон перевода](#operation/createP2PTransferTemplate), при помощи личного кабинета или непосредственно вызова метода API.
+      2. Владелец [выписывает токен доступа](#operation/issueP2PTransferTemplateAccessToken) к шаблону и использует его вместе с идентификатором шаблона при встраивании формы для переводов на своём сайте.
+      3. Будучи открытой клиентом, форма использует [полученный токен](#operation/issueP2PTransferTemplateAccessToken) для доступа к различной информации о шаблоне и для [выписывания талона](#operation/issueP2PTransferTicket) на единоразовое совершение перевода.
+      4. Клиент заполняет необходимые данные, и, используя [полученный талон](#operation/issueP2PTransferTicket) в качестве токена доступа, запускает перевод и начинает следить изменениями его статуса*.
+      5. В случае неуспешного завершения перевода форма может повторить процесс, [выписав очередной талон](#operation/issueP2PTransferTicket) на совершение перевода.
+      * В том случае, если перевод не удалось создать, например по причине кратковременной недоступности сервиса, повторный запрос с тем же талоном будет обработан идемпотентно.
+
+      Cоздание и модификация шаблона перевода не требуют верификации на стороне платформы и заявок на эти изменения.
+      ### Токен доступа к шаблону перевода
+      Токен доступа к шаблону перевода создается с помощью соответствующего метода API [issueP2PTransferTemplateAccessToken](#operation/issueP2PTransferTemplateAccessToken). Он авторизует:
+      * чтение шаблона,
+      * выписывание талона для проведения перевода по шаблону.
+
+      ### Талон на совершение перевода
+      Талон на совершение перевода является расширенной версией токена доступа и создается с помощью соответствующего метода API [issueP2PTransferTicket](#operation/issueP2PTransferTicket). Он авторизует:
+      * запросы комиссии перевода,
+      * одну попытку создания перевода по данному шаблону,
+      * операции чтения, связанные с этим переводом.
+  - name: W2W
+    x-displayName: Переводы внутри платформы
+    description: Переводы средств между кошельками внутри платформы
+  - name: Webhooks
+    x-displayName: Webhooks
+    description: |
+      ## RBKmoney Webhooks Management API
+      В данном разделе описаны методы, позволяющие управлять Webhook'ами, или инструментами для получения асинхронных оповещений посредством HTTP-запросов при наступлении одного или группы интересующих вас событий, например, о том, что выплата в рамках созданного кошелька была успешно проведена.
+      ## RBKmoney Webhooks Events API
+      Внимание! Только Webhooks Management API является частью платформы RBKmoney, а следовательно и данной спецификации. Для реализации обработчика присылаемых уведомлений вам необходимо будет ознакомиться со Swagger-спецификацей [RBKmoney Wallet Webhooks Events API](https://rbkmoney.github.io/wallet-webhook-events-api/).
+  - name: Error Codes
+    x-displayName: Коды ошибок
+    description: |
+
+      ## Ошибки перевода
+
+        | Код                    | Описание                                                                                                                                       |
+        | ---                    | --------                                                                                                                                       |
+        | InvalidSenderResource  | Неверный источник перевода (введен номер несуществующей карты, отсутствующего аккаунта и т.п.)                                                 |
+        | InvalidReceiverResource| Неверный получатель перевода (введен номер несуществующей карты и т.п.)                                                                        |
+        | InsufficientFunds      | Недостаточно средств на счете банковской карты                                                                                                 |
+        | PreauthorizationFailed | Предварительная авторизация отклонена (введен неверный код 3D-Secure, на форме 3D-Secure нажата ссылка отмены)                                 |
+        | RejectedByIssuer       | Перевод отклонён эмитентом (установлены запреты по стране списания, запрет на покупки в интернете, платёж отклонен антифродом эмитента и т.п.) |
+        | P2PTransferRejected    | Перевод отклонён по иным причинам                                                                                                              |
+paths:
+  '/currencies/{currencyID}':
+    get:
+      operationId: getCurrency
+      summary: Получить описание валюты
+      tags:
+        - Currencies
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: currencyID
+          in: path
+          description: |
+            Валюта, символьный код согласно [ISO
+            4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+          type: string
+          required: true
+          pattern: '^[A-Za-z]{3}$'
+      responses:
+        '200':
+          description: Валюта найдена
+          schema:
+            $ref: '#/definitions/Currency'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  /deposit-adjustments:
+    get:
+      operationId: listDepositAdjustments
+      summary: Поиск корректировок
+      tags:
+        - Deposits
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: walletID
+          in: query
+          description: Идентификатор кошелька
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: identityID
+          in: query
+          description: Идентификатор личности владельца
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: depositID
+          in: query
+          description: Идентификатор ввода денежных средств
+          type: string
+          required: false
+          maxLength: 50
+          minLength: 1
+        - name: sourceID
+          in: query
+          description: Идентификатор источника средств
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: status
+          in: query
+          type: string
+          enum:
+            - Pending
+            - Succeeded
+            - Failed
+          required: false
+        - name: createdAtFrom
+          in: query
+          description: Дата создания с
+          type: string
+          format: date-time
+          required: false
+        - name: createdAtTo
+          in: query
+          description: Дата создания до
+          type: string
+          format: date-time
+          required: false
+        - $ref: '#/parameters/amountFrom'
+        - $ref: '#/parameters/amountTo'
+        - $ref: '#/parameters/currencyID'
+        - $ref: '#/parameters/limit'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат поиска
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Найденные корректировки
+                type: array
+                items:
+                  $ref: '#/definitions/DepositAdjustment'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+  /deposit-reverts:
+    get:
+      operationId: listDepositReverts
+      summary: Поиск отмен
+      tags:
+        - Deposits
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: walletID
+          in: query
+          description: Идентификатор кошелька
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: identityID
+          in: query
+          description: Идентификатор личности владельца
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: depositID
+          in: query
+          description: Идентификатор ввода денежных средств
+          type: string
+          required: false
+          maxLength: 50
+          minLength: 1
+        - name: sourceID
+          in: query
+          description: Идентификатор источника средств
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: status
+          in: query
+          type: string
+          enum:
+            - Pending
+            - Succeeded
+            - Failed
+          required: false
+        - name: createdAtFrom
+          in: query
+          description: Дата создания с
+          type: string
+          format: date-time
+          required: false
+        - name: createdAtTo
+          in: query
+          description: Дата создания до
+          type: string
+          format: date-time
+          required: false
+        - $ref: '#/parameters/amountFrom'
+        - $ref: '#/parameters/amountTo'
+        - $ref: '#/parameters/currencyID'
+        - $ref: '#/parameters/limit'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат поиска
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Найденные отмены
+                type: array
+                items:
+                  $ref: '#/definitions/DepositRevert'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+  /deposits:
+    get:
+      operationId: listDeposits
+      summary: Поиск пополнений
+      tags:
+        - Deposits
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: walletID
+          in: query
+          description: Идентификатор кошелька
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: identityID
+          in: query
+          description: Идентификатор личности владельца
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: depositID
+          in: query
+          description: Идентификатор ввода денежных средств
+          type: string
+          required: false
+          maxLength: 50
+          minLength: 1
+        - name: sourceID
+          in: query
+          description: Идентификатор источника средств
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: status
+          in: query
+          type: string
+          enum:
+            - Pending
+            - Succeeded
+            - Failed
+          required: false
+        - name: createdAtFrom
+          in: query
+          description: Дата создания с
+          type: string
+          format: date-time
+          required: false
+        - name: createdAtTo
+          in: query
+          description: Дата создания до
+          type: string
+          format: date-time
+          required: false
+        - $ref: '#/parameters/amountFrom'
+        - $ref: '#/parameters/amountTo'
+        - $ref: '#/parameters/currencyID'
+        - $ref: '#/parameters/limit'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат поиска
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Найденные пополнения
+                type: array
+                items:
+                  $ref: '#/definitions/Deposit'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+  /destinations:
+    get:
+      operationId: listDestinations
+      summary: Перечислить приёмники средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: identityID
+          description: Идентификатор личности владельца
+          in: query
+          required: false
+          type: string
+          maxLength: 40
+          minLength: 1
+        - $ref: '#/parameters/currencyID'
+        - $ref: '#/parameters/limit'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат поиска
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Найденные приёмники средств
+                type: array
+                items:
+                  $ref: '#/definitions/Destination'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+    post:
+      operationId: createDestination
+      summary: Завести приёмник средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: destination
+          description: Данные приёмника средств
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Destination'
+      responses:
+        '201':
+          description: Приёмник средств создан
+          headers:
+            Location:
+              description: URI созданного приёмника средств
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/Destination'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные данные приёмника средств
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/destinations/{destinationID}':
+    get:
+      operationId: getDestination
+      summary: Получить приёмник средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/destinationID'
+      responses:
+        '200':
+          description: Приёмник средств найден
+          schema:
+            $ref: '#/definitions/Destination'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/destinations/{destinationID}/grants':
+    post:
+      operationId: issueDestinationGrant
+      summary: Выдать право управления приёмником средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/destinationID'
+        - name: request
+          description: Запрос на право управления приёмником средств
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DestinationGrantRequest'
+      responses:
+        '201':
+          description: Право выдано
+          schema:
+            $ref: '#/definitions/DestinationGrantRequest'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для выдачи
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/external-ids/destinations/{externalID}':
+    get:
+      operationId: getDestinationByExternalID
+      summary: Получить приёмник средств по внешнему идентификатору
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/externalID'
+      responses:
+        '200':
+          description: Приёмник средств найден
+          schema:
+            $ref: '#/definitions/Destination'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/external-ids/withdrawals/{externalID}':
+    get:
+      operationId: getWithdrawalByExternalID
+      summary: Получить состояние вывода средств по внешнему идентификатору
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/externalID'
+      responses:
+        '200':
+          description: Вывод найден
+          schema:
+            $ref: '#/definitions/Withdrawal'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  /external/wallets:
+    get:
+      summary: Получить кошелёк по указанному внешнему идентификатору
+      operationId: getWalletByExternalID
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: externalID
+          description: Внешний идентификатор кошелька
+          in: query
+          required: true
+          type: string
+          maxLength: 40
+          minLength: 1
+      responses:
+        '200':
+          description: Данные кошелька
+          schema:
+            $ref: '#/definitions/Wallet'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/files/{fileID}/download':
+    post:
+      description: Получить ссылку для скачивания файла
+      tags:
+        - Downloads
+      operationId: downloadFile
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/fileID'
+      responses:
+        '201':
+          description: Данные для получения файла
+          schema:
+            $ref: '#/definitions/FileDownload'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  /identities:
+    get:
+      operationId: listIdentities
+      summary: Перечислить личности владельцев
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: providerID
+          description: Идентификатор провайдера услуг
+          in: query
+          required: false
+          type: string
+          maxLength: 40
+          minLength: 1
+        - name: class
+          description: Класс личности
+          in: query
+          required: false
+          type: string
+          maxLength: 40
+          minLength: 1
+        - name: level
+          description: Уровень идентификации
+          in: query
+          required: false
+          type: string
+          maxLength: 40
+          minLength: 1
+        - $ref: '#/parameters/limit'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат поиска
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Найденные личности
+                type: array
+                items:
+                  $ref: '#/definitions/Identity'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+    post:
+      operationId: createIdentity
+      summary: Создать личность владельца
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: identity
+          description: Данные создаваемой личности
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Identity'
+      responses:
+        '201':
+          description: Личность владельца создана
+          headers:
+            Location:
+              description: URI созданной личности
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/Identity'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные данные личности владельца
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/identities/{identityID}':
+    get:
+      operationId: getIdentity
+      summary: Получить данные личности владельца
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+      responses:
+        '200':
+          description: Личность владельца найдена
+          schema:
+            $ref: '#/definitions/Identity'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/identities/{identityID}/challenges':
+    get:
+      operationId: listIdentityChallenges
+      summary: Перечислить процедуры идентификации
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - name: status
+          description: |
+            Статус процедуры идентификации личности.
+
+            | Значение    | Пояснение                       |
+            | ----------- | ------------------------------- |
+            | `Pending`   | Процедура в процессе выполнения |
+            | `Completed` | Процедура пройдена успешно      |
+            | `Failed`    | Процедура не пройдена           |
+            | `Cancelled` | Процедура отменена              |
+          in: query
+          required: false
+          type: string
+          enum:
+            - Pending
+            - Completed
+            - Failed
+            - Cancelled
+      responses:
+        '200':
+          description: Процедуры идентификации найдены
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/IdentityChallenge'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+    post:
+      operationId: startIdentityChallenge
+      summary: Запустить процедуру идентификации
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - name: challenge
+          description: Данные для запуска процедуры идентификации
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/IdentityChallenge'
+      responses:
+        '202':
+          description: Процедура идентификации запущена
+          headers:
+            Location:
+              description: URI запущенной процедуры
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/IdentityChallenge'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '409':
+          description: Ранее запущенная процедура ещё не завершена
+        '422':
+          description: Неверные данные для проведения процедуры
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/identities/{identityID}/challenges/{challengeID}':
+    get:
+      operationId: getIdentityChallenge
+      summary: Получить данные процедуры идентификации
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - $ref: '#/parameters/challengeID'
+      responses:
+        '200':
+          description: Процедура идентификации найдена
+          schema:
+            $ref: '#/definitions/IdentityChallenge'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/identities/{identityID}/challenges/{challengeID}/events':
+    get:
+      operationId: pollIdentityChallengeEvents
+      summary: Запросить события процедуры идентификации
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - $ref: '#/parameters/challengeID'
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/eventCursor'
+      responses:
+        '200':
+          description: События найдены
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/IdentityChallengeEvent'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/identities/{identityID}/challenges/{challengeID}/events/{eventID}':
+    get:
+      operationId: getIdentityChallengeEvent
+      summary: Получить событие процедуры идентификации
+      tags:
+        - Identities
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - $ref: '#/parameters/challengeID'
+        - $ref: '#/parameters/eventID'
+      responses:
+        '200':
+          description: Событие найдено
+          schema:
+            $ref: '#/definitions/IdentityChallengeEvent'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/identities/{identityID}/reports':
+    post:
+      description: Сгенерировать отчет с указанным типом по личности владельца за указанный промежуток времени
+      tags:
+        - Reports
+      operationId: createReport
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - name: ReportParams
+          in: body
+          description: Параметры генерации отчета
+          required: true
+          schema:
+            $ref: '#/definitions/ReportParams'
+      responses:
+        '201':
+          description: Отчет создан
+          schema:
+            $ref: '#/definitions/Report'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+    get:
+      description: Получить список отчетов по личности владельца за период
+      tags:
+        - Reports
+      operationId: getReports
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - $ref: '#/parameters/fromTime'
+        - $ref: '#/parameters/toTime'
+        - name: type
+          in: query
+          description: Тип получаемых отчетов
+          required: false
+          type: string
+          enum:
+            - withdrawalRegistry
+      responses:
+        '200':
+          description: Найденные отчеты
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Report'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+  '/identities/{identityID}/reports/{reportID}':
+    get:
+      description: Получить отчет по данному идентификатору
+      tags:
+        - Reports
+      operationId: getReport
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/identityID'
+        - $ref: '#/parameters/reportID'
+      responses:
+        '200':
+          description: Найденный отчет
+          schema:
+            $ref: '#/definitions/Report'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  /p2p/quotes:
+    post:
+      description: |
+        Расчитать комиссии и зафиксировать их в виде токена, который можно использовать при создании перевода
+      operationId: quoteP2PTransfer
+      tags:
+        - P2P
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: quoteParams
+          description: Параметры для вычисления комиссий
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/QuoteParameters'
+      responses:
+        '201':
+          description: Результат вычисления комиссий
+          schema:
+            $ref: '#/definitions/P2PTransferQuote'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '422':
+          description: Неверные данные для расчета комиссий
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  /p2p/transfer/templates:
+    post:
+      description: Создать шаблон перевода
+      tags:
+        - P2PTemplates
+      operationId: createP2PTransferTemplate
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: transferTemplateParams
+          in: body
+          description: Параметры создания шаблона перевода
+          schema:
+            $ref: '#/definitions/P2PTransferTemplateParameters'
+      responses:
+        '201':
+          description: Шаблон перевода создан
+          schema:
+            $ref: '#/definitions/P2PTransferTemplate'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные входные данные для создания шаблона перевода
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/p2p/transfer/templates/{p2pTransferTemplateID}':
+    get:
+      description: Получить шаблон перевода по его идентификатору.
+      tags:
+        - P2PTemplates
+      operationId: getP2PTransferTemplateByID
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferTemplateID'
+      responses:
+        '200':
+          description: Шаблон перевода
+          schema:
+            $ref: '#/definitions/P2PTransferTemplate'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/p2p/transfer/templates/{p2pTransferTemplateID}/access-tokens':
+    post:
+      operationId: issueP2PTransferTemplateAccessToken
+      description: |
+        Получить токен доступа для чтения шаблона и
+        выписывание талонов на создание переводов по шаблону
+      tags:
+        - P2PTemplates
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferTemplateID'
+        - name: request
+          description: Запрос на получение токена доступа
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/P2PTransferTemplateTokenRequest'
+      responses:
+        '201':
+          description: Токен получен
+          schema:
+            $ref: '#/definitions/P2PTransferTemplateTokenRequest'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для получения
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/p2p/transfer/templates/{p2pTransferTemplateID}/block':
+    post:
+      description: Заблокировать использование шаблона.
+      tags:
+        - P2PTemplates
+      operationId: blockP2PTransferTemplate
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferTemplateID'
+      responses:
+        '204':
+          description: Шаблон заблокирован
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для блокировки шаблона
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/p2p/transfer/templates/{p2pTransferTemplateID}/quotes':
+    post:
+      description: |
+        Расчитать комиссии и зафиксировать их в виде токена, который можно использовать при создании перевода по шаблону
+      operationId: quoteP2PTransferWithTemplate
+      tags:
+        - P2PTemplates
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferTemplateID'
+        - name: quoteParams
+          description: Параметры для вычисления комиссий
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/P2PTransferTemplateQuoteParameters'
+      responses:
+        '201':
+          description: Результат вычисления комиссий
+          schema:
+            $ref: '#/definitions/P2PTransferQuote'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для расчета комиссий
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/p2p/transfer/templates/{p2pTransferTemplateID}/tickets':
+    post:
+      operationId: issueP2PTransferTicket
+      description: Получить талон на одну попытку создания перевода по шаблону
+      tags:
+        - P2PTemplates
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferTemplateID'
+        - name: request
+          description: Запрос на получение талона
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/P2PTransferTemplateTicketRequest'
+      responses:
+        '201':
+          description: Талон получен
+          schema:
+            $ref: '#/definitions/P2PTransferTemplateTokenRequest'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для получения
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/p2p/transfer/templates/{p2pTransferTemplateID}/transfers':
+    post:
+      description: Создать новый перевод по шаблону.
+      tags:
+        - P2PTemplates
+      operationId: createP2PTransferWithTemplate
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferTemplateID'
+        - name: p2pTransferParamsWithTemplate
+          description: Параметры создаваемого перевода
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/P2PTransferWithTemplateParameters'
+      responses:
+        '202':
+          description: Перевод запущен
+          headers:
+            Location:
+              description: URI запущенного перевода
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/P2PTransfer'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные входные данные для создания перевода
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  /p2p/transfers:
+    post:
+      description: Создать перевод
+      tags:
+        - P2P
+      operationId: createP2PTransfer
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: transferParams
+          in: body
+          description: Параметры создания перевода
+          schema:
+            $ref: '#/definitions/P2PTransferParameters'
+      responses:
+        '202':
+          description: Перевод запущен
+          headers:
+            Location:
+              description: URI запущенного перевода
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/P2PTransfer'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные входные данные для перевода
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/p2p/transfers/{p2pTransferID}':
+    get:
+      description: Получить состояние перевода.
+      tags:
+        - P2P
+      operationId: getP2PTransfer
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferID'
+      responses:
+        '200':
+          description: Найденный перевод
+          schema:
+            $ref: '#/definitions/P2PTransfer'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/p2p/transfers/{p2pTransferID}/events':
+    get:
+      description: Получить историю перевода в виде набора событий.
+      tags:
+        - P2P
+      operationId: getP2PTransferEvents
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/p2pTransferID'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат запроса событий
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Набор событий
+                type: array
+                items:
+                  $ref: '#/definitions/P2PTransferEvent'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  /providers:
+    get:
+      operationId: listProviders
+      summary: Перечислить доступных провайдеров
+      tags:
+        - Providers
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/residence'
+      responses:
+        '200':
+          description: Провайдеры найдены
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Provider'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+  '/providers/{providerID}':
+    get:
+      operationId: getProvider
+      summary: Получить данные провайдера
+      tags:
+        - Providers
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/providerID'
+      responses:
+        '200':
+          description: Провайдер найден
+          schema:
+            $ref: '#/definitions/Provider'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/providers/{providerID}/identity-classes':
+    get:
+      operationId: listProviderIdentityClasses
+      summary: Перечислить классы личностей
+      tags:
+        - Providers
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/providerID'
+      responses:
+        '200':
+          description: Классы личностей найдены
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/IdentityClass'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/providers/{providerID}/identity-classes/{identityClassID}':
+    get:
+      operationId: getProviderIdentityClass
+      summary: Получить описание класса личностей
+      tags:
+        - Providers
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/providerID'
+        - name: identityClassID
+          description: Класс личности владельца
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Класс личностей найден
+          schema:
+            $ref: '#/definitions/IdentityClass'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/providers/{providerID}/identity-classes/{identityClassID}/levels':
+    get:
+      operationId: listProviderIdentityLevels
+      summary: Перечислить уровни идентификации личности
+      tags:
+        - Providers
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/providerID'
+        - name: identityClassID
+          description: Класс личности владельца
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Уровни идентификации найдены
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/IdentityLevel'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/providers/{providerID}/identity-classes/{identityClassID}/levels/{identityLevelID}':
+    get:
+      operationId: getProviderIdentityLevel
+      summary: Получить описание уровня идентификации
+      tags:
+        - Providers
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/providerID'
+        - name: identityClassID
+          description: Класс личности владельца
+          in: path
+          required: true
+          type: string
+        - name: identityLevelID
+          description: Уровень идентификации
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Уровень идентификации найден
+          schema:
+            $ref: '#/definitions/IdentityLevel'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/residences/{residence}':
+    get:
+      operationId: getResidence
+      summary: Получить описание региона резиденции
+      tags:
+        - Residences
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: residence
+          in: path
+          description: |
+            Резиденция, в рамках которой производится оказание услуг,
+            код страны или региона по стандарту [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
+          type: string
+          pattern: '^[A-Za-z]{3}$'
+          required: true
+      responses:
+        '200':
+          description: Регион резиденции найден
+          schema:
+            $ref: '#/definitions/Residence'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  /w2w/transfers:
+    post:
+      description: Создать перевод
+      tags:
+        - W2W
+      operationId: createW2WTransfer
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: transferParams
+          in: body
+          description: Параметры создания перевода
+          schema:
+            $ref: '#/definitions/W2WTransferParameters'
+      responses:
+        '202':
+          description: Перевод запущен
+          headers:
+            Location:
+              description: URI запущенного перевода
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/W2WTransfer'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные входные данные для перевода
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/w2w/transfers/{w2wTransferID}':
+    get:
+      description: Получить состояние перевода.
+      tags:
+        - W2W
+      operationId: getW2WTransfer
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/w2wTransferID'
+      responses:
+        '200':
+          description: Найденный перевод
+          schema:
+            $ref: '#/definitions/W2WTransfer'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  /wallets:
+    get:
+      operationId: listWallets
+      summary: Перечислить кошельки
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: identityID
+          description: Идентификатор личности владельца
+          in: query
+          required: false
+          type: string
+          maxLength: 40
+          minLength: 1
+        - $ref: '#/parameters/currencyID'
+        - $ref: '#/parameters/limit'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат поиска
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Найденные кошельки
+                type: array
+                items:
+                  $ref: '#/definitions/Wallet'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+    post:
+      operationId: createWallet
+      summary: Завести новый кошелёк
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: wallet
+          description: Данные создаваемого кошелька
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Wallet'
+      responses:
+        '201':
+          description: Кошелёк создан
+          headers:
+            Location:
+              description: URI созданного кошелька
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/Wallet'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные данные кошелька
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/wallets/{walletID}':
+    get:
+      operationId: getWallet
+      summary: Получить данные кошелька
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/walletID'
+      responses:
+        '200':
+          description: Кошелёк найден
+          schema:
+            $ref: '#/definitions/Wallet'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/wallets/{walletID}/account':
+    get:
+      operationId: getWalletAccount
+      summary: Получить состояние счёта
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/walletID'
+      responses:
+        '200':
+          description: Счёт кошелька получен
+          schema:
+            $ref: '#/definitions/WalletAccount'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/wallets/{walletID}/grants':
+    post:
+      operationId: issueWalletGrant
+      summary: Выдать право управления средствами
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/walletID'
+        - name: request
+          description: Запрос на право управления средствами на кошельке
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/WalletGrantRequest'
+      responses:
+        '201':
+          description: Единоразовое право выдано
+          schema:
+            $ref: '#/definitions/WalletGrantRequest'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для выдачи
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  /webhooks:
+    post:
+      description: Установить новый webhook.
+      tags:
+        - Webhooks
+      operationId: createWebhook
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: webhookParams
+          description: Параметры устанавливаемого webhook'а
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Webhook'
+      responses:
+        '201':
+          description: Webhook установлен
+          schema:
+            $ref: '#/definitions/Webhook'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '422':
+          description: Неверные данные для создания webhook'а
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+    get:
+      description: Получить набор установленных webhook'ов.
+      tags:
+        - Webhooks
+      operationId: getWebhooks
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/queryIdentityID'
+      responses:
+        '200':
+          description: Набор webhook'ов
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Webhook'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '422':
+          description: Неверные данные для получения webhook'ов
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/webhooks/{webhookID}':
+    get:
+      description: Получить webhook по его идентификатору.
+      tags:
+        - Webhooks
+      operationId: getWebhookByID
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/webhookID'
+        - $ref: '#/parameters/queryIdentityID'
+      responses:
+        '200':
+          description: Данные webhook'а
+          schema:
+            $ref: '#/definitions/Webhook'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для получения webhook'а
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+    delete:
+      description: Снять указанный webhook.
+      tags:
+        - Webhooks
+      operationId: deleteWebhookByID
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/webhookID'
+        - $ref: '#/parameters/queryIdentityID'
+      responses:
+        '204':
+          description: Webhook успешно снят
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          description: Неверные данные для снятия webhook'а
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  /withdrawal-quotes:
+    post:
+      operationId: createQuote
+      summary: Подготовка котировки
+      description: Фиксация курса обмена валют для проведения выплаты с конвертацией
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: withdrawalQuoteParams
+          description: Данные котировки для вывода
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/WithdrawalQuoteParams'
+      responses:
+        '202':
+          description: Полученная котировка
+          schema:
+            $ref: '#/definitions/WithdrawalQuote'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные данные для получения котировки
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  /withdrawals:
+    get:
+      operationId: listWithdrawals
+      summary: Поиск выводов
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: walletID
+          in: query
+          description: Идентификатор кошелька
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: identityID
+          in: query
+          description: Идентификатор личности владельца
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: withdrawalID
+          in: query
+          description: Идентификатор вывода денежных средств
+          type: string
+          required: false
+          maxLength: 40
+          minLength: 1
+        - name: destinationID
+          in: query
+          description: Идентификатор приёмника средств
+          type: string
+          maxLength: 40
+          minLength: 1
+          required: false
+        - name: status
+          in: query
+          type: string
+          enum:
+            - Pending
+            - Succeeded
+            - Failed
+          required: false
+        - name: createdAtFrom
+          in: query
+          description: Дата создания с
+          type: string
+          format: date-time
+          required: false
+        - name: createdAtTo
+          in: query
+          description: Дата создания до
+          type: string
+          format: date-time
+          required: false
+        - $ref: '#/parameters/amountFrom'
+        - $ref: '#/parameters/amountTo'
+        - $ref: '#/parameters/currencyID'
+        - $ref: '#/parameters/limit'
+        - name: continuationToken
+          in: query
+          required: false
+          description: |
+            Токен, сигнализирующий о том, что в ответе передана только часть данных.
+            Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+            Если токена нет, получена последняя часть данных.
+          type: string
+      responses:
+        '200':
+          description: Результат поиска
+          schema:
+            type: object
+            properties:
+              continuationToken:
+                description: |
+                  Токен, сигнализирующий о том, что в ответе передана только часть данных.
+                  Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+                  Если токена нет, получена последняя часть данных.
+                type: string
+              result:
+                description: Найденные выводы
+                type: array
+                items:
+                  $ref: '#/definitions/Withdrawal'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+    post:
+      operationId: createWithdrawal
+      summary: Запустить вывод средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - name: withdrawal
+          description: Данные вывода
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/WithdrawalParameters'
+      responses:
+        '202':
+          description: Вывод запущен
+          headers:
+            Location:
+              description: URI запущенного вывода
+              type: string
+              format: uri
+          schema:
+            $ref: '#/definitions/Withdrawal'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '409':
+          $ref: '#/responses/ConflictRequest'
+        '422':
+          description: Неверные данные для осуществления вывода
+          schema:
+            $ref: '#/definitions/InvalidOperationParameters'
+  '/withdrawals/{withdrawalID}':
+    get:
+      operationId: getWithdrawal
+      summary: Получить состояние вывода средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/withdrawalID'
+      responses:
+        '200':
+          description: Вывод найден
+          schema:
+            $ref: '#/definitions/Withdrawal'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/withdrawals/{withdrawalID}/events':
+    get:
+      operationId: pollWithdrawalEvents
+      summary: Запросить события вывода средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/withdrawalID'
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/eventCursor'
+      responses:
+        '200':
+          description: События найдены
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/WithdrawalEvent'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+  '/withdrawals/{withdrawalID}/events/{eventID}':
+    get:
+      operationId: getWithdrawalEvents
+      summary: Получить событие вывода средств
+      tags:
+        - Withdrawals
+      parameters:
+        - $ref: '#/parameters/requestID'
+        - $ref: '#/parameters/deadline'
+        - $ref: '#/parameters/withdrawalID'
+        - $ref: '#/parameters/eventID'
+      responses:
+        '200':
+          description: Событие найдено
+          schema:
+            $ref: '#/definitions/WithdrawalEvent'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+definitions:
+  Asset:
+    description: |
+      Объём денежных средств
+    type: object
+    required:
+      - amount
+      - currency
+    properties:
+      amount:
+        description: |
+          Сумма денежных средств в минорных единицах, например, в копейках
+        type: integer
+        format: int64
+        example: 1430000
+      currency:
+        description: |
+          Валюта, символьный код согласно [ISO
+          4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
+        pattern: '^[A-Z]{3}$'
+        example: RUB
+  BankCardDestinationResource:
+    description: Банковская карта
+    allOf:
+      - $ref: '#/definitions/DestinationResource'
+      - $ref: '#/definitions/SecuredBankCard'
+  BankCardReceiverResource:
+    description: Банковская карта
+    allOf:
+      - $ref: '#/definitions/ReceiverResource'
+      - $ref: '#/definitions/SecuredBankCard'
+      - type: object
+        properties:
+          paymentSystem:
+            description: Платёжная система
+            type: string
+            enum:
+              - visa
+              - mastercard
+              - visaelectron
+              - maestro
+              - forbrugsforeningen
+              - dankort
+              - amex
+              - dinersclub
+              - discover
+              - unionpay
+              - jcb
+              - nspkmir
+              - elo
+              - rupay
+              - dummy
+              - uzcard
+            readOnly: true
+  BankCardReceiverResourceParams:
+    description: Банковская карта
+    allOf:
+      - $ref: '#/definitions/ReceiverResourceParams'
+      - $ref: '#/definitions/SecuredBankCard'
+  BankCardSenderResource:
+    description: Банковская карта
+    allOf:
+      - $ref: '#/definitions/SenderResource'
+      - $ref: '#/definitions/SecuredBankCard'
+      - type: object
+        properties:
+          paymentSystem:
+            description: Платёжная система
+            type: string
+            enum:
+              - visa
+              - mastercard
+              - visaelectron
+              - maestro
+              - forbrugsforeningen
+              - dankort
+              - amex
+              - dinersclub
+              - discover
+              - unionpay
+              - jcb
+              - nspkmir
+              - elo
+              - rupay
+              - dummy
+              - uzcard
+            readOnly: true
+  BankCardSenderResourceParams:
+    description: Банковская карта
+    allOf:
+      - $ref: '#/definitions/SenderResourceParams'
+      - $ref: '#/definitions/SecuredBankCard'
+      - type: object
+        required:
+          - authData
+        properties:
+          authData:
+            description: 'Данные авторизации, полученные при сохранении карты'
+            type: string
+            maxLength: 1000
+  Bitcoin:
+    allOf:
+      - $ref: '#/definitions/CryptoWallet'
+  BitcoinCash:
+    allOf:
+      - $ref: '#/definitions/CryptoWallet'
+  BrowserGetRequest:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BrowserRequest'
+      - type: object
+        required:
+          - uriTemplate
+        properties:
+          uriTemplate:
+            description: |
+              Шаблон значения URL для перехода в браузере
+
+              Шаблон представлен согласно стандарту
+              [RFC6570](https://tools.ietf.org/html/rfc6570).
+            type: string
+  BrowserPostRequest:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BrowserRequest'
+      - type: object
+        required:
+          - uriTemplate
+          - form
+        properties:
+          uriTemplate:
+            description: |
+              Шаблон значения URL для отправки формы
+
+              Шаблон представлен согласно стандарту
+              [RFC6570](https://tools.ietf.org/html/rfc6570).
+            type: string
+          form:
+            $ref: '#/definitions/UserInteractionForm'
+  BrowserRequest:
+    type: object
+    discriminator: requestType
+    required:
+      - requestType
+    properties:
+      requestType:
+        description: Тип браузерной операции
+        type: string
+  ContactInfo:
+    description: Контактные данные
+    type: object
+    properties:
+      email:
+        description: Адрес электронной почты
+        type: string
+        format: email
+        maxLength: 100
+      phoneNumber:
+        description: |
+          Номер мобильного телефона с международным префиксом согласно
+          [E.164](https://en.wikipedia.org/wiki/E.164).
+        type: string
+        format: '^\+\d{4,15}$'
+  ContinuationToken:
+    description: |
+      Токен, сигнализирующий о том, что в ответе передана только часть данных.
+      Для получения следующей части нужно повторно обратиться к сервису, указав тот же набор условий и полученый токен.
+      Если токена нет, получена последняя часть данных.
+    type: string
+  CryptoCurrency:
+    description: Криптовалюта
+    type: string
+    enum:
+      - Bitcoin
+      - Litecoin
+      - BitcoinCash
+      - Ripple
+      - Ethereum
+      - Zcash
+      - USDT
+  CryptoWallet:
+    description: Данные криптовалютного кошелька
+    type: object
+    discriminator: currency
+    required:
+      - id
+      - currency
+    properties:
+      id:
+        description: Идентификатор (он же адрес) криптовалютного кошелька
+        type: string
+        minLength: 16
+        maxLength: 256
+        example: zu3TcwGI71Bpaaw2XkLWZXlhMdn4zpVzMQ
+      currency:
+        description: Криптовалюта
+        type: string
+        enum:
+          - Bitcoin
+          - Litecoin
+          - BitcoinCash
+          - Ripple
+          - Ethereum
+          - Zcash
+          - USDT
+  CryptoWalletDestinationResource:
+    description: Криптовалютные денежные средства
+    allOf:
+      - $ref: '#/definitions/DestinationResource'
+      - $ref: '#/definitions/CryptoWallet'
+  Currency:
+    description: Описание валюты
+    type: object
+    required:
+      - id
+      - numericCode
+      - name
+      - exponent
+    properties:
+      id:
+        description: |
+          Валюта, символьный код согласно [ISO
+          4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
+        pattern: '^[A-Z]{3}$'
+        example: RUB
+      numericCode:
+        description: |
+          Цифровой код валюты согласно
+          [ISO 4217](http://www.iso.org/iso/home/standards/currency_codes.htm)
+        type: string
+        pattern: '^[0-9]{3}$'
+        example: '643'
+      name:
+        description: |
+          Человекочитаемое название валюты
+        type: string
+        example: Российский рубль
+      sign:
+        description: |
+          Знак единицы валюты
+        type: string
+        example: ₽
+      exponent:
+        description: |
+          Количество допустимых знаков после запятой в сумме средств, в которых может
+          указываться количество минорных денежных единиц
+        type: integer
+        minimum: 0
+        example: 2
+  CurrencyID:
+    description: |
+      Валюта, символьный код согласно [ISO
+      4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+    type: string
+    pattern: '^[A-Z]{3}$'
+    example: RUB
+  Deposit:
+    description: Данные поступления денежных средств
+    allOf:
+      - type: object
+        required:
+          - wallet
+          - source
+          - body
+          - id
+        properties:
+          id:
+            description: Идентификатор поступления денежных средств
+            type: string
+            example: tZ0jUmlsV0
+            readOnly: true
+          createdAt:
+            description: Дата и время запуска пополнения
+            type: string
+            format: date-time
+            readOnly: true
+          wallet:
+            description: Идентификатор кошелька
+            type: string
+            example: '10068321'
+          source:
+            description: Идентификатор источника денежных средств
+            type: string
+            example: '107498'
+          body:
+            description: Объём поступивших средств
+            type: object
+            required:
+              - amount
+              - currency
+            properties:
+              amount:
+                description: |
+                  Сумма денежных средств в минорных единицах, например, в копейках
+                type: integer
+                format: int64
+                example: 1430000
+              currency:
+                description: |
+                  Валюта, символьный код согласно [ISO
+                  4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+                type: string
+                pattern: '^[A-Z]{3}$'
+                example: RUB
+          fee:
+            description: Сумма коммисии
+            type: object
+            required:
+              - amount
+              - currency
+            properties:
+              amount:
+                description: |
+                  Сумма денежных средств в минорных единицах, например, в копейках
+                type: integer
+                format: int64
+                example: 1430000
+              currency:
+                description: |
+                  Валюта, символьный код согласно [ISO
+                  4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+                type: string
+                pattern: '^[A-Z]{3}$'
+                example: RUB
+          externalID:
+            description: |
+              Уникальный идентификатор сущности на вашей стороне.
+
+              При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+            type: string
+            example: '10036274'
+      - $ref: '#/definitions/DepositStatus'
+  DepositAdjustment:
+    description: Данные корректировки поступления денежных средств
+    allOf:
+      - type: object
+        properties:
+          id:
+            description: Идентификатор корректировки поступления денежных средств
+            type: string
+            example: tZ0jUmlsV0
+            readOnly: true
+          createdAt:
+            description: Дата и время запуска корректировки
+            type: string
+            format: date-time
+            readOnly: true
+          externalID:
+            description: |
+              Уникальный идентификатор сущности на вашей стороне.
+
+              При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+            type: string
+            example: '10036274'
+      - $ref: '#/definitions/DepositAdjustmentStatus'
+  DepositAdjustmentFailure:
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Код ошибки коррекции
+        type: string
+      subError:
+        $ref: '#/definitions/SubFailure'
+  DepositAdjustmentID:
+    description: Идентификатор корректировки поступления денежных средств
+    type: string
+    example: tZ0jUmlsV0
+  DepositAdjustmentStatus:
+    type: object
+    properties:
+      status:
+        description: |
+          Статус корректировки поступления денежных средств.
+
+          | Значение    | Пояснение                                               |
+          | ----------- | ------------------------------------------------------- |
+          | `Pending`   | Корректировка в процессе выполнения                     |
+          | `Succeeded` | Корректировка произведёна успешно                       |
+          | `Failed`    | Корректировка завершилась неудачей                      |
+        type: string
+        enum:
+          - Pending
+          - Succeeded
+          - Failed
+        readOnly: true
+      failure:
+        description: |
+          > Если `status` == `Failed`
+
+          Пояснение причины неудачи
+        readOnly: true
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: Код ошибки коррекции
+            type: string
+          subError:
+            $ref: '#/definitions/SubFailure'
+  DepositFailure:
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Код ошибки поступления
+        type: string
+      subError:
+        $ref: '#/definitions/SubFailure'
+  DepositID:
+    description: Идентификатор поступления денежных средств
+    type: string
+    example: tZ0jUmlsV0
+  DepositRevert:
+    description: Данные отмены поступления денежных средств
+    allOf:
+      - type: object
+        required:
+          - wallet
+          - source
+          - body
+        properties:
+          id:
+            description: "Идентификатор отмены поступления денежных средств\_"
+            type: string
+            example: '10068321'
+            readOnly: true
+          createdAt:
+            description: Дата и время запуска отмены
+            type: string
+            format: date-time
+            readOnly: true
+          wallet:
+            description: Идентификатор кошелька
+            type: string
+            example: '10068321'
+          source:
+            description: Идентификатор источника денежных средств
+            type: string
+            example: '107498'
+          body:
+            description: Объем денежных средств
+            type: object
+            required:
+              - amount
+              - currency
+            properties:
+              amount:
+                description: |
+                  Сумма денежных средств в минорных единицах, например, в копейках
+                type: integer
+                format: int64
+                example: 1430000
+              currency:
+                description: |
+                  Валюта, символьный код согласно [ISO
+                  4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+                type: string
+                pattern: '^[A-Z]{3}$'
+                example: RUB
+          reason:
+            type: string
+          externalID:
+            description: |
+              Уникальный идентификатор сущности на вашей стороне.
+
+              При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+            type: string
+            example: '10036274'
+      - $ref: '#/definitions/DepositRevertStatus'
+  DepositRevertFailure:
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Код ошибки отмены
+        type: string
+      subError:
+        $ref: '#/definitions/SubFailure'
+  DepositRevertID:
+    description: "Идентификатор отмены поступления денежных средств\_"
+    type: string
+    example: '10068321'
+  DepositRevertStatus:
+    type: object
+    properties:
+      status:
+        description: |
+          Статус отмены поступления денежных средств.
+
+          | Значение    | Пояснение                                               |
+          | ----------- | ------------------------------------------------------- |
+          | `Pending`   | Отмена в процессе выполнения                            |
+          | `Succeeded` | Отмена поступления средств произведёна успешно          |
+          | `Failed`    | Отмена поступления средств завершилась неудачей         |
+        type: string
+        enum:
+          - Pending
+          - Succeeded
+          - Failed
+        readOnly: true
+      failure:
+        description: |
+          > Если `status` == `Failed`
+
+          Пояснение причины неудачи
+        readOnly: true
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: Код ошибки отмены
+            type: string
+          subError:
+            $ref: '#/definitions/SubFailure'
+  DepositStatus:
+    type: object
+    properties:
+      status:
+        description: |
+          Статус поступления денежных средств.
+
+          | Значение    | Пояснение                                        |
+          | ----------- | ------------------------------------------------ |
+          | `Pending`   | Поступление в процессе выполнения                |
+          | `Succeeded` | Поступление средств произведён успешно           |
+          | `Failed`    | Поступление средств завершился неудачей          |
+        type: string
+        enum:
+          - Pending
+          - Succeeded
+          - Failed
+        readOnly: true
+      failure:
+        description: |
+          > Если `status` == `Failed`
+
+          Пояснение причины неудачи
+        readOnly: true
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: Код ошибки поступления
+            type: string
+          subError:
+            $ref: '#/definitions/SubFailure'
+  Destination:
+    description: Данные приёмника денежных средств
+    allOf:
+      - type: object
+        required:
+          - name
+          - identity
+          - currency
+          - resource
+        properties:
+          id:
+            description: Идентификатор приёмника денежных средств
+            type: string
+            example: '107498'
+            readOnly: true
+          name:
+            description: |
+              Человекочитаемое название приёмника средств, по которому его легко узнать
+            type: string
+            example: Squarey plastic thingy
+          createdAt:
+            description: Дата и время создания приёмника средств
+            type: string
+            format: date-time
+            readOnly: true
+          isBlocked:
+            description: Заблокирован ли приёмник средств?
+            type: boolean
+            readOnly: true
+            example: false
+          identity:
+            description: Идентификатор личности владельца кошелька
+            type: string
+            example: '10036274'
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+          resource:
+            $ref: '#/definitions/DestinationResource'
+          metadata:
+            description: |
+              Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
+              данным приёмником
+            type: object
+            example:
+              color_hint: olive-green
+          externalID:
+            description: |
+              Уникальный идентификатор сущности на вашей стороне.
+
+              При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+            type: string
+            example: '10036274'
+      - $ref: '#/definitions/DestinationStatus'
+  DestinationGrantRequest:
+    description: Запрос на право управления выводами на приёмник средств
+    type: object
+    required:
+      - validUntil
+    properties:
+      token:
+        description: 'Токен, дающий право управления выводами'
+        type: string
+        minLength: 1
+        maxLength: 4000
+        example: |
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+          DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+        readOnly: true
+      validUntil:
+        description: |
+          Дата и время, до наступления которых выданное право действительно
+        type: string
+        format: date-time
+  DestinationID:
+    description: Идентификатор приёмника денежных средств
+    type: string
+    example: '107498'
+  DestinationResource:
+    description: 'Ресурс приёмника денежных средств, используемый для осуществления выводов'
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        description: |
+          Тип ресурса приёмника средств.
+
+          См. [RBKmoney Payment Resource API](?api/payres/swagger.yaml).
+        type: string
+        enum:
+          - BankCardDestinationResource
+          - CryptoWalletDestinationResource
+          - DigitalWalletDestinationResource
+  DestinationStatus:
+    type: object
+    properties:
+      status:
+        description: |
+          Статус приёмника денежных средств.
+
+          | Значение       | Пояснение                                  |
+          | -------------- | ------------------------------------------ |
+          | `Unauthorized` | Не авторизован владельцем на вывод средств |
+          | `Authorized`   | Авторизован владельцем на вывод средств    |
+        type: string
+        enum:
+          - Unauthorized
+          - Authorized
+        readOnly: true
+        example: Authorized
+      validUntil:
+        description: |
+          > Если `status` == `Authorized`
+
+          Дата и время, до наступления которых авторизация действительна
+        type: string
+        format: date-time
+        readOnly: true
+  DestinationsTopic:
+    description: |
+      Область охвата, включающая события по приёмникам денежных средств
+      в рамках определённого кошелька
+    allOf:
+      - $ref: '#/definitions/WebhookScope'
+      - type: object
+        required:
+          - eventTypes
+        properties:
+          eventTypes:
+            description: 'Набор типов событий приёмника денежных средств, о которых следует оповещать'
+            type: array
+            items:
+              type: string
+              enum:
+                - DestinationCreated
+                - DestinationUnauthorized
+                - DestinationAuthorized
+  DigitalWallet:
+    description: Данные цифрового кошелька
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        description: Идентификатор цифрового кошелька
+        type: string
+        minLength: 1
+        maxLength: 100
+        example: zu3TcwGI71Bpaaw2XkLWZXlhMdn4zpVzMQ
+      provider:
+        description: Провайдер электронных денежных средств
+        type: string
+        enum:
+          - Webmoney
+  DigitalWalletDestinationResource:
+    description: Цифровой кошелек
+    allOf:
+      - $ref: '#/definitions/DestinationResource'
+      - $ref: '#/definitions/DigitalWallet'
+  DigitalWalletProvider:
+    description: Провайдер электронных денежных средств
+    type: string
+    enum:
+      - Webmoney
+  InvalidOperationParameters:
+    description: Неверные входные данные для операции
+    type: object
+    properties:
+      message:
+        type: string
+        example: |
+          No such identity challenge type: fms.
+  Ethereum:
+    allOf:
+      - $ref: '#/definitions/CryptoWallet'
+  ExternalID:
+    description: |
+      Уникальный идентификатор сущности на вашей стороне.
+
+      При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+    type: string
+    example: '10036274'
+  FileDownload:
+    type: object
+    required:
+      - url
+      - expiresAt
+    properties:
+      url:
+        description: URL файла
+        type: string
+      expiresAt:
+        description: Время до которого ссылка будет считаться действительной
+        type: string
+        format: date-time
+  GrantToken:
+    type: string
+    minLength: 1
+    maxLength: 4000
+    example: |
+      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+      DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+  Identity:
+    description: Данные личности владельца кошельков
+    type: object
+    required:
+      - name
+      - provider
+      - class
+    properties:
+      id:
+        description: Идентификатор личности владельца кошелька
+        type: string
+        example: '10036274'
+        readOnly: true
+      name:
+        description: |
+          Человекочитаемое имя личности владельца, по которому его легко опознать
+        type: string
+        example: Keyn Fawkes
+      createdAt:
+        description: Дата и время создания личности владельца
+        type: string
+        format: date-time
+        readOnly: true
+      provider:
+        description: Идентификатор провайдера услуг
+        type: string
+        example: ncoeps
+      class:
+        description: Класс личности владельцев
+        type: string
+        example: person
+      level:
+        description: Уровень идентификации личности
+        type: string
+        example: partial
+        readOnly: true
+      effectiveChallenge:
+        description: |
+          Идентификатор успешно пройденной процедура идентификации, результат которой действителен на
+          текущий момент
+        type: string
+        example: '1'
+        readOnly: true
+      isBlocked:
+        description: Заблокирована ли личность владельца?
+        type: boolean
+        readOnly: true
+        example: false
+      metadata:
+        description: |
+          Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
+          данной личностью владельца
+        type: object
+        example:
+          lkDisplayName: Сергей Иванович
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+      partyID:
+        description: Уникальный в рамках платформы идентификатор участника.
+        type: string
+        minLength: 1
+        maxLength: 40
+  IdentityChallenge:
+    description: Процедура идентификации личности
+    allOf:
+      - type: object
+        required:
+          - type
+          - proofs
+        properties:
+          id:
+            description: Идентификатор процедуры идентификации личности
+            type: string
+            example: '1'
+            readOnly: true
+          createdAt:
+            description: Дата и время запуска процедуры
+            type: string
+            format: date-time
+            readOnly: true
+          type:
+            description: Тип процедуры идентификации личности
+            type: string
+            example: esia
+          proofs:
+            description: |
+              Набор представленных доказательств.
+
+              См. [RBKmoney Private Documents API](?api/privdoc/swagger.json).
+            type: array
+            uniqueItems: true
+            items:
+              $ref: '#/definitions/SecuredPrivateDocument'
+      - $ref: '#/definitions/IdentityChallengeStatus'
+  IdentityChallengeEvent:
+    description: |
+      Событие, возникшее в процессе процедуры идентификации
+    type: object
+    required:
+      - eventID
+      - occuredAt
+      - changes
+    properties:
+      eventID:
+        description: Идентификатор события процедуры идентификации
+        type: integer
+        format: int32
+        example: 42
+      occuredAt:
+        description: Дата и время возникновения события
+        type: string
+        format: date-time
+      changes:
+        type: array
+        items:
+          $ref: '#/definitions/IdentityChallengeEventChange'
+  IdentityChallengeEventChange:
+    description: |
+      Изменение, возникшее в процессе процедуры идентификации
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        description: Тип произошедшего изменения
+        type: string
+        enum:
+          - IdentityChallengeStatusChanged
+  IdentityChallengeID:
+    description: Идентификатор процедуры идентификации личности
+    type: string
+    example: '1'
+  IdentityChallengeStatus:
+    type: object
+    properties:
+      status:
+        description: |
+          Статус процедуры идентификации личности.
+
+          | Значение    | Пояснение                       |
+          | ----------- | ------------------------------- |
+          | `Pending`   | Процедура в процессе выполнения |
+          | `Completed` | Процедура пройдена успешно      |
+          | `Failed`    | Процедура не пройдена           |
+          | `Cancelled` | Процедура отменена              |
+        type: string
+        enum:
+          - Pending
+          - Completed
+          - Failed
+          - Cancelled
+        readOnly: true
+      validUntil:
+        description: |
+          > Если `status` == `Completed`
+
+          Дата и время, до наступления которых результат процедуры действителен
+        type: string
+        format: date-time
+        readOnly: true
+      failureReason:
+        description: |
+          > Если `status` == `Failed`
+
+          Описание причины неудачного завершения процедуры
+        type: string
+        example: Proof incomplete
+        readOnly: true
+  IdentityChallengeStatusChanged:
+    description: Изменение статуса процедуры идентификации
+    allOf:
+      - $ref: '#/definitions/IdentityChallengeEventChange'
+      - $ref: '#/definitions/IdentityChallengeStatus'
+  IdentityChallengeStatusValue:
+    description: |
+      Статус процедуры идентификации личности.
+
+      | Значение    | Пояснение                       |
+      | ----------- | ------------------------------- |
+      | `Pending`   | Процедура в процессе выполнения |
+      | `Completed` | Процедура пройдена успешно      |
+      | `Failed`    | Процедура не пройдена           |
+      | `Cancelled` | Процедура отменена              |
+    type: string
+    enum:
+      - Pending
+      - Completed
+      - Failed
+      - Cancelled
+  IdentityChallengeType:
+    description: Описание типа процедуры идентификации личности
+    type: object
+    properties:
+      id:
+        description: Тип процедуры идентификации личности
+        type: string
+        example: esia
+      name:
+        description: |
+          Человекочитаемое название процедуры идентификации
+        type: string
+        example: Упрощённая идентификация
+      requiredProofs:
+        description: |
+          Набор доказательств, которые необходимо предоставить
+        type: array
+        items:
+          description: Тип документа
+          type: string
+          enum:
+            - RUSDomesticPassport
+            - RUSRetireeInsuranceCertificate
+        example:
+          - RUSDomesticPassport
+          - RUSRetireeInsuranceCertificate
+  IdentityChallengeTypeID:
+    description: Тип процедуры идентификации личности
+    type: string
+    example: esia
+  IdentityClass:
+    type: object
+    properties:
+      id:
+        description: Класс личности владельцев
+        type: string
+        example: person
+      name:
+        description: |
+          Человекочитаемое название класса
+        type: string
+        example: Частное лицо
+  IdentityClassID:
+    description: Класс личности владельцев
+    type: string
+    example: person
+  IdentityID:
+    description: Идентификатор личности владельца кошелька
+    type: string
+    example: '10036274'
+  IdentityLevel:
+    type: object
+    properties:
+      id:
+        description: Уровень идентификации личности
+        type: string
+        example: partial
+      name:
+        description: |
+          Человекочитаемое название уровня идентификации
+        type: string
+        example: Частично идентифицирован
+      challenges:
+        description: |
+          Список возможных процедур, которые необходимо пройти для достижения этого
+          уровня
+        type: array
+        items:
+          $ref: '#/definitions/IdentityChallengeType'
+  IdentityLevelID:
+    description: Уровень идентификации личности
+    type: string
+    example: partial
+  BadRequest:
+    type: object
+    required:
+      - errorType
+    properties:
+      errorType:
+        description: Тип ошибки в данных
+        type: string
+        enum:
+          - SchemaViolated
+          - NotFound
+          - WrongType
+          - NotInRange
+          - WrongSize
+          - WrongLength
+          - WrongArray
+          - NoMatch
+          - InvalidResourceToken
+          - InvalidToken
+          - AmbiguousPartyID
+        example: NotFound
+      name:
+        description: 'Имя или идентификатор элемента сообщения, содержащего недопустимые данные'
+        type: string
+        example: X-Request-ID
+      description:
+        description: 'Пояснение, почему данные считаются недопустимыми'
+        type: string
+        example: Required parameter was not sent
+  ConflictRequest:
+    type: object
+    properties:
+      externalID:
+        description: 'Переданное значение `externalID`, для которого обнаружен конфликт параметров запроса'
+        type: string
+        example: '10036274'
+      id:
+        description: 'Идентификатор сущности, созданной предыдущим запросом с указанным `externalID`'
+        type: string
+      message:
+        description: Человекочитаемое описание ошибки
+        type: string
+  BankCardPaymentSystem:
+    description: Платёжная система
+    type: string
+    enum:
+      - visa
+      - mastercard
+      - visaelectron
+      - maestro
+      - forbrugsforeningen
+      - dankort
+      - amex
+      - dinersclub
+      - discover
+      - unionpay
+      - jcb
+      - nspkmir
+      - elo
+      - rupay
+      - dummy
+      - uzcard
+  SecuredBankCard:
+    description: Безопасные данные банковской карты
+    type: object
+    required:
+      - token
+    properties:
+      token:
+        description: 'Токен, идентифицирующий исходные данные карты'
+        type: string
+        minLength: 1
+        maxLength: 1000
+        example: zu3TcwGI71Bpaaw2XkLWZXlhMdn4zpVzMQg9xMkh
+      bin:
+        description: |
+          [Идентификационный номер][1] банка-эмитента карты
+
+          [1]: https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_(IIN)
+        type: string
+        pattern: '^\d{6,8}$'
+        example: '424242'
+        readOnly: true
+      lastDigits:
+        description: Последние цифры номера карты
+        type: string
+        pattern: '^\d{2,4}$'
+        example: '4242'
+        readOnly: true
+  RUSDomesticPassport:
+    description: Открытые данные национального паспорта гражданина РФ
+    allOf:
+      - $ref: '#/definitions/SecuredPrivateDocument'
+      - type: object
+        properties:
+          seriesMasked:
+            description: Маскированная серия паспорта
+            type: string
+            example: 45**
+            readOnly: true
+          numberMasked:
+            description: Маскированный номер паспорта
+            type: string
+            example: '*****6'
+            readOnly: true
+          fullnameMasked:
+            description: Маскированное полное имя гражданина
+            type: string
+            example: И***** И.И.
+            readOnly: true
+  RUSRetireeInsuranceCertificate:
+    description: |
+      Открытые данные страхового свидетельства обязательного пенсионного страхования
+      гражданина РФ
+    allOf:
+      - $ref: '#/definitions/SecuredPrivateDocument'
+      - type: object
+        properties:
+          numberMasked:
+            description: |
+              Маскированный [СНИЛС](https://ru.wikipedia.org/wiki/Страховой_номер_индивидуального_лицевого_счёта)
+            type: string
+            example: 12*-***-*** *4
+            readOnly: true
+  SecuredPrivateDocument:
+    description: |
+      Персональный документ, токенизированный с целью сокрытия чувствительных данных
+    type: object
+    discriminator: type
+    required:
+      - token
+    properties:
+      type:
+        description: Тип документа
+        type: string
+        enum:
+          - RUSDomesticPassport
+          - RUSRetireeInsuranceCertificate
+        readOnly: true
+      token:
+        description: 'Токен, уникально идентифицирующий исходные данные'
+        type: string
+        example: 7kodCm5gr68ji4O11KpVn0
+  SecuredPrivateDocumentType:
+    description: Тип документа
+    type: string
+    enum:
+      - RUSDomesticPassport
+      - RUSRetireeInsuranceCertificate
+  Litecoin:
+    allOf:
+      - $ref: '#/definitions/CryptoWallet'
+  P2PTransfer:
+    description: Данные перевода
+    type: object
+    required:
+      - id
+      - identityID
+      - createdAt
+      - body
+      - sender
+      - receiver
+      - status
+      - contactInfo
+    properties:
+      id:
+        description: Идентификатор перевода
+        type: string
+        example: 10a0b68D3E21
+        maxLength: 40
+        minLength: 1
+      identityID:
+        description: Идентификатор личности владельца перевода
+        type: string
+        example: '10036274'
+      createdAt:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      body:
+        description: Сумма операции
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      sender:
+        $ref: '#/definitions/SenderResource'
+      receiver:
+        $ref: '#/definitions/ReceiverResource'
+      status:
+        $ref: '#/definitions/P2PTransferStatus'
+      contactInfo:
+        description: Контактные данные отправителя
+        type: object
+        properties:
+          email:
+            description: Адрес электронной почты
+            type: string
+            format: email
+            maxLength: 100
+          phoneNumber:
+            description: |
+              Номер мобильного телефона с международным префиксом согласно
+              [E.164](https://en.wikipedia.org/wiki/E.164).
+            type: string
+            format: '^\+\d{4,15}$'
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+      metadata:
+        description: Связанные с переводом метаданные
+        type: object
+  P2PTransferChange:
+    type: object
+    discriminator: changeType
+    required:
+      - changeType
+    properties:
+      changeType:
+        type: string
+        enum:
+          - P2PTransferStatusChanged
+          - P2PTransferInteractionChanged
+  P2PTransferEvent:
+    type: object
+    required:
+      - createdAt
+      - change
+    properties:
+      createdAt:
+        type: string
+        format: date-time
+      change:
+        $ref: '#/definitions/P2PTransferChange'
+  P2PTransferFailure:
+    description: |
+      [Ошибка, возникшая в процессе проведения перевода](#tag/Error-Codes)
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Основной код ошибки
+        type: string
+      subError:
+        $ref: '#/definitions/SubFailure'
+  P2PTransferID:
+    description: Идентификатор перевода
+    type: string
+    example: 10a0b68D3E21
+    maxLength: 40
+    minLength: 1
+  P2PTransferInteractionChanged:
+    type: object
+    allOf:
+      - $ref: '#/definitions/P2PTransferChange'
+      - type: object
+        description: |
+          Изменения определённого взаимодействия с пользователем
+        required:
+          - userInteractionID
+          - userInteractionChange
+        properties:
+          userInteractionID:
+            description: Идентификатор взаимодействия с пользователем
+            type: string
+          userInteractionChange:
+            $ref: '#/definitions/UserInteractionChange'
+  P2PTransferParameters:
+    description: Параметры создания перевода
+    type: object
+    required:
+      - sender
+      - receiver
+      - identityID
+      - body
+      - contactInfo
+    properties:
+      sender:
+        $ref: '#/definitions/SenderResourceParams'
+      receiver:
+        $ref: '#/definitions/ReceiverResourceParams'
+      identityID:
+        description: Идентификатор личности владельца перевода
+        type: string
+        example: '10036274'
+      body:
+        description: Сумма перевода
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      contactInfo:
+        description: Контактные данные отправителя
+        type: object
+        properties:
+          email:
+            description: Адрес электронной почты
+            type: string
+            format: email
+            maxLength: 100
+          phoneNumber:
+            description: |
+              Номер мобильного телефона с международным префиксом согласно
+              [E.164](https://en.wikipedia.org/wiki/E.164).
+            type: string
+            format: '^\+\d{4,15}$'
+      quoteToken:
+        type: string
+        minLength: 1
+        maxLength: 4000
+        description: |
+          Токен, полученный в результате вычисления и фиксирования комиссий перевода
+      metadata:
+        description: 'Метаданные, которые необходимо связать с переводом'
+        type: object
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+  P2PTransferQuote:
+    description: Комиссия и токен предназначеный для создания перевода
+    type: object
+    required:
+      - customerFee
+      - token
+      - expiresOn
+    properties:
+      customerFee:
+        description: Комиссия "сверху" - взимается с клиента в дополнение к сумме операции
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      token:
+        $ref: '#/definitions/P2PTransferQuoteToken'
+      expiresOn:
+        description: Дата и время прекращения действия токена
+        type: string
+        format: date-time
+  P2PTransferQuoteToken:
+    type: string
+    minLength: 1
+    maxLength: 4000
+    description: |
+      Токен, полученный в результате вычисления и фиксирования комиссий перевода
+  P2PTransferStatus:
+    type: object
+    required:
+      - status
+    properties:
+      status:
+        description: |
+          Статус вывода денежных средств.
+
+          | Значение    | Пояснение                                  |
+          | ----------- | ------------------------------------------ |
+          | `Pending`   | Перевод в процессе выполнения                |
+          | `Succeeded` | Перевод средств произведён успешно           |
+          | `Failed`    | Перевод средств завершился неудачей          |
+        type: string
+        enum:
+          - Pending
+          - Succeeded
+          - Failed
+      failure:
+        description: |
+          [Ошибка, возникшая в процессе проведения перевода](#tag/Error-Codes)
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: Основной код ошибки
+            type: string
+          subError:
+            $ref: '#/definitions/SubFailure'
+  P2PTransferStatusChanged:
+    type: object
+    allOf:
+      - $ref: '#/definitions/P2PTransferChange'
+      - $ref: '#/definitions/P2PTransferStatus'
+  P2PTransferTemplate:
+    type: object
+    required:
+      - id
+      - identityID
+      - createdAt
+      - details
+    properties:
+      id:
+        description: Идентификатор шаблона перевода
+        type: string
+        example: 10a0b68D3E21
+        maxLength: 40
+        minLength: 1
+        readOnly: true
+      identityID:
+        description: Идентификатор личности владельца шаблона
+        type: string
+        example: '10036274'
+      createdAt:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      isBlocked:
+        description: Заблокирован ли шаблон?
+        type: boolean
+        readOnly: true
+        example: false
+      details:
+        $ref: '#/definitions/P2PTransferTemplateDetails'
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+  P2PTransferTemplateBody:
+    type: object
+    required:
+      - value
+    properties:
+      value:
+        description: |
+          Объём денежных средств
+        type: object
+        required:
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+  P2PTransferTemplateDetails:
+    type: object
+    description: 'Параметры, использующиеся при создании перевода'
+    required:
+      - body
+    properties:
+      description:
+        description: Описание перевода
+        type: string
+        maxLength: 1000
+      body:
+        $ref: '#/definitions/P2PTransferTemplateBody'
+      metadata:
+        $ref: '#/definitions/P2PTransferTemplateMetadata'
+  P2PTransferTemplateID:
+    description: Идентификатор шаблона перевода
+    type: string
+    example: 10a0b68D3E21
+    maxLength: 40
+    minLength: 1
+  P2PTransferTemplateMetadata:
+    type: object
+    required:
+      - defaultMetadata
+    properties:
+      defaultMetadata:
+        description: |
+          Метаданные, которые будут связаны с переводом, созданным по шаблону. Непосредственно при создании перевода можно передать дополнительные метаданные. При совпадении ключей предпочтение будет отдаваться значениям из этого поля шаблона.
+        type: object
+  P2PTransferTemplateParameters:
+    type: object
+    required:
+      - identityID
+      - details
+    properties:
+      identityID:
+        description: Идентификатор личности владельца шаблона
+        type: string
+        example: '10036274'
+      details:
+        $ref: '#/definitions/P2PTransferTemplateDetails'
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+  P2PTransferTemplateQuoteParameters:
+    description: Параметры запроса комиссий
+    type: object
+    required:
+      - sender
+      - receiver
+      - body
+    properties:
+      sender:
+        $ref: '#/definitions/SenderResource'
+      receiver:
+        $ref: '#/definitions/ReceiverResource'
+      body:
+        description: Сумма операции
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+  P2PTransferTemplateTicketRequest:
+    type: object
+    required:
+      - validUntil
+    properties:
+      token:
+        type: string
+        minLength: 1
+        maxLength: 4000
+        example: |
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+          DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+        readOnly: true
+      validUntil:
+        description: |
+          Желаемые дата и время, до наступления которых будет действителен выданный токен.
+          Итоговое значение может быть ограничено сроком действия AccessToken, его можно узнать из ответа.
+        type: string
+        format: date-time
+  P2PTransferTemplateTokenRequest:
+    type: object
+    required:
+      - validUntil
+    properties:
+      token:
+        type: string
+        minLength: 1
+        maxLength: 4000
+        example: |
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+          DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+        readOnly: true
+      validUntil:
+        description: |
+          Дата и время, до наступления которых выданный токен действителен
+        type: string
+        format: date-time
+  P2PTransferWithTemplateParameters:
+    type: object
+    required:
+      - sender
+      - receiver
+      - body
+      - contactInfo
+    properties:
+      sender:
+        $ref: '#/definitions/SenderResourceParams'
+      receiver:
+        $ref: '#/definitions/ReceiverResourceParams'
+      body:
+        description: Сумма перевода
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      contactInfo:
+        description: Контактные данные отправителя
+        type: object
+        properties:
+          email:
+            description: Адрес электронной почты
+            type: string
+            format: email
+            maxLength: 100
+          phoneNumber:
+            description: |
+              Номер мобильного телефона с международным префиксом согласно
+              [E.164](https://en.wikipedia.org/wiki/E.164).
+            type: string
+            format: '^\+\d{4,15}$'
+      quoteToken:
+        type: string
+        minLength: 1
+        maxLength: 4000
+        description: |
+          Токен, полученный в результате вычисления и фиксирования комиссий перевода
+      metadata:
+        type: object
+        description: |
+          Метаданные, которые необходимо связать с переводом.
+          Добавляются к указанным при создании шаблона.
+          При совпадении ключей предпочтение отдается значениям из шаблона.
+  PartyID:
+    description: Уникальный в рамках платформы идентификатор участника.
+    type: string
+    minLength: 1
+    maxLength: 40
+  Provider:
+    description: Данные провайдера услуг
+    type: object
+    required:
+      - id
+      - name
+      - residences
+    properties:
+      id:
+        description: Идентификатор провайдера услуг
+        type: string
+        example: ncoeps
+      name:
+        description: |
+          Человекочитаемое наименование провайдера услуг
+        type: string
+        example: НКО «ЭПС»
+      residences:
+        type: array
+        description: |
+          Резиденции, в которых провайдер предоставляет услуги
+        items:
+          description: |
+            Резиденция, символьный код по стандарту [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
+          type: string
+          pattern: '^[A-Z]{3}$'
+          example: RUS
+  ProviderID:
+    description: Идентификатор провайдера услуг
+    type: string
+    example: ncoeps
+  QuoteParameters:
+    description: Параметры запроса комиссий
+    type: object
+    required:
+      - sender
+      - receiver
+      - identityID
+      - body
+    properties:
+      sender:
+        $ref: '#/definitions/SenderResource'
+      receiver:
+        $ref: '#/definitions/ReceiverResource'
+      identityID:
+        description: Идентификатор личности владельца кошелька
+        type: string
+        example: '10036274'
+      body:
+        description: Сумма операции
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+  ReceiverResource:
+    description: 'Ресурс получателя денежных средств, используемый для осуществления переводов'
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        description: |
+          Тип ресурса получателя средств.
+
+          См. [RBKmoney Payment Resource API](?api/payres/swagger.yaml).
+        type: string
+        enum:
+          - BankCardReceiverResource
+  ReceiverResourceParams:
+    description: Параметры ресурса получателя денежных средств
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        description: |
+          Тип ресурса получателя средств.
+
+          См. [RBKmoney Payment Resource API](?api/payres/swagger.yaml).
+        type: string
+        enum:
+          - BankCardReceiverResourceParams
+  Redirect:
+    type: object
+    allOf:
+      - $ref: '#/definitions/UserInteraction'
+      - type: object
+        required:
+          - request
+        properties:
+          request:
+            $ref: '#/definitions/BrowserRequest'
+  Report:
+    type: object
+    required:
+      - id
+      - createdAt
+      - fromTime
+      - toTime
+      - status
+      - type
+      - files
+    properties:
+      id:
+        description: Идентификатор отчета
+        type: integer
+        format: int64
+      createdAt:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      fromTime:
+        description: Дата и время начала периода
+        type: string
+        format: date-time
+      toTime:
+        description: Дата и время конца периода
+        type: string
+        format: date-time
+      status:
+        description: Статус формирования отчета
+        type: string
+        enum:
+          - pending
+          - created
+          - canceled
+      type:
+        description: Тип отчета
+        type: string
+        enum:
+          - withdrawalRegistry
+      files:
+        type: array
+        items:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              description: Идентификатор файла
+              type: string
+              maxLength: 40
+              minLength: 1
+  ReportParams:
+    type: object
+    required:
+      - reportType
+      - fromTime
+      - toTime
+    properties:
+      reportType:
+        description: Тип отчета
+        type: string
+        enum:
+          - withdrawalRegistry
+      fromTime:
+        description: Начало временного отрезка
+        type: string
+        format: date-time
+      toTime:
+        description: Конец временного отрезка
+        type: string
+        format: date-time
+  Residence:
+    description: Описание региона резиденции
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        description: |
+          Резиденция, символьный код по стандарту [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
+        type: string
+        pattern: '^[A-Z]{3}$'
+        example: RUS
+      name:
+        description: |
+          Человекочитаемое название региона резиденции
+        type: string
+        example: Российская федерация
+      flag:
+        description: |
+          Флаг региона резиденции
+        type: string
+        example: "\U0001F1F7\U0001F1FA"
+  ResidenceID:
+    description: |
+      Резиденция, символьный код по стандарту [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
+    type: string
+    pattern: '^[A-Z]{3}$'
+    example: RUS
+  Ripple:
+    allOf:
+      - $ref: '#/definitions/CryptoWallet'
+      - type: object
+        properties:
+          tag:
+            description: Уникальный идентификатор учетной записи Ripple (XRP)
+            type: string
+            pattern: '^[0-9]{9}$'
+            example: '191919191'
+  SenderResource:
+    description: 'Ресурс отправителя денежных средств, используемый для осуществления переводов'
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        description: |
+          Тип ресурса отправителя средств.
+
+          См. [RBKmoney Payment Resource API](?api/payres/swagger.yaml).
+        type: string
+        enum:
+          - BankCardSenderResource
+  SenderResourceParams:
+    description: Параметры ресурса отправителя денежных средств
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        description: |
+          Тип ресурса отправителя средств.
+
+          См. [RBKmoney Payment Resource API](?api/payres/swagger.yaml).
+        type: string
+        enum:
+          - BankCardSenderResourceParams
+  SourceID:
+    description: Идентификатор источника денежных средств
+    type: string
+    example: '107498'
+  SubFailure:
+    description: |
+      Детализация описания ошибки
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Детализация кода ошибки
+        type: string
+      subError:
+        $ref: '#/definitions/SubFailure'
+  USDT:
+    allOf:
+      - $ref: '#/definitions/CryptoWallet'
+  UserInteraction:
+    type: object
+    discriminator: interactionType
+    required:
+      - interactionType
+    properties:
+      interactionType:
+        description: Тип взаимодействия с пользователем
+        type: string
+  UserInteractionChange:
+    type: object
+    discriminator: changeType
+    required:
+      - changeType
+    properties:
+      changeType:
+        description: Вид изменения взаимодействию с пользователем.
+        type: string
+        enum:
+          - UserInteractionCreated
+          - UserInteractionFinished
+  UserInteractionCreated:
+    type: object
+    allOf:
+      - $ref: '#/definitions/UserInteractionChange'
+      - type: object
+        required:
+          - userInteraction
+        properties:
+          userInteraction:
+            $ref: '#/definitions/UserInteraction'
+  UserInteractionFinished:
+    type: object
+    allOf:
+      - $ref: '#/definitions/UserInteractionChange'
+  UserInteractionForm:
+    description: Форма для отправки средствами браузера
+    type: array
+    items:
+      type: object
+      required:
+        - key
+        - template
+      properties:
+        key:
+          description: |
+            Значение ключа элемента формы, которую необходимо отправить средствами
+            браузера
+          type: string
+        template:
+          description: |
+            Шаблон значения элемента формы
+            Шаблон представлен согласно стандарту
+            [RFC6570](https://tools.ietf.org/html/rfc6570).
+          type: string
+  W2WTransfer:
+    description: Данные перевода
+    type: object
+    required:
+      - id
+      - createdAt
+      - body
+      - sender
+      - receiver
+      - status
+    properties:
+      id:
+        description: Идентификатор перевода
+        type: string
+        example: 10a0b68D3E21
+        maxLength: 40
+        minLength: 1
+      createdAt:
+        description: Дата и время создания
+        type: string
+        format: date-time
+      body:
+        description: Сумма операции
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      sender:
+        $ref: '#/definitions/WalletID'
+      receiver:
+        $ref: '#/definitions/WalletID'
+      status:
+        $ref: '#/definitions/W2WTransferStatus'
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+  W2WTransferFailure:
+    description: |
+      [Ошибка, возникшая в процессе проведения перевода](#tag/Error-Codes)
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Основной код ошибки
+        type: string
+      subError:
+        $ref: '#/definitions/SubFailure'
+  W2WTransferID:
+    description: Идентификатор перевода
+    type: string
+    example: 10a0b68D3E21
+    maxLength: 40
+    minLength: 1
+  W2WTransferParameters:
+    description: Параметры создания перевода
+    type: object
+    required:
+      - sender
+      - receiver
+      - body
+    properties:
+      sender:
+        $ref: '#/definitions/WalletID'
+      receiver:
+        $ref: '#/definitions/WalletID'
+      body:
+        description: Сумма перевода
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+  W2WTransferStatus:
+    type: object
+    required:
+      - status
+    properties:
+      status:
+        description: |
+          Статус перевода денежных средств.
+
+          | Значение    | Пояснение                                  |
+          | ----------- | ------------------------------------------ |
+          | `Pending`   | Перевод в процессе выполнения                |
+          | `Succeeded` | Перевод средств произведён успешно           |
+          | `Failed`    | Перевод средств завершился неудачей          |
+        type: string
+        enum:
+          - Pending
+          - Succeeded
+          - Failed
+      failure:
+        description: |
+          [Ошибка, возникшая в процессе проведения перевода](#tag/Error-Codes)
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: Основной код ошибки
+            type: string
+          subError:
+            $ref: '#/definitions/SubFailure'
+  Wallet:
+    description: Данные кошелька
+    type: object
+    required:
+      - name
+      - identity
+      - currency
+    properties:
+      id:
+        description: Идентификатор кошелька
+        type: string
+        example: '10068321'
+        readOnly: true
+      name:
+        description: 'Человекочитаемое название кошелька, по которому его легко узнать'
+        type: string
+        example: Worldwide PHP Awareness Initiative
+      createdAt:
+        description: Дата и время создания кошелька
+        type: string
+        format: date-time
+        readOnly: true
+      isBlocked:
+        description: Заблокирован ли кошелёк?
+        type: boolean
+        readOnly: true
+        example: false
+      identity:
+        description: Идентификатор личности владельца кошелька
+        type: string
+        example: '10036274'
+      currency:
+        description: |
+          Валюта, символьный код согласно [ISO
+          4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+        type: string
+        pattern: '^[A-Z]{3}$'
+        example: RUB
+      metadata:
+        description: |
+          Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
+          данным кошельком
+        type: object
+        example:
+          client_locale: RU_ru
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+  WalletAccount:
+    description: Состояние счёта кошелька
+    type: object
+    required:
+      - own
+      - available
+    properties:
+      own:
+        description: |
+          Собственные средства
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      available:
+        description: |
+          Доступные к использованию средства, обычно равны собственным средствам
+          за вычетом сумм всех незавершённых операций
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+        example:
+          amount: 1200000
+          currency: RUB
+  WalletGrantRequest:
+    description: Запрос на единоразовое право управления средствами на кошельке
+    type: object
+    required:
+      - asset
+      - validUntil
+    properties:
+      token:
+        description: 'Токен, дающий право единоразового управления средствами на кошельке'
+        type: string
+        minLength: 1
+        maxLength: 4000
+        example: |
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+          DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+        readOnly: true
+      asset:
+        description: Допустимый к использованию объём средств
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      validUntil:
+        description: |
+          Дата и время, до наступления которых выданное право действительно
+        type: string
+        format: date-time
+  WalletID:
+    description: Идентификатор кошелька
+    type: string
+    example: '10068321'
+  WalletName:
+    description: 'Человекочитаемое название кошелька, по которому его легко узнать'
+    type: string
+    example: Worldwide PHP Awareness Initiative
+  Webhook:
+    type: object
+    required:
+      - identityID
+      - scope
+      - url
+    properties:
+      id:
+        description: |
+          Идентификатор webhook'а
+        type: string
+        readOnly: true
+      identityID:
+        description: Идентификатор личности владельца кошелька
+        type: string
+        example: '10036274'
+      active:
+        description: |
+          Включена ли в данный момент доставка оповещений?
+        type: boolean
+        readOnly: true
+      scope:
+        $ref: '#/definitions/WebhookScope'
+      url:
+        description: |
+          URL, на который будут поступать оповещения о произошедших событиях
+        type: string
+        format: uri
+        maxLength: 1000
+      publicKey:
+        description: |
+          Содержимое публичного ключа, служащего для проверки авторитативности
+          приходящих на `url` оповещений
+        type: string
+        format: hexadecimal
+        readOnly: true
+        example: MIGJAoGBAM1fmNUvezts3yglTdhXuqG7OhHxQtDFA+Ss//YuUGjw5ossDbEMoS+SIFuYZ/UL9Xg0rEHNRSbmf48OK+mz0FobEtbji8MADayzGfFopXsfRFa7MVy3Uhu5jBDpLsN3DyJapAkK0TAYINlZXxVjDwxRNheTvC+xub5WNdiwc28fAgMBAAE=
+  WebhookScope:
+    description: |
+      Область охвата webhook'а, ограничивающая набор типов событий, по которым
+      следует отправлять оповещения
+    type: object
+    discriminator: topic
+    required:
+      - topic
+    properties:
+      topic:
+        description: Предмет оповещений
+        type: string
+        enum:
+          - WithdrawalsTopic
+          - DestinationsTopic
+  Withdrawal:
+    description: Данные вывода денежных средств
+    allOf:
+      - type: object
+        required:
+          - wallet
+          - destination
+          - body
+        properties:
+          id:
+            description: Идентификатор вывода денежных средств
+            type: string
+            example: tZ0jUmlsV0
+            readOnly: true
+          createdAt:
+            description: Дата и время запуска вывода
+            type: string
+            format: date-time
+            readOnly: true
+          wallet:
+            description: Идентификатор кошелька
+            type: string
+            example: '10068321'
+          destination:
+            description: Идентификатор приёмника денежных средств
+            type: string
+            example: '107498'
+          body:
+            description: 'Объём средств, которые необходимо вывести'
+            type: object
+            required:
+              - amount
+              - currency
+            properties:
+              amount:
+                description: |
+                  Сумма денежных средств в минорных единицах, например, в копейках
+                type: integer
+                format: int64
+                example: 1430000
+              currency:
+                description: |
+                  Валюта, символьный код согласно [ISO
+                  4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+                type: string
+                pattern: '^[A-Z]{3}$'
+                example: RUB
+          fee:
+            description: Сумма коммисии
+            type: object
+            required:
+              - amount
+              - currency
+            properties:
+              amount:
+                description: |
+                  Сумма денежных средств в минорных единицах, например, в копейках
+                type: integer
+                format: int64
+                example: 1430000
+              currency:
+                description: |
+                  Валюта, символьный код согласно [ISO
+                  4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+                type: string
+                pattern: '^[A-Z]{3}$'
+                example: RUB
+          metadata:
+            description: |
+              Произвольный, специфичный для клиента API и непрозрачный для системы набор данных, ассоциированных с
+              данным выводом
+            type: object
+            example:
+              notify_email: iliketrains@example.com
+          externalID:
+            description: |
+              Уникальный идентификатор сущности на вашей стороне.
+
+              При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+            type: string
+            example: '10036274'
+      - $ref: '#/definitions/WithdrawalStatus'
+  WithdrawalEvent:
+    description: |
+      Событие, возникшее в процессе вывода средств
+    type: object
+    required:
+      - eventID
+      - occuredAt
+      - changes
+    properties:
+      eventID:
+        description: Идентификатор события вывода средств
+        type: integer
+        format: int32
+        example: 42
+      occuredAt:
+        description: Дата и время возникновения события
+        type: string
+        format: date-time
+      changes:
+        type: array
+        items:
+          $ref: '#/definitions/WithdrawalEventChange'
+  WithdrawalEventChange:
+    description: |
+      Изменение, возникшее в процессе вывода средств
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        description: Тип произошедшего изменения
+        type: string
+        enum:
+          - WithdrawalStatusChanged
+  WithdrawalFailure:
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        description: Код ошибки вывода
+        type: string
+      subError:
+        $ref: '#/definitions/SubFailure'
+  WithdrawalID:
+    description: Идентификатор вывода денежных средств
+    type: string
+    example: tZ0jUmlsV0
+  WithdrawalParameters:
+    description: Параметры создаваемого вывода
+    allOf:
+      - $ref: '#/definitions/Withdrawal'
+      - type: object
+        properties:
+          walletGrant:
+            type: string
+            minLength: 1
+            maxLength: 4000
+            example: |
+              eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+              DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+            description: |
+              Токен, дающий право на списание с кошелька для оплаты вывода.
+
+              Необходимо предоставить в том случае, если оплата производится засчёт средств _чужого_
+              кошелька. Владелец указанного кошелька может
+              [выдать на это право](#operation/issueWalletGrant).
+          destinationGrant:
+            type: string
+            minLength: 1
+            maxLength: 4000
+            example: |
+              eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+              DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+            description: |
+              Токен, дающий право вывода.
+
+              Необходимо предоставить в том случае, если вывод производится посредством _чужого_ приёмника
+              средств. Владелец указанного приёмника может
+              [выдать на это право](#operation/issueDestinationGrant).
+          quoteToken:
+            type: string
+            minLength: 1
+            maxLength: 4000
+            example: |
+              eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+              DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+            description: |
+              Котировка, по которой следует проводить вывод средств.
+
+              Должна быть [получена](#operation/createQuote)
+              заранее для каждой отдельной операции вывода с конвертацией.
+  WithdrawalQuote:
+    description: Данные котировки для вывода
+    type: object
+    required:
+      - cashFrom
+      - cashTo
+      - createdAt
+      - expiresOn
+      - quoteToken
+    properties:
+      cashFrom:
+        description: Объём средств в исходной валюте
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+        readOnly: true
+      cashTo:
+        description: Объём средств в конечной валюте
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+        readOnly: true
+      createdAt:
+        description: Дата и время получения котировки
+        type: string
+        format: date-time
+        readOnly: true
+      expiresOn:
+        description: Дата и время окончания действия котировки
+        type: string
+        format: date-time
+        readOnly: true
+      quoteToken:
+        type: string
+        minLength: 1
+        maxLength: 4000
+        example: |
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+          DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+        description: |
+          Котировка, по которой следует проводить вывод средств.
+          Необходимо предоставить при создании вывода с конвертацией
+  WithdrawalQuoteParams:
+    description: Параметры котировки для вывода
+    type: object
+    required:
+      - walletID
+      - currencyFrom
+      - currencyTo
+      - cash
+    properties:
+      externalID:
+        description: |
+          Уникальный идентификатор сущности на вашей стороне.
+
+          При указании будет использован для того, чтобы гарантировать идемпотентную обработку операции.
+        type: string
+        example: '10036274'
+      walletID:
+        description: Идентификатор кошелька
+        type: string
+        example: '10068321'
+      destinationID:
+        description: Идентификатор приёмника денежных средств
+        type: string
+        example: '107498'
+      currencyFrom:
+        description: Код исходной валюты
+        type: string
+        pattern: '^[A-Z]{3}$'
+        example: RUB
+      currencyTo:
+        description: Код конечной валюты
+        type: string
+        pattern: '^[A-Z]{3}$'
+        example: RUB
+      cash:
+        description: Объём средств для получения котировки в одной из валют обмена
+        type: object
+        required:
+          - amount
+          - currency
+        properties:
+          amount:
+            description: |
+              Сумма денежных средств в минорных единицах, например, в копейках
+            type: integer
+            format: int64
+            example: 1430000
+          currency:
+            description: |
+              Валюта, символьный код согласно [ISO
+              4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+            type: string
+            pattern: '^[A-Z]{3}$'
+            example: RUB
+      walletGrant:
+        type: string
+        minLength: 1
+        maxLength: 4000
+        example: |
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+          DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+        description: |
+          Токен, дающий право на списание с кошелька для оплаты вывода.
+          Необходимо предоставить в том случае, если оплата производится засчёт средств _чужого_ кошелька. Владелец указанного кошелька может [выдать на это право](#operation/issueWalletGrant)
+      destinationGrant:
+        type: string
+        minLength: 1
+        maxLength: 4000
+        example: |
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M
+          DIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o
+        description: |
+          Токен, дающий право вывода.
+          Необходимо предоставить в том случае, если вывод производится посредством _чужого_ приёмника средств. Владелец указанного приёмника может [выдать на это право](#operation/issueDestinationGrant)
+  WithdrawalStatus:
+    type: object
+    properties:
+      status:
+        description: |
+          Статус вывода денежных средств.
+
+          | Значение    | Пояснение                                  |
+          | ----------- | ------------------------------------------ |
+          | `Pending`   | Вывод в процессе выполнения                |
+          | `Succeeded` | Вывод средств произведён успешно           |
+          | `Failed`    | Вывод средств завершился неудачей          |
+        type: string
+        enum:
+          - Pending
+          - Succeeded
+          - Failed
+        readOnly: true
+      failure:
+        description: |
+          > Если `status` == `Failed`
+
+          Пояснение причины неудачи
+        readOnly: true
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: Код ошибки вывода
+            type: string
+          subError:
+            $ref: '#/definitions/SubFailure'
+  WithdrawalStatusChanged:
+    description: Изменение статуса вывода средств
+    allOf:
+      - $ref: '#/definitions/WithdrawalEventChange'
+      - $ref: '#/definitions/WithdrawalStatus'
+  WithdrawalsTopic:
+    description: |
+      Область охвата, включающая события по выплатам в рамках определённого кошелька
+    allOf:
+      - $ref: '#/definitions/WebhookScope'
+      - type: object
+        required:
+          - eventTypes
+        properties:
+          walletID:
+            description: Идентификатор кошелька
+            type: string
+            example: '10068321'
+          eventTypes:
+            description: 'Набор типов событий выплаты, о которых следует оповещать'
+            type: array
+            items:
+              type: string
+              enum:
+                - WithdrawalStarted
+                - WithdrawalSucceeded
+                - WithdrawalFailed
+  Zcash:
+    allOf:
+      - $ref: '#/definitions/CryptoWallet'
