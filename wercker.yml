@@ -35,15 +35,6 @@ release:
       url: ${SLACK_WEBHOOK_URL}
       username: "wercker"
 
-release-epic:
-  steps:
-    - lordlothar99/git-push:
-      gh_oauth: ${GITHUB_API_TOKEN}
-      branch: release/${WERCKER_GIT_BRANCH}
-      basedir: api
-      destdir: api
-      message: Epic release ${WERCKER_GIT_OWNER}/${WERCKER_GIT_REPOSITORY}@${WERCKER_GIT_COMMIT}
-
 deploy:
   steps:
     - lordlothar99/git-push:
