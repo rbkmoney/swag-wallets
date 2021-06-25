@@ -2,6 +2,7 @@ description: Данные цифрового кошелька
 type: object
 required:
   - id
+  - provider
 properties:
   id:
     description: Идентификатор цифрового кошелька
