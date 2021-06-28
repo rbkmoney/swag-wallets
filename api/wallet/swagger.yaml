@@ -2961,7 +2961,6 @@ definitions:
   DigitalWallet:
     description: Данные цифрового кошелька
     type: object
-    discriminator: provider
     required:
       - id
       - provider
