@@ -4,6 +4,7 @@ required:
   - name
   - provider
   - class
+  - partyID
 properties:
   id:
     x-rebillyMerge:
