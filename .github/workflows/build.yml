@@ -50,9 +50,9 @@ jobs:
 
                    "attachments": [
                      {
-                     "author_name": "${{ github.event.pull_request.sender.login}}",
-                     "author_link": "${{ github.event.pull_request.sender.url}}",
-                     "author_icon": "${{ github.event.pull_request.sender.avatar_url}}",
+                     "author_name": "${{ github.event.sender.login }}",
+                     "author_link": "${{ github.event.sender.url }}",
+                     "author_icon": "${{ github.event.sender.avatar_url }}",
 
                      "title": "${{ github.repository }}#${{ github.event.pull_request.number }}: ${{ github.base_ref }}"
                      "title_link": "https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
@@ -63,8 +63,6 @@ jobs:
                      }
                      ]
                    }
-
-                   User avatar: https://avatars.githubusercontent.com/u/9301440
                   EOF
             - name: Generate Mattermost message
               if: failure()
