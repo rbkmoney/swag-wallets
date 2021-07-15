@@ -71,7 +71,7 @@ jobs:
                    }
                   EOF
 
-                  curl -i -X POST -H 'Content-Type: application/json' -d @mattermost.json "$MATTERMOST_WEBHOOK_URL"
+                  curl -i --fail -X POST -H 'Content-Type: application/json' -d @mattermost.json "$MATTERMOST_WEBHOOK_URL"
               env:
                   MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
                   MATTERMOST_CHANNEL: builds
