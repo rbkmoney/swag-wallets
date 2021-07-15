@@ -32,7 +32,7 @@ jobs:
             - name: Generate success Mattermost message
               if: ${{ ! cancelled() }}
               run: |
-                  if [ ${{ job.status }} = 'success' ]
+                  if [ ${{ job.status }} = 'success' ]; then
                     STATUS=passed
                     COLOR=#02C100
                   else
