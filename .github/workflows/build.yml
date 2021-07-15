@@ -30,7 +30,7 @@ jobs:
               # 1. https://docs.mattermost.com/developer/webhooks-incoming.html
               # 2. https://docs.mattermost.com/developer/message-attachments.html
             - name: Generate success Mattermost message
-              if: !canceled()
+              if: ! canceled()
               run: |
                   if [ ${{ job.status }} = 'success' ]
                     STATUS=passed
