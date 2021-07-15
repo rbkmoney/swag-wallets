@@ -26,17 +26,45 @@ jobs:
               run: npm test
             - name: Build docsite
               run: npm run build
-              # HACK: Github expressions do not support if/else or ternary operators
+              # Docs:
+              # 1. https://docs.mattermost.com/developer/webhooks-incoming.html
+              # 2. https://docs.mattermost.com/developer/message-attachments.html
             - name: Generate success Mattermost message
-              if: success()
+              if: !canceled()
               run: |
+                  if [ ${{ job.status }} = 'success' ]
+                    STATUS=passed
+                    COLOR=#02C100
+                  else
+                    STATUS=failed
+                    COLOR=#E40304
+                  fi
+                  FALLBACK="Build ${{ github.run_number }} for `${{ github.repository }}  by ${{ github.actor }} has $STATUS on branch ${{ github.base_ref }}`"
+
+                  TEXT="[Build ${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for `${{ github.repository }}` by **${{ github.actor }}** has **$STATUS** on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})"
+
                   cat <<EOF >mattermost.json
                   {
-                   "text":
-                       "[Build #${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for ${{ github.repository }} by ${{ github.actor }} has passed on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})",
-                   "attachments":
-                       [{"color": "green" }]
+                   "username": "GitHub Actions",
+                   "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+
+                   "attachments": [
+                     {
+                     "author_name": "${{ github.event.pull_request.sender.login}}",
+                     "author_link": "${{ github.event.pull_request.sender.url}}",
+                     "author_icon": "${{ github.event.pull_request.sender.avatar_url}}",
+
+                     "title": "${{ github.repository }}#${{ github.event.pull_request.number }}: ${{ github.base_ref }}"
+                     "title_link": "https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+
+                     "fallback": "$FALLBACK",
+                     "text": "$TEXT",
+                     "color": "$COLOR"
+                     }
+                     ]
                    }
+
+                   User avatar: https://avatars.githubusercontent.com/u/9301440
                   EOF
             - name: Generate Mattermost message
               if: failure()
@@ -44,9 +72,9 @@ jobs:
                   cat <<EOF >mattermost.json
                   {
                    "text":
-                       "[Build #${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for ${{ github.repository }} by ${{ github.actor }} has failed on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})",
+                       "[Build ${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for ${{ github.repository }} by ${{ github.actor }} has failed on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})",
                    "attachments":
-                       [{"color": "red" }]
+                       [{"color": "" }]
                    }
                   EOF
             - name: TEMP Display Mattermost message
