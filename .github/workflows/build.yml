@@ -1,0 +1,60 @@
+name: Build
+
+on:
+    pull_request:
+        branches: [ v0 ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        container: node:16
+
+        steps:
+            - name: Checkout branch
+              uses: actions/checkout@v2
+            - name: Cache Node Modules and NPM Cache
+              id: cache
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      node_modules
+                      ~/npm
+                  key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}-node
+            - name: Install deps
+              run: npm install
+            - name: Run Tests
+              run: npm test
+            - name: Build docsite
+              run: npm run build
+              # HACK: Github expressions do not support if/else or ternary operators
+            - name: Generate success Mattermost message
+              if: success()
+              run: |
+                  cat <<EOF >mattermost.json
+                  {
+                   "text":
+                       "[Build #${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for ${{ github.repository }} by ${{ github.actor }} has passed on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})",
+                   "attachments":
+                       [{"color": "green" }]
+                   }
+                  EOF
+            - name: Generate Mattermost message
+              if: failure()
+              run: |
+                  cat <<EOF >mattermost.json
+                  {
+                   "text":
+                       "[Build #${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for ${{ github.repository }} by ${{ github.actor }} has failed on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})",
+                   "attachments":
+                       [{"color": "red" }]
+                   }
+                  EOF
+            - name: TEMP Display Mattermost message
+              if: always()
+              run: cat mattermost.json
+            # - name: Notify Mattermost
+            #   if: always()
+            #   uses: mattermost/action-mattermost-notify@1.0.2
+            #   env:
+            #       MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+            #       MATTERMOST_CHANNEL: builds
