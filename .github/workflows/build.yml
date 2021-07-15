@@ -39,12 +39,18 @@ jobs:
                     STATUS=failed
                     COLOR=#E40304
                   fi
+
+                  if [ -n "$MATTERMOST_CHANNEL" ]; then
+                    CHANNEL_STR='"channel": "$MATTERMOST_CHANNEL", '
+                  fi
+
                   FALLBACK="Build ${{ github.run_number }} for \`${{ github.repository }}\` by ${{ github.actor }} has $STATUS on branch ${{ github.head_ref }}"
 
                   TEXT="[Build ${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for \`${{ github.repository }}\` by **${{ github.actor }}** has **$STATUS** on branch [${{ github.head_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.head_ref }})"
 
                   cat <<EOF >mattermost.json
                   {
+                   $CHANNEL_STR
                    "username": "GitHub Actions",
                    "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
 
@@ -64,23 +70,19 @@ jobs:
                      ]
                    }
                   EOF
-            - name: Generate Mattermost message
-              if: failure()
-              run: |
-                  cat <<EOF >mattermost.json
-                  {
-                   "text":
-                       "[Build ${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for ${{ github.repository }} by ${{ github.actor }} has failed on branch [${{ github.head_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.head_ref }})",
-                   "attachments":
-                       [{"color": "" }]
-                   }
-                  EOF
-            - name: TEMP Display Mattermost message
-              if: always()
-              run: cat mattermost.json
-            - name: Notify Mattermost
-              if: always()
-              uses: mattermost/action-mattermost-notify@1.0.2
+
+                  curl -i -X POST -H 'Content-Type: application/json' -d @mattermost.json "$MATTERMOST_WEBHOOK_URL"
               env:
                   MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
                   MATTERMOST_CHANNEL: builds
+
+            - name: TEMP Display Mattermost message
+              if: always()
+              run: cat mattermost.json
+            # FIX THIS
+            # - name: Notify Mattermost
+            #   if: always()
+            #   uses: mattermost/action-mattermost-notify@1.0.2
+            #   env:
+            #       MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+            #       MATTERMOST_CHANNEL: builds
