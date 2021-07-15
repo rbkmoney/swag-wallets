@@ -52,9 +52,9 @@ jobs:
             - name: TEMP Display Mattermost message
               if: always()
               run: cat mattermost.json
-            # - name: Notify Mattermost
-            #   if: always()
-            #   uses: mattermost/action-mattermost-notify@1.0.2
-            #   env:
-            #       MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
-            #       MATTERMOST_CHANNEL: builds
+            - name: Notify Mattermost
+              if: always()
+              uses: mattermost/action-mattermost-notify@1.0.2
+              env:
+                  MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+                  MATTERMOST_CHANNEL: builds
