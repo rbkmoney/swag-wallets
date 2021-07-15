@@ -39,9 +39,9 @@ jobs:
                     STATUS=failed
                     COLOR=#E40304
                   fi
-                  FALLBACK="Build ${{ github.run_number }} for `${{ github.repository }}  by ${{ github.actor }} has $STATUS on branch ${{ github.base_ref }}`"
+                  FALLBACK="Build ${{ github.run_number }} for \`${{ github.repository }}  by ${{ github.actor }} has $STATUS on branch ${{ github.base_ref }}\`"
 
-                  TEXT="[Build ${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for `${{ github.repository }}` by **${{ github.actor }}** has **$STATUS** on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})"
+                  TEXT="[Build ${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for \`${{ github.repository }}\` by **${{ github.actor }}** has **$STATUS** on branch [${{ github.base_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.base_ref }})"
 
                   cat <<EOF >mattermost.json
                   {
