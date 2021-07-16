@@ -30,6 +30,10 @@ jobs:
               # Docs:
               # 1. https://docs.mattermost.com/developer/webhooks-incoming.html
               # 2. https://docs.mattermost.com/developer/message-attachments.html
+            - name: TEMP show sender and pr info
+              run: |
+                  echo "${{ github.event.sender }}"
+                  echo "${{ github.event.pull_request }}"
             - name: Send Mattermost notification
               if: ${{ ! cancelled() }}
               run: |
