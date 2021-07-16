@@ -34,7 +34,7 @@ jobs:
               if: ${{ ! cancelled() }}
               run: |
                   if [ ${{ job.status }} = 'success' ]; then
-                    STATUS=passed
+                    STATUS='completed successfully'
                     COLOR=#02C100
                   else
                     STATUS=failed
@@ -48,7 +48,6 @@ jobs:
                   COMMIT="${{ github.sha }}"
                   # COMMIT_MSG="${{ github.event.commits[0]['message'] }}"
 
-                  BRANCH="${{ github.ref }}"
                   REPO="${{ github.repository }}"
                   RUN_ID="${{ github.run_id }}"
                   RUN_NUM="${{ github.run_number }}"
@@ -66,8 +65,7 @@ jobs:
 
                   AUTHOR_LINK="${{ github.event.sender.html_url }}"
 
-                  FALLBACK="Deployment of $REPO by $AUTHOR_NAME has $STATUS"
-                  # TITLE="Deployment of $REPO @ $BRANCH (Run #$RUN_NUM)",
+                  FALLBACK="Deployment of $REPO@$COMMIT by $AUTHOR_NAME has $STATUS"
                   TITLE="Deployment of $REPO (Run #$RUN_NUM) has $STATUS"
 
                   cat <<EOF >mattermost.json
@@ -95,13 +93,18 @@ jobs:
                           },
                           {
                             "short": true,
-                            "title": "Branch",
-                            "value": "[$BRANCH](https://github.com/$REPO/tree/$BRANCH)"
+                            "title": "Commit",
+                            "value": "[$COMMIT](https://github.com/$REPO/commit/$COMMIT)"
                           },
                           {
                             "short": true,
-                            "title": "Commit",
-                            "value": "[$COMMIT](https://github.com/$REPO/commit/$COMMIT)"
+                            "title": "Status",
+                            "value": "$STATUS"
+                          },
+                          {
+                            "short": true,
+                            "title": "Author",
+                            "value": "$AUTHOR_NAME"
                           }
                         ],
                         "color": "$COLOR"
