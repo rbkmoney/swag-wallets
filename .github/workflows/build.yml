@@ -30,60 +30,69 @@ jobs:
               # Docs:
               # 1. https://docs.mattermost.com/developer/webhooks-incoming.html
               # 2. https://docs.mattermost.com/developer/message-attachments.html
-            - name: Generate success Mattermost message
-              if: ${{ ! cancelled() }}
-              run: |
-                  if [ ${{ job.status }} = 'success' ]; then
-                    STATUS=passed
-                    COLOR=#02C100
-                  else
-                    STATUS=failed
-                    COLOR=#E40304
-                  fi
+           - name: Send Mattermost notification
+             if: ${{ ! cancelled() }}
+             run: |
+                 if [ ${{ job.status }} = 'success' ]; then
+                   STATUS=passed
+                   COLOR=#02C100
+                 else
+                   STATUS=failed
+                   COLOR=#E40304
+                 fi
 
-                  if [ -n "$MATTERMOST_CHANNEL" ]; then
-                    CHANNEL_STR="\"channel\": \"$MATTERMOST_CHANNEL\", "
-                  fi
+                 if [ -n "$MATTERMOST_CHANNEL" ]; then
+                   CHANNEL_STR="\"channel\": \"$MATTERMOST_CHANNEL\", "
+                 fi
 
-                  FALLBACK="Build ${{ github.run_number }} for \`${{ github.repository }}\` by ${{ github.actor }} has $STATUS on branch ${{ github.head_ref }}"
+                 REPO="${{ github.repository }}"
 
-                  TEXT="[Build ${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for \`${{ github.repository }}\` by **${{ github.actor }}** has **$STATUS** on branch [${{ github.head_ref }}](https://github.com/${{ github.repository }}/tree/${{ github.head_ref }})"
+                 AUTHOR_LOGIN="${{ github.event.sender.login }}"
+                 AUTHOR_NAME="$AUTHOR_LOGIN"
+                 AUTHOR_FULL_NAME="$AUTHOR_NAME"
 
-                  cat <<EOF >mattermost.json
-                  {
-                   $CHANNEL_STR
-                   "username": "GitHub Actions",
-                   "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+                 AUTHOR_REAL_NAME="${{ github.event.sender.name }}"
+                 if [ -n "$AUTHOR_REAL_NAME" ]; then
+                   AUTHOR_NAME="$AUTHOR_REAL_NAME"
+                   AUTHOR_FULL_NAME="$AUTHOR_LOGIN ($AUTHOR_REAL_NAME)"
+                 fi
 
-                   "attachments": [
-                     {
-                     "author_name": "${{ github.event.sender.login }}",
-                     "author_link": "${{ github.event.sender.html_url }}",
-                     "author_icon": "${{ github.event.sender.avatar_url }}",
+                 AUTHOR_LINK="${{ github.event.sender.html_url }}"
 
-                     "title": "${{ github.repository }}#${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}",
-                     "title_link": "https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}",
+                 PR_NUMBER="${{ github.event.pull_request.number }}"
+                 PR_TITLE="${{ github.event.pull_request.title }}"
 
-                     "fallback": "$FALLBACK",
-                     "text": "$TEXT",
-                     "color": "$COLOR"
-                     }
-                     ]
-                   }
-                  EOF
+                 FALLBACK="Build ${{ github.run_number }} for \`$REPO\` by ${{ github.actor }} has $STATUS on branch ${{ github.head_ref }}"
 
-                  curl -i --fail -X POST -H 'Content-Type: application/json' -d @mattermost.json "$MATTERMOST_WEBHOOK_URL"
+                 TEXT="[Build ${{ github.run_number }}](https://github.com/$REPO/actions/runs/${{ github.run_id }}) for \`$REPO\` by [**${{ github.actor }}**]($AUTHOR_LINK) has **$STATUS** on branch [${{ github.head_ref }}](https://github.com/$REPO/tree/${{ github.head_ref }})"
+
+                 cat <<EOF >mattermost.json
+                 {
+                  $CHANNEL_STR
+                  "username": "GitHub Actions",
+                  "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+
+                  "attachments": [
+                    {
+                    "author_name": "$AUTHOR_NAME",
+                    "author_link": "$AUTHOR_LINK"
+                    "author_icon": "${{ github.event.sender.avatar_url }}",
+
+                    "title": "$REPO#$PR_NUMBER: $PR_TITLE",
+                    "title_link": "https://github.com/$REPO/pull/$PR_NUMBER",
+
+                    "fallback": "$FALLBACK",
+                    "text": "$TEXT",
+                    "color": "$COLOR"
+                    }
+                    ]
+                  }
+                 EOF
+
+                 curl -i --fail -X POST -H 'Content-Type: application/json' -d @mattermost.json "$MATTERMOST_WEBHOOK_URL"
               env:
                   MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
                   MATTERMOST_CHANNEL: builds
-
             - name: TEMP Display Mattermost message
               if: always()
               run: cat mattermost.json
-            # FIX THIS
-            # - name: Notify Mattermost
-            #   if: always()
-            #   uses: mattermost/action-mattermost-notify@1.0.2
-            #   env:
-            #       MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
-            #       MATTERMOST_CHANNEL: builds
