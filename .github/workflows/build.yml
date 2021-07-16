@@ -30,7 +30,7 @@ jobs:
               # Docs:
               # 1. https://docs.mattermost.com/developer/webhooks-incoming.html
               # 2. https://docs.mattermost.com/developer/message-attachments.html
-               - name: Send Mattermost notification
+            - name: Send Mattermost notification
               if: ${{ ! cancelled() }}
               run: |
                   if [ ${{ job.status }} = 'success' ]; then
