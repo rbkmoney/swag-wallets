@@ -75,7 +75,7 @@ jobs:
                    "attachments": [
                      {
                      "author_name": "$AUTHOR_NAME",
-                     "author_link": "$AUTHOR_LINK"
+                     "author_link": "$AUTHOR_LINK",
                      "author_icon": "${{ github.event.sender.avatar_url }}",
 
                      "title": "$REPO#$PR_NUMBER: $PR_TITLE",
