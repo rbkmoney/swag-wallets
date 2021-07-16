@@ -46,7 +46,7 @@ jobs:
                   fi
 
                   COMMIT="${{ github.sha }}"
-                  COMMIT_MSG="${{ github.event.commits[0]['message'] }}"
+                  # COMMIT_MSG="${{ github.event.commits[0]['message'] }}"
 
                   BRANCH="${{ github.ref }}"
                   REPO="${{ github.repository }}"
@@ -67,6 +67,8 @@ jobs:
                   AUTHOR_LINK="${{ github.event.sender.html_url }}"
 
                   FALLBACK="(Test) of $REPO by $AUTHOR_NAME has $STATUS"
+                  # TITLE="(Test) of $REPO @ $BRANCH (Run #$RUN_NUM)",
+                  TITLE="(Test) of $REPO (Run #$RUN_NUM)",
 
                   cat <<EOF >mattermost.json
                   {
@@ -80,7 +82,7 @@ jobs:
                         "author_link": "$AUTHOR_LINK",
                         "author_icon": "${{ github.event.sender.avatar_url }}",
 
-                        "title": "(Test) of $REPO @ $BRANCH (Run $RUN_ID)",
+                        "title": "$TITLE",
                         "title_link": "https://github.com/$REPO/actions/runs/$RUN_ID",
 
                         "fallback": "$FALLBACK",
@@ -94,7 +96,7 @@ jobs:
                           {
                             "short": true,
                             "title": "Branch",
-                            "value": "[$BRANCH](https://github.com/$REPO/tree/$BRANCH"
+                            "value": "[$BRANCH](https://github.com/$REPO/tree/$BRANCH)"
                           },
                           {
                             "short": true,
@@ -110,11 +112,6 @@ jobs:
                             "short": true,
                             "title": "Author",
                             "value": "[$AUTHOR_NAME]($AUTHOR_LINK)"
-                          },
-                          {
-                            "short": false,
-                            "title": "Commit Message",
-                            "value": "$COMMIT_MSG"
                           }
                         ],
                         "color": "$COLOR"
