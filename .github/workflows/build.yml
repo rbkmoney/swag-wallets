@@ -49,7 +49,10 @@ jobs:
                     CHANNEL_STR="\"channel\": \"$MATTERMOST_CHANNEL\", "
                   fi
 
+                  BRANCH="${{ github.head_ref }}"
                   REPO="${{ github.repository }}"
+                  RUN_ID="${{ github.run_id }}"
+                  RUN_NUM="${{ github.run_number }}"
 
                   AUTHOR_LOGIN="${{ github.event.sender.login }}"
                   AUTHOR_NAME="$AUTHOR_LOGIN"
@@ -59,7 +62,7 @@ jobs:
 
                   if [ -n "$AUTHOR_REAL_NAME" ]; then
                     AUTHOR_NAME="$AUTHOR_REAL_NAME"
-                    AUTHOR_FULL_NAME="$AUTHOR_LOGIN ($AUTHOR_REAL_NAME)"
+                    AUTHOR_FULL_NAME="$AUTHOR_REAL_NAME ($AUTHOR_LOGIN)"
                   fi
 
                   AUTHOR_LINK="${{ github.event.sender.html_url }}"
@@ -67,9 +70,9 @@ jobs:
                   PR_NUMBER="${{ github.event.pull_request.number }}"
                   PR_TITLE="${{ github.event.pull_request.title }}"
 
-                  FALLBACK="Build ${{ github.run_number }} for \`$REPO\` by ${{ github.actor }} has $STATUS on branch ${{ github.head_ref }}"
+                  FALLBACK="Build $RUN_NUM for \`$REPO\` by $AUTHOR_NAME has $STATUS on branch $BRANCH"
 
-                  TEXT="[Build ${{ github.run_number }}](https://github.com/$REPO/actions/runs/${{ github.run_id }}) for \`$REPO\` by [**${{ github.actor }}**]($AUTHOR_LINK) has **$STATUS** on branch [${{ github.head_ref }}](https://github.com/$REPO/tree/${{ github.head_ref }})"
+                  TEXT="[Build $RUN_NUM](https://github.com/$REPO/actions/runs/$RUN_ID) for \`$REPO\` by [**$AUTHOR_NAME**]($AUTHOR_LINK) has **$STATUS** on branch [$BRANCH](https://github.com/$REPO/tree/$BRANCH)"
 
                   cat <<EOF >mattermost.json
                   {
@@ -79,7 +82,7 @@ jobs:
 
                    "attachments": [
                      {
-                     "author_name": "$AUTHOR_NAME",
+                     "author_name": "$AUTHOR_FULL_NAME",
                      "author_link": "$AUTHOR_LINK",
                      "author_icon": "${{ github.event.sender.avatar_url }}",
 
