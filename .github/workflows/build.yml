@@ -95,7 +95,7 @@ jobs:
                             "short": true,
                             "title": "Branch",
                             "value": "[$BRANCH](https://github.com/$REPO/tree/$BRANCH"
-                          }
+                          },
                           {
                             "short": true,
                             "title": "Status",
@@ -117,7 +117,6 @@ jobs:
                             "value": "$COMMIT_MSG"
                           }
                         ],
-                        "text": "$TEXT",
                         "color": "$COLOR"
                       }
                     ]
@@ -125,7 +124,7 @@ jobs:
                   EOF
 
                   CODE="$(curl -i -L -X POST -H 'Content-Type: application/json' -o curl_error -w "%{http_code}" -d @mattermost.json "$MATTERMOST_WEBHOOK_URL")"
-                  [ "$CODE" -ge 400 ] && cat curl_error
+                  [ "$CODE" -ge 400 ] && cat curl_error && exit 1
               env:
                   MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
                   MATTERMOST_CHANNEL: builds
