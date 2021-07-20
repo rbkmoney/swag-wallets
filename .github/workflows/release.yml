@@ -60,7 +60,7 @@ jobs:
                   verbose: true
                   build_dir: ../publication
               env:
-                  GH_PAT: ${{ secrets.GH_PAT }} # Necessary to push to ANOTHER repo
+                  GH_PAT: ${{ secrets.WALLETS_API_DEPLOY_KEY }} # Necessary to push to ANOTHER repo
             - name: Send Mattermost notification
               if: ${{ ! cancelled() }}
               run: |
