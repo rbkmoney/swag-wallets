@@ -25,42 +25,23 @@ jobs:
               run: npm install
             - name: Build docsite
               run: npm run build -- ../public
-            - name: Checkout release branch
-              uses: actions/checkout@v2
+            - name: Install rsync (dep for github-pages-deploy-action)
+              run: apt-get update && apt-get install -y rsync
+            - name: Deploy to release branch
+              uses: JamesIves/github-pages-deploy-action@4.1.4
               with:
-                  ref: release/v0
-                  persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-                  fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-                  clean: true
-            - name: Switch branch and put public
-              env:
-                  BRANCH: release/v0
-              run: |
-                  git config --global user.name 'github-actions[bot]'
-                  git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-
-                  cp -r ../public/api .
-                  git add api
-                  git commit --allow-empty -m 'release ${{ github.repository }}@${{ github.sha }} by ${{ github.actor }}'
-
-                  # NOTE: Action "ad-m/github-push-action@v0.6.0" just didn't work
-                  git push https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
-
-                  git config --global --remove-section user
-            - name: Prepare for publication
-              run: |
-                  mkdir ../publication/
-                  mv ../public ../publication/v0
-            - name: Deploy Github Pages
-              uses: crazy-max/ghaction-github-pages@v2.5.0
+                  branch: release/v0
+                  folder: ../public/api
+                  target-folder: api
+                  commit-message: release ${{ github.repository }}@${{ github.sha }} by ${{ github.actor }}
+            - name: Deploy to Github Pages
+              uses: JamesIves/github-pages-deploy-action@4.1.4
               with:
-                  repo: rbkmoney/wallets-api
-                  keep_history: true
-                  commit_message: 'deploy from ${{ github.actor }}'
-                  verbose: true
-                  build_dir: ../publication
-              env:
-                  GH_PAT: ${{ secrets.WALLETS_API_DEPLOY_KEY }} # Necessary to push to ANOTHER repo
+                  repository-name: rbkmoney/wallets-api
+                  branch: gh-pages
+                  folder: ../public
+                  target-folder: v0
+                  token: ${{ secrets.WALLETS_API_DEPLOY_KEY }} # Necessary to push to ANOTHER repo
             - name: Send Mattermost notification
               if: ${{ ! cancelled() }}
               run: |
