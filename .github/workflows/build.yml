@@ -51,7 +51,14 @@ jobs:
                   AUTHOR_NAME="$AUTHOR_LOGIN"
                   AUTHOR_FULL_NAME="$AUTHOR_NAME"
 
-                  AUTHOR_REAL_NAME="$(curl -H "Accept: application/vnd.github.v3+json"  -H "Authorization: token ${{ github.token }}" https://api.github.com/users/$AUTHOR_LOGIN | grep '"name":' | cut -d\" -f4)"
+                  set -o pipefail
+                  FETCH_RESULT="$(curl -H "Accept: application/vnd.github.v3+json"  -H "Authorization: token ${{ github.token }}" https://api.github.com/users/$AUTHOR_LOGIN)"
+                  echo "real name fetch: $?"
+                  echo "$FETCH_RESULT""
+                  AUTHOR_REAL_NAME="$(echo "$FETCH_RESULT" | grep '"name":' | cut -d\" -f4)"
+                  set +o pipefail
+
+                  echo "Real name fetch"
 
                   if [ -n "$AUTHOR_REAL_NAME" ]; then
                     AUTHOR_NAME="$AUTHOR_REAL_NAME"
