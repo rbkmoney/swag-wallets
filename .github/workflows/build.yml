@@ -53,7 +53,7 @@ jobs:
 
                   FETCH_RESULT="$(curl -H "Accept: application/vnd.github.v3+json"  -H "Authorization: token ${{ github.token }}" https://api.github.com/users/$AUTHOR_LOGIN)"
                   echo "real name fetch: $?"
-                  echo "$FETCH_RESULT""
+                  echo "$FETCH_RESULT"
                   AUTHOR_REAL_NAME="$(echo "$FETCH_RESULT" | grep '"name":' | cut -d\" -f4)"
 
                   echo "Real name fetch"
