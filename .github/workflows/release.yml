@@ -54,7 +54,7 @@ jobs:
             - name: Deploy Github Pages
               uses: crazy-max/ghaction-github-pages@v2.5.0
               with:
-                  repo: arikai/wallets-api
+                  repo: rbkmoney/wallets-api
                   keep_history: true
                   commit_message: 'deploy from ${{ github.actor }}'
                   verbose: true
