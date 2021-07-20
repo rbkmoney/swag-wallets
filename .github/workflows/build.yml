@@ -106,6 +106,9 @@ jobs:
                     --data @mattermost.json                   \
                     "${MATTERMOST_WEBHOOK_URL:?webhook url must be set}")"
 
+                  echo "result code: $CODE"
+                  echo "curl_error: $(cat curl_error)"
+
                   [ "$CODE" -ge 400 ] && cat curl_error && exit 1
               env:
                   MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
