@@ -41,7 +41,7 @@ jobs:
                   branch: gh-pages
                   folder: ../public
                   target-folder: v0
-                  token: ${{ secrets.WALLETS_API_DEPLOY_KEY }} # Necessary to push to ANOTHER repo
+                  ssh-key: ${{ secrets.WALLETS_API_DEPLOY_KEY }} # Necessary to push to ANOTHER repo
             - name: Send Mattermost notification
               if: ${{ ! cancelled() }}
               run: |
