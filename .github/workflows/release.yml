@@ -29,14 +29,13 @@ jobs:
               run: |
                   apt-get update && apt-get install -y rsync
                   # Necessary for github-pages deploy via ssh-key below
-                  mkdir -p ~/.ssh/
-                  cat <<EOF> ~/.ssh/config
-                  Host *
+                  cat <<EOF>> /etc/ssh/ssh_config
+                  Host github.com
+                      User git
                       ForwardAgent no
                       StrictHostKeyChecking no
                       UserKnownHostsFile /dev/null
                   EOF
-                  cat ~/.ssh/config
             - name: Deploy to release branch
               uses: JamesIves/github-pages-deploy-action@4.1.4
               with:
