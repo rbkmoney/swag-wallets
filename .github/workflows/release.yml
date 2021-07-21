@@ -28,7 +28,8 @@ jobs:
             - name: Install rsync (dep for github-pages-deploy-action)
               run: |
                   apt-get update && apt-get install -y rsync
-                  mkdir -p ~/.ssh/ # Necessary for github-pages deploy via ssh-key below
+                  # Necessary for github-pages deploy via ssh-key below
+                  mkdir -p ~/.ssh/
                   cat <<EOF> ~/.ssh/config
                     Host github.com
                     User git
