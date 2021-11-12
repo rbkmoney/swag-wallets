@@ -58,9 +58,9 @@ get:
       in: query
       type: string
       enum:
-        - none
-        - partial
-        - full
+        - None
+        - Partial
+        - fFull
       required: false
     - $ref: '#/parameters/amountFrom'
     - $ref: '#/parameters/amountTo'
