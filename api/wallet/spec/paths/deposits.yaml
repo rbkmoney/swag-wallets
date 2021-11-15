@@ -60,7 +60,7 @@ get:
       enum:
         - None
         - Partial
-        - fFull
+        - Full
       required: false
     - $ref: '#/parameters/amountFrom'
     - $ref: '#/parameters/amountTo'
