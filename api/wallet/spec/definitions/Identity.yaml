@@ -3,7 +3,6 @@ type: object
 required:
   - name
   - provider
-  - class
 properties:
   id:
     x-rebillyMerge:
